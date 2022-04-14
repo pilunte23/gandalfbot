@@ -4,6 +4,7 @@ import discord
 import json
 import re
 import unidecode
+import asyncio
 from discord.ext import commands
 from discord_slash import SlashCommand, SlashContext
 from discord_slash.utils.manage_commands import create_choice, create_option
@@ -51,7 +52,7 @@ async def on_ready():
                     value="all",        
                 ),
                 create_choice(    
-                    name= "<:leadership:963333800216121354> Commandement",
+                    name= "Commandement",
                     value="leadership"
                 ),
                 create_choice(
