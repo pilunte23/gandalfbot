@@ -32,8 +32,8 @@ async def on_ready():
 @slash.slash(
     
     name="c",
-    description="Pour l'affichage de cartes",
-    guild_ids=[int(os.getenv("GUILID"))],
+    description="Pour l'affichage de carte(s)",
+    guild_ids=list(map(int,str(os.getenv("GUILID")).split(" "))),
     options=[
         create_option(
             name="recherche",
@@ -280,11 +280,18 @@ async def sendcard(ctx,datacard):
     file_url = "./images/"+datacard['octgnid']+".jpg"
     emoji = discord.utils.get(bot.emojis, name=datacard['sphere_code'])
     if datacard['sphere_code'] == "neutral":
-        embed = discord.Embed(title=datacard['name'], color=sphere_color) #creates embed
+        embed = discord.Embed(title=datacard['name']) #creates embed
     else:
-        embed = discord.Embed(title=datacard['name']+f"{emoji}", color=sphere_color) #creates embed
+        embed = discord.Embed(title=f"{emoji} "+datacard['name'],color=sphere_color) #creates embed
     file = discord.File(file_url, filename="image.jpg")
+    pack_file = discord.File(f"./assets/pack/{datacard['pack_code']}.png", filename="pack.png")
+    embed.set_author(name=f"{datacard['pack_name']}", url= f"https://ringsdb.com/set/{datacard['pack_code']}")
+    if datacard['has_errata']:
+        errata=f"Cette carte possède une [FAQ](http://lotr-lcg-quest-companion.gamersdungeon.net/#Card{datacard['position']})"
+        embed.add_field(name="\u200b",value=errata) #creates embed
+    embed.set_thumbnail(url=f"attachment://pack.png")
     embed.set_image(url="attachment://image.jpg")
-    await ctx.send(file=file, embed=embed)
+    await ctx.send(files=[file,pack_file], embed=embed)
+
 
 bot.run(os.getenv("TOKEN"))
