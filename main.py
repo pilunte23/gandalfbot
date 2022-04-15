@@ -277,6 +277,25 @@ async def sendcard(ctx,datacard):
         sphere_color = 0xD3D911
     if datacard['sphere_code'] == "fellowship":
         sphere_color = 0xD99611
+    cycle=""
+    if datacard['pack_code'] in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
+        cycle="Cycle 1 : Ombres de la Forêt Noire"
+    if datacard['pack_code'] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
+        cycle="Cycle 2 : Royaume de Cavenain"
+    if datacard['pack_code'] in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
+        cycle="Cycle 3 : Face à l'Ombre"
+    if datacard['pack_code'] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
+        cycle="Cycle 4 : Le Créateur d'Anneaux"
+    if datacard['pack_code'] in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
+        cycle="Cycle 5 : Le Réveil d'Angmar"
+    if datacard['pack_code'] in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
+        cycle="Cycle 6 : Chasse-Rêve"
+    if datacard['pack_code'] in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
+        cycle="Cycle 7 : Les Haradrim"
+    if datacard['pack_code'] in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
+        cycle="Cycle 8 : Ered Mithrin"
+    if datacard['pack_code'] in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
+        cycle="Cycle 9 : La Vengeance du Mordor"
     file_url = "./images/"+datacard['octgnid']+".jpg"
     emoji = discord.utils.get(bot.emojis, name=datacard['sphere_code'])
     if datacard['sphere_code'] == "neutral":
@@ -291,7 +310,7 @@ async def sendcard(ctx,datacard):
         embed.add_field(name="\u200b",value=errata) #creates embed
     embed.set_thumbnail(url=f"attachment://pack.png")
     embed.set_image(url="attachment://image.jpg")
+    embed.set_footer(text=f"{cycle}")
     await ctx.send(files=[file,pack_file], embed=embed)
-
 
 bot.run(os.getenv("TOKEN"))
