@@ -93,11 +93,11 @@ async def on_ready():
                 ),
                 create_choice(
                     name="Héro",
-                    value="Hero"
+                    value="Héro"
                 ),
                 create_choice(
                     name="Allié",
-                    value="Ally"
+                    value="Allié"
                 ),
                 create_choice(
                     name="Attachement",
@@ -105,7 +105,7 @@ async def on_ready():
                 ),
                 create_choice(
                     name="Evènement",
-                    value="Event"
+                    value="Evènement"
                 ),
                 create_choice(
                     name="Contrat",
@@ -113,11 +113,11 @@ async def on_ready():
                 ),
                 create_choice(
                     name="Quête annexe",
-                    value="Player Side Quest"
+                    value="Quête annexe"
                 ),
                 create_choice(
                     name="Campagne",
-                    value="Campaign"
+                    value="Campagne"
                 )
             ]
         ),
@@ -296,6 +296,23 @@ async def sendcard(ctx,datacard):
         cycle="Cycle 8 : Ered Mithrin"
     if datacard['pack_code'] in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
         cycle="Cycle 9 : La Vengeance du Mordor"
+    if datacard['pack_code'] == "OHaUH":
+        cycle="Extension de saga : Par Monts et par Souterrains"
+    if datacard['pack_code'] == "OtD":
+        cycle="Extension de saga : Au Seuil de la Porte"
+    if datacard['pack_code'] == "TBR":
+        cycle="Extension de saga : Les Cavaliers Noirs"
+    if datacard['pack_code'] == "TRD":
+        cycle="Extension de saga : La Route s'Assombrit"
+    if datacard['pack_code'] == "ToS":
+        cycle="Extension de saga : La Trahison de Saroumane"
+    if datacard['pack_code'] == "LoS":
+        cycle="Extension de saga : La Terre de l'Ombre"
+    if datacard['pack_code'] == "FotW":
+        cycle="Extension de saga : La Flamme de l'Ouest"
+    if datacard['pack_code'] == "MoF":
+        cycle="Extension de saga : La Montagne de Feu"
+
     file_url = "./images/"+datacard['octgnid']+".jpg"
     emoji = discord.utils.get(bot.emojis, name=datacard['sphere_code'])
     if datacard['sphere_code'] == "neutral":
