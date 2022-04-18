@@ -1,4 +1,3 @@
-
 import os
 import discord
 import json
@@ -48,7 +47,7 @@ async def on_ready():
             option_type=3,
             choices=[
                 create_choice(
-                    name="Pas de filtre",
+                    name="Pas de filtre (valeur par défaut)",
                     value="all",        
                 ),
                 create_choice(    
@@ -88,7 +87,7 @@ async def on_ready():
             option_type=3,
             choices=[
                 create_choice(
-                    name="Pas de filtre",
+                    name="Pas de filtre (valeur par défaut)",
                     value="all"
                 ),
                 create_choice(
@@ -122,29 +121,55 @@ async def on_ready():
             ]
         ),
         create_option(
-            name="multicard",
-            description="Affichage multicarte",
+            name="champs",
+            description="Sur quel champs de recherche",
             required=False,
             option_type=3,
             choices=[
                 create_choice(
-                    name="Oui",
-                    value="yes"
+                    name="Nom (valeur par défaut)",
+                    value="name"
                 ),
                 create_choice(
-                    name="Non",
-                    value="no"
+                    name="Traits",
+                    value="traits"
+                ),
+                create_choice(
+                    name="Illustrateur",
+                    value="illu"
+                )
+            ]
+        ),
+        create_option(
+            name="selection",
+            description="Type d'affichage",
+            required=False,
+            option_type=3,
+            choices=[
+                create_choice(
+                    name="Menu sélectionnable limité à 25 cartes (valeur par défaut)",
+                    value="menu"
+                ),
+                create_choice(
+                    name="Multicarte limité à 10 cartes",
+                    value="multicard"
+                ),
+                create_choice(
+                    name="Liste ( bascule dans ce mode si dépasse le nombre de carte)",
+                    value="list"
                 )
             ]
         )
     ]       
 )
 
-async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",multicard="no",search_type="name"):
+async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",selection="menu",champs="name"):
     "pas de multilingue pour l'instant"
     langue="fr"
+    if len(recherche) < 3:
+        await _toomuchcard(ctx)
     """lower and remove accents"""
-    recherche = ".*"+unidecode.unidecode(str(recherche.lower()))+".*"
+    search = ".*"+unidecode.unidecode(str(recherche.lower()))+".*"
     resultat_carte = []
     img = []
     place = 0
@@ -154,8 +179,14 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",multic
     data = json.load(f)
 
     for i in data:
-        """ search in name or traits"""
-        if re.search(recherche,unidecode.unidecode(str(i["name"].lower()))): 
+        """ search in name, traits, illustrator"""
+        if champs == "name":
+            all_search = re.search(search,unidecode.unidecode(str(i["name"].lower()))) 
+        if champs == "traits" and "traits" in i:
+            all_search = re.search(search,unidecode.unidecode(str(i["traits"].lower())))
+        if champs == "illustrator":
+            all_search = re.search(search,unidecode.unidecode(str(i["illustrator"].lower()))) 
+        if all_search: 
             if ( sphere == i['sphere_code'] or sphere == "all" ) and ( type == i['type_name'] or type == "all" ):
                 """check exist octgn file"""
                 if "octgnid" in i:
@@ -174,9 +205,9 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",multic
             if langue == "fr": 
                 await sendcard(ctx,resultat_carte[0])
         else:
-            if multicard == "yes":
+            if selection == "multicard":
                 if len(resultat_carte) > 10:
-                    await _toomuchcard(ctx)
+                    await _listcard(ctx,resultat_carte,selection,recherche)
                 else:
                     """ define the size of the result with the number of card found """
                     img_weight = (img_weight + len(resultat_carte)) * 493
@@ -201,11 +232,11 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",multic
                     embed_carte.set_image(url ="attachment://image.png")
                     await ctx.send(file=file,embed = embed_carte)
             else:
-                if len(resultat_carte) > 24:
-                    await _toomuchcard(ctx)
-                else:
+                if (selection == "menu" and len(resultat_carte) < 24):
                     """menu for single card search"""
-                    await _selectingbox(ctx,resultat_carte)               
+                    await _selectingbox(ctx,resultat_carte)   
+                else:
+                    await _listcard(ctx,resultat_carte,selection,recherche)
     else:
         file_url = "./assets/picture/no_card.png"
         file = discord.File(file_url, filename="image.png")
@@ -216,9 +247,37 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",multic
         await asyncio.sleep(5)
         await no_card_msg.delete()
 
+async def _listcard(ctx,resultat_carte,affichage,recherche):
+    list_sphere={"leadership":[],"lore":[],"spirit":[],"tactics":[],"neutral":[],"baggins":[],"fellowship":[]}
+    for i in resultat_carte:
+        for j in list_sphere:
+            if i['sphere_code'] == j:
+               list_sphere[j].append(i)
+
+    sphere_count = 0  
+    for key,list_card in list_sphere.items():     
+        if len(list_card) > 0:
+            emoji = discord.utils.get(bot.emojis, name=key)
+            count = 0 
+            globals()[f"embed_list_card{sphere_count}"] = discord.Embed(title=f"Cartes {emoji} pour votre recherche par", color = discord.Color.from_rgb(127, 64, 7))
+            globals()[f"field{count}"] = ""
+            for i in list_card:
+                """if total file size < 1024"""
+                if len(f"[{i['name']}]({i['url']})\n") + len(globals()[f"field{count}"]) < 1024:
+                    globals()[f"field{count}"] = f"[{i['name']}]({i['url']}) {i['type_name']}\n" + globals()[f"field{count}"] 
+                else:
+                    """create new fields"""
+                    globals()[f"embed_list_card{sphere_count}"].add_field(name = f"Carte(s) de la sphère {emoji}", value = globals()[f"field{count}"])  
+                    count += 1
+                    globals()[f"field{count}"] = ""            
+                    globals()[f"field{count}"] = f"[{i['name']}]({i['url']}) {i['type_name']}\n" + globals()[f"field{count}"]
+            globals()[f"embed_list_card{sphere_count}"].add_field(name = f"Carte(s) de la sphère {emoji}", value = globals()[f"field{count}"])  
+            await ctx.send(embed = globals()[f"embed_list_card{sphere_count}"])
+        sphere_count += 1
+   
 async def _toomuchcard(ctx):
     embed_too_carte = discord.Embed(name = "too much result", color = discord.Color.red())
-    embed_too_carte.add_field(name = "Trop de résultat", value = "Trop de cartes trouvées, veuillez affiner votre recherche")   
+    embed_too_carte.add_field(name = "Trop de résultat", value = "Il faut 3 caractère minimum pour votre recherche")   
     too_card_msg = await ctx.send(embed = embed_too_carte)
     await asyncio.sleep(5)
     await too_card_msg.delete()
@@ -316,7 +375,7 @@ async def sendcard(ctx,datacard):
     file_url = "./images/"+datacard['octgnid']+".jpg"
     emoji = discord.utils.get(bot.emojis, name=datacard['sphere_code'])
     if datacard['sphere_code'] == "neutral":
-        embed = discord.Embed(title=datacard['name']) #creates embed
+        embed = discord.Embed(title=f"[{datacard['name']}]({datacard['url']})") #creates embed
     else:
         embed = discord.Embed(title=f"{emoji} "+datacard['name'],color=sphere_color) #creates embed
     file = discord.File(file_url, filename="image.jpg")
