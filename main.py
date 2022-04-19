@@ -136,7 +136,7 @@ async def on_ready():
                 ),
                 create_choice(
                     name="Illustrateur",
-                    value="illu"
+                    value="illustrator"
                 )
             ]
         ),
@@ -155,7 +155,7 @@ async def on_ready():
                     value="multicard"
                 ),
                 create_choice(
-                    name="Liste ( bascule dans ce mode si dépasse le nombre de carte)",
+                    name="Liste (bascule dans ce mode si dépasse le nombre de carte)",
                     value="list"
                 )
             ]
@@ -169,7 +169,6 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
     if len(recherche) < 3:
         await _toomuchcard(ctx)
     """lower and remove accents"""
-    search = ".*"+unidecode.unidecode(str(recherche.lower()))+".*"
     resultat_carte = []
     img = []
     place = 0
@@ -180,12 +179,12 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
 
     for i in data:
         """ search in name, traits, illustrator"""
-        if champs == "name":
-            all_search = re.search(search,unidecode.unidecode(str(i["name"].lower()))) 
+        if champs == "name" and "name" in i:
+            all_search = re.search(".*"+unidecode.unidecode(str(recherche.lower()))+".*",unidecode.unidecode(str(i["name"].lower()))) 
         if champs == "traits" and "traits" in i:
-            all_search = re.search(search,unidecode.unidecode(str(i["traits"].lower())))
-        if champs == "illustrator":
-            all_search = re.search(search,unidecode.unidecode(str(i["illustrator"].lower()))) 
+            all_search = re.search(".*\\b"+unidecode.unidecode(str(recherche.lower()))+"\\b.*",unidecode.unidecode(str(i["traits"].lower())))
+        if champs == "illustrator" and "illustrator" in i:
+            all_search = re.search(".*"+unidecode.unidecode(str(recherche.lower()))+".*",unidecode.unidecode(str(i["illustrator"].lower()))) 
         if all_search: 
             if ( sphere == i['sphere_code'] or sphere == "all" ) and ( type == i['type_name'] or type == "all" ):
                 """check exist octgn file"""
@@ -207,13 +206,12 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
         else:
             if selection == "multicard":
                 if len(resultat_carte) > 10:
-                    await _listcard(ctx,resultat_carte,selection,recherche)
+                    await _listcard(ctx,resultat_carte,champs,recherche)
                 else:
                     """ define the size of the result with the number of card found """
                     img_weight = (img_weight + len(resultat_carte)) * 493
                     img_height = 700
                     """ add every patch in the list img """
-                    number_image = 1
                     for i in resultat_carte:
                         img.append(i['octgnid']+".jpg")
                     """ creating the new img who will be send """
@@ -236,7 +234,7 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
                     """menu for single card search"""
                     await _selectingbox(ctx,resultat_carte)   
                 else:
-                    await _listcard(ctx,resultat_carte,selection,recherche)
+                    await _listcard(ctx,resultat_carte,champs,recherche)
     else:
         file_url = "./assets/picture/no_card.png"
         file = discord.File(file_url, filename="image.png")
@@ -247,7 +245,13 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
         await asyncio.sleep(5)
         await no_card_msg.delete()
 
-async def _listcard(ctx,resultat_carte,affichage,recherche):
+async def _listcard(ctx,resultat_carte,champs,recherche):
+    if champs == "name":
+        lib_champs ="Nom"
+    if champs == "traits":
+        lib_champs ="Traits"   
+    if champs == "illustrator":
+        lib_champs ="Illustrateur"
     list_sphere={"leadership":[],"lore":[],"spirit":[],"tactics":[],"neutral":[],"baggins":[],"fellowship":[]}
     for i in resultat_carte:
         for j in list_sphere:
@@ -259,7 +263,7 @@ async def _listcard(ctx,resultat_carte,affichage,recherche):
         if len(list_card) > 0:
             emoji = discord.utils.get(bot.emojis, name=key)
             count = 0 
-            globals()[f"embed_list_card{sphere_count}"] = discord.Embed(title=f"Cartes {emoji} pour votre recherche par", color = discord.Color.from_rgb(127, 64, 7))
+            globals()[f"embed_list_card{sphere_count}"] = discord.Embed(title=f"Cartes {emoji} pour votre recherche par {lib_champs} : {recherche}", color = discord.Color.from_rgb(127, 64, 7))
             globals()[f"field{count}"] = ""
             for i in list_card:
                 """if total file size < 1024"""
