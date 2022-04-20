@@ -178,6 +178,7 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
     data = json.load(f)
 
     for i in data:
+        all_search = None
         """ search in name, traits, illustrator"""
         if champs == "name" and "name" in i:
             all_search = re.search(".*"+unidecode.unidecode(str(recherche.lower()))+".*",unidecode.unidecode(str(i["name"].lower()))) 
@@ -378,10 +379,7 @@ async def sendcard(ctx,datacard):
 
     file_url = "./images/"+datacard['octgnid']+".jpg"
     emoji = discord.utils.get(bot.emojis, name=datacard['sphere_code'])
-    if datacard['sphere_code'] == "neutral":
-        embed = discord.Embed(title=f"[{datacard['name']}]({datacard['url']})") #creates embed
-    else:
-        embed = discord.Embed(title=f"{emoji} "+datacard['name'],color=sphere_color) #creates embed
+    embed = discord.Embed(title=f"{emoji} "+datacard['name'],color=sphere_color)
     file = discord.File(file_url, filename="image.jpg")
     pack_file = discord.File(f"./assets/pack/{datacard['pack_code']}.png", filename="pack.png")
     embed.set_author(name=f"{datacard['pack_name']}", url= f"https://ringsdb.com/set/{datacard['pack_code']}")
