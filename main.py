@@ -36,9 +36,25 @@ async def on_ready():
     options=[
         create_option(
             name="recherche",
-            description="Nom de la carte recherchée",
+            description="Terme recherché",
             required=True,
             option_type=3
+        ),
+        create_option(
+            name="terme",
+            description="Type de recherche",
+            required=False,
+            option_type=3,
+            choices=[
+                create_choice(
+                    name="Terme exact (par défaut)",
+                    value="exact"
+                ),
+                create_choice(
+                    name="Terme partiel",
+                    value="partial"
+                )
+            ]
         ),
         create_option(
             name="sphere",
@@ -47,7 +63,7 @@ async def on_ready():
             option_type=3,
             choices=[
                 create_choice(
-                    name="Pas de filtre (valeur par défaut)",
+                    name="Pas de filtre (par défaut)",
                     value="all",        
                 ),
                 create_choice(    
@@ -87,7 +103,7 @@ async def on_ready():
             option_type=3,
             choices=[
                 create_choice(
-                    name="Pas de filtre (valeur par défaut)",
+                    name="Pas de filtre (par défaut)",
                     value="all"
                 ),
                 create_choice(
@@ -127,7 +143,7 @@ async def on_ready():
             option_type=3,
             choices=[
                 create_choice(
-                    name="Nom (valeur par défaut)",
+                    name="Nom (par défaut)",
                     value="name"
                 ),
                 create_choice(
@@ -147,15 +163,15 @@ async def on_ready():
             option_type=3,
             choices=[
                 create_choice(
-                    name="Menu sélectionnable limité à 25 cartes (valeur par défaut)",
+                    name="Renvoie une liste de carte via Menu sélectionnable limité à 25 cartes (par défaut)",
                     value="menu"
                 ),
                 create_choice(
-                    name="Multicarte limité à 10 cartes",
+                    name="Renvoie une image de plusieurs cartes limité à 10 cartes",
                     value="multicard"
                 ),
                 create_choice(
-                    name="Liste (bascule dans ce mode si dépasse le nombre de carte)",
+                    name="Renvoie une liste des cartes pour chaque sphère.",
                     value="list"
                 )
             ]
@@ -163,12 +179,9 @@ async def on_ready():
     ]       
 )
 
-async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",selection="menu",champs="name"):
+async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",selection="menu",champs="name",terme="exact"):
     "pas de multilingue pour l'instant"
     langue="fr"
-    if len(recherche) < 3:
-        await _toomuchcard(ctx)
-    """lower and remove accents"""
     resultat_carte = []
     img = []
     place = 0
@@ -177,15 +190,22 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
     f = open(url_file)
     data = json.load(f)
 
+    if terme =="exact":
+        word_use = "^"+unidecode.unidecode(str(recherche.lower()))+"$"
+    else:
+        if champs == "traits":
+            word_use = ".*\\b"+unidecode.unidecode(str(recherche.lower()))+"\\b.*"
+        else:       
+            word_use = ".*"+unidecode.unidecode(str(recherche.lower()))+".*"
     for i in data:
         all_search = None
         """ search in name, traits, illustrator"""
         if champs == "name" and "name" in i:
-            all_search = re.search(".*"+unidecode.unidecode(str(recherche.lower()))+".*",unidecode.unidecode(str(i["name"].lower()))) 
+            all_search = re.search(word_use,unidecode.unidecode(str(i["name"].lower()))) 
         if champs == "traits" and "traits" in i:
-            all_search = re.search(".*\\b"+unidecode.unidecode(str(recherche.lower()))+"\\b.*",unidecode.unidecode(str(i["traits"].lower())))
+            all_search = re.search(word_use,unidecode.unidecode(str(i["traits"].lower())))
         if champs == "illustrator" and "illustrator" in i:
-            all_search = re.search(".*"+unidecode.unidecode(str(recherche.lower()))+".*",unidecode.unidecode(str(i["illustrator"].lower()))) 
+            all_search = re.search(word_use,unidecode.unidecode(str(i["illustrator"].lower()))) 
         if all_search: 
             if ( sphere == i['sphere_code'] or sphere == "all" ) and ( type == i['type_name'] or type == "all" ):
                 """check exist octgn file"""
@@ -207,7 +227,7 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
         else:
             if selection == "multicard":
                 if len(resultat_carte) > 10:
-                    await _listcard(ctx,resultat_carte,champs,recherche)
+                    await _toomuchcard(ctx)
                 else:
                     """ define the size of the result with the number of card found """
                     img_weight = (img_weight + len(resultat_carte)) * 493
@@ -230,12 +250,14 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
                     file = discord.File("requête.png", filename = "image.png")
                     embed_carte.set_image(url ="attachment://image.png")
                     await ctx.send(file=file,embed = embed_carte)
-            else:
-                if (selection == "menu" and len(resultat_carte) < 24):
-                    """menu for single card search"""
-                    await _selectingbox(ctx,resultat_carte)   
+            if selection == "menu": 
+                if len(resultat_carte) > 24:
+                    await _toomuchcard(ctx)
                 else:
-                    await _listcard(ctx,resultat_carte,champs,recherche)
+                    """menu for single card search"""
+                    await _selectingbox(ctx,resultat_carte)       
+            if selection == "list":
+                await _listcard(ctx,resultat_carte,champs,recherche)                  
     else:
         file_url = "./assets/picture/no_card.png"
         file = discord.File(file_url, filename="image.png")
@@ -282,7 +304,7 @@ async def _listcard(ctx,resultat_carte,champs,recherche):
    
 async def _toomuchcard(ctx):
     embed_too_carte = discord.Embed(name = "too much result", color = discord.Color.red())
-    embed_too_carte.add_field(name = "Trop de résultat", value = "Il faut 3 caractère minimum pour votre recherche")   
+    embed_too_carte.add_field(name = "Trop de résultat", value = "Veuillez affiner votre recherche")   
     too_card_msg = await ctx.send(embed = embed_too_carte)
     await asyncio.sleep(5)
     await too_card_msg.delete()
