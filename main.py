@@ -32,7 +32,7 @@ async def on_ready():
     
     name="c",
     description="Pour l'affichage de carte(s)",
-    guild_ids=list(map(int,str(os.getenv("GUILID")).split(" "))),
+    guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
     options=[
         create_option(
             name="recherche",
@@ -413,4 +413,4 @@ async def sendcard(ctx,datacard):
     embed.set_footer(text=f"{cycle}")
     await ctx.send(files=[file,pack_file], embed=embed)
 
-bot.run(os.getenv("TOKEN"))
+bot.run(os.getenv("DISCORD_TOKEN"))
