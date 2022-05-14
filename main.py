@@ -2,7 +2,6 @@ import os
 import discord
 import json
 import re
-import unidecode
 import asyncio
 from discord.ext import commands
 from discord_slash import SlashCommand, SlashContext
@@ -10,6 +9,7 @@ from discord_slash.utils.manage_commands import create_choice, create_option
 from discord_slash.utils.manage_components import *
 from dotenv import load_dotenv
 from PIL import Image
+from unidecode import unidecode
 
 
 load_dotenv(dotenv_path="config")
@@ -26,10 +26,38 @@ def emoji(emoji_name):
 async def on_ready():
 	""" check if bot is connected """
 	print("Le robot est connecté comme {0.user}".format(bot))
-    
 
 @slash.slash(
-    
+    name="t",
+    description="Affiche le timing des phases du jeu",
+    guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
+    options=[create_option(
+        name="timing",
+        description="Affiche le timing des phases du jeu",
+        option_type=3,
+        required=True,
+        choices=[
+                    create_choice(
+                        name="Phases",
+                        value="phases"
+                    ),
+                    create_choice(
+                        name="Combat",
+                        value="combat"
+                    )
+                ]
+    )                    
+    ]
+)
+
+async def _timing(ctx:SlashContext,timing):  
+    file_url = f"./assets/timing/{timing}.png"
+    file = discord.File(file_url, filename="image.png")
+    embed_no_carte = discord.Embed(name = f"{timing}", color = discord.Color.red())
+    embed_no_carte.set_image(url="attachment://image.png")  
+    await ctx.send(file=file,embed = embed_no_carte)
+
+@slash.slash(
     name="c",
     description="Pour l'affichage de carte(s)",
     guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
@@ -47,12 +75,12 @@ async def on_ready():
             option_type=3,
             choices=[
                 create_choice(
-                    name="Terme exact (par défaut)",
-                    value="exact"
+                    name="Terme partiel (par défaut)",
+                    value="partial"
                 ),
                 create_choice(
-                    name="Terme partiel",
-                    value="partial"
+                    name="Terme exact",
+                    value="exact"
                 )
             ]
         ),
@@ -179,7 +207,7 @@ async def on_ready():
     ]       
 )
 
-async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",selection="menu",champs="name",terme="exact"):
+async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",selection="menu",champs="name",terme="partial"):
     "pas de multilingue pour l'instant"
     langue="fr"
     resultat_carte = []
@@ -191,21 +219,21 @@ async def _carte(ctx:SlashContext, recherche:str,sphere="all",type= "all",select
     data = json.load(f)
 
     if terme =="exact":
-        word_use = "^"+unidecode.unidecode(str(recherche.lower()))+"$"
+        word_use = "^"+ unidecode(str(recherche.lower()))+"$"
     else:
         if champs == "traits":
-            word_use = ".*\\b"+unidecode.unidecode(str(recherche.lower()))+"\\b.*"
+            word_use = ".*\\b"+ unidecode(str(recherche.lower()))+"\\b.*"
         else:       
-            word_use = ".*"+unidecode.unidecode(str(recherche.lower()))+".*"
+            word_use = ".*"+ unidecode(str(recherche.lower()))+".*"
     for i in data:
         all_search = None
         """ search in name, traits, illustrator"""
         if champs == "name" and "name" in i:
-            all_search = re.search(word_use,unidecode.unidecode(str(i["name"].lower()))) 
+            all_search = re.search(word_use,unidecode(str(i["name"].lower()))) 
         if champs == "traits" and "traits" in i:
-            all_search = re.search(word_use,unidecode.unidecode(str(i["traits"].lower())))
+            all_search = re.search(word_use,unidecode(str(i["traits"].lower())))
         if champs == "illustrator" and "illustrator" in i:
-            all_search = re.search(word_use,unidecode.unidecode(str(i["illustrator"].lower()))) 
+            all_search = re.search(word_use,unidecode(str(i["illustrator"].lower()))) 
         if all_search: 
             if ( sphere == i['sphere_code'] or sphere == "all" ) and ( type == i['type_name'] or type == "all" ):
                 """check exist octgn file"""
