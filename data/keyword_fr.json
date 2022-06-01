@@ -1,0 +1,118 @@
+[
+    {
+        "word":"\u00c0 Distance",
+        "definition": "Un personnage avec ce mot-cl\u00e9 peut \u00eatre d\u00e9clar\u00e9 par son contr\u00f4leur comme attaquant contre des ennemis engag\u00e9s au combat avec d'autres joueurs. Un personnage peut d\u00e9clarer des attaques \u00e0 distance au moment o\u00F9 son propri\u00e9taire d\u00e9clare ses attaques, mais il peut aussi participer \u00e0 des attaques d\u00e9clar\u00e9es par d'autres joueurs.\nDans les deux cas, il faut incliner le personnage et remplir toutes les autres conditions qui pourraient \u00eatre n\u00e9cessaires pour r\u00e9aliser cette attaque \u00e0 distance."
+    },
+    {
+        "word":"Archerie X",
+        "definition": "Tant qu'une carte avec le mot-cl\u00e9 Archerie est en jeu, les joueurs doivent, au d\u00e9but de chaque phase de combat, infliger aux personnages en jeu des d\u00e9g\u00e2ts \u00e9gaux \u00e0 la valeur indiqu\u00e9e. Ces d\u00e9g\u00e2ts peuvent \u00eatreinflig\u00e9s aux personnages plac\u00e9s sous le contr\u00f4le de n'importe quel joueur, et peuvent \u00eatre r\u00e9partis entre les joueurs, comme ils l'entendent. S'ils n'arrivent pas \u00e0 se mettre d'accord, c'est le premier joueur qui a le dernier mot. Si plusieurs cartes avec le mot-cl\u00e9 Archerie sont en jeu, leurs effets sont cumulatifs. Rappelezvous que la defense n'absorbe pas les points de d\u00e9g\u00e2ts inflig\u00e9s par l'Archerie."
+    },
+    {
+        "word":"Bas-fonds X",
+        "definition": "Dans ce sc\u00e9nario, les h\u00e9ros tentent de d\u00e9couvrir la cabale mal\u00e9fique qui ourdit un complot \u00e0 Minas Tirith. Pour simuler les dangers inh\u00e9rents \u00e0 cette menace, certains lieux de ce sc\u00e9nario s'accompagnent du mot-cl\u00e9 Bas-fonds. Quand un tel lieu entre en jeu, prenez un nombre de cartes du sommet du deck des bas-fonds \u00e9gal \u00e0 la valeur indiqu\u00e9e et empilez-les, face cach\u00e9e, sous ce lieu.\nQuand un lieu quitte le jeu, les cartes empil\u00e9es en dessous face cach\u00e9e sont r\u00e9v\u00e9l\u00e9es les unes apr\u00e8s les autres et plac\u00e9es dans la zone de cheminement. Si une carte du deck des bas-fonds doit \u00eatre d\u00e9fauss\u00e9e, elle est mise dans la pile de d\u00e9fausse du deck de rencontre. Si un lieu ayant le mot-cl\u00e9 Bas-fonds est r\u00e9v\u00e9l\u00e9 du deck de rencontre et qu'il n'y a plus de cartes dans le deck des bas-fonds, alors le mot-cl\u00e9 Basfonds est sans effet."
+    },
+    {
+        "word":"Bataille",
+        "definition": "Quand une carte Qu\u00eate a le mot-cl\u00e9 Bataille, les personnages engag\u00e9s dans cette qu\u00eate additionnent leurvaleur d'attaque (attaque) au lieu de leur valeur de volont\u00e9 (volonte) au moment de la r\u00e9solution de la qu\u00eate. Lesennemis et lieux de la zone de cheminement additionnent leur valeur de menace (menace), comme d'habitude."
+    },
+    {
+        "word":"Cherche X",
+        "definition": "Le mot-cl\u00e9 Cherche X repr\u00e9sente les h\u00e9ros qui recherchent Mugash, le capitaine orque. Quand un lieu avec ce mot-cl\u00e9 quitte le jeu, le ou les joueurs identifi\u00e9s par ce lieu r\u00e9v\u00e8lent les X premi\u00e8res cartes de leur \u00AB deck hors jeu \u00BB. Les joueurs concern\u00e9s placent chaque ennemi r\u00e9v\u00e9l\u00e9 dans la zone de cheminement, choisissent 1 carte Joueur r\u00e9v\u00e9l\u00e9e, l'ajoutent \u00e0 leur main, et d\u00e9faussent le reste."
+    },
+    {
+        "word":"Dissimulation X",
+        "definition": "Dissimulation X est un mot-cl\u00e9 de ce sc\u00e9nario. Le joueur qui r\u00e9v\u00e8le une carte Rencontre ayant ce mot-cl\u00e9 doit effectuer un test de Dissimulation. Si la carte est aussi assortie d'un effet \u00AB Une fois r\u00e9v\u00e9l\u00e9e \u00BB ou \u00AB Forc\u00e9 \u00BB, le test de Dissimulation doit \u00eatre r\u00e9solu avant le reste de la carte."
+    },
+    {
+        "word":"Embuscade",
+        "definition": "Embuscade est un mot-cl\u00e9 utilis\u00e9 dans le sc\u00e9nario La Route vers Fondcombe. Quand un ennemi ayant ce mot-cl\u00e9 entre en jeu, chaque joueur, en commençant par le premier joueur, puis le joueur \u00e0 sa gauche, et ainsi de suite en respectant le sens horaire, doit faire un test d'engagement au combat. Ce test d'engagement au combat n'est fait que contre l'ennemi qui vient d'entrer en jeu, on ignore les autres ennemis qui sont d\u00e9j\u00e0 dans la zone de cheminement. D\u00e8s que l'ennemi engage au combat un joueur \u00e0 cause de l'effet de ce mot-cl\u00e9, n'effectuez plus d'autres tests d'engagement au combat contre lui."
+    },
+    {
+        "word":"Entrave",
+        "definition": "Le mot-cl\u00e9 Entrave appara\u00eet sur les ennemis Huorn de ce sc\u00e9nario. Tant qu'il est engag\u00e9 au combat avec un joueur, un ennemi avec ce mot-cl\u00e9 ne se voit pas attribuer de carte ombre et n'effectue pas d'attaque lors de la phase de combat. Au lieu d'effectuer des attaques, les ennemis avec le mot-cl\u00e9 Entrave obligent les joueurs \u00e0 retirer des marqueurs de progression de la qu\u00eate en cours ou du lieu actif. Au d\u00e9but de la phase de combat, chaque joueur retire un marqueur de progression de la qu\u00eate en cours pour chaque ennemi ayant Entrave qui est engag\u00e9 avec lui. Quand il n'y a plus de marqueurs de progression sur la qu\u00eate en cours, les joueurs en retirent du lieu actif \u00e0 la place. S'il n'y a pas de marqueurs de progression sur la qu\u00eate ou le lieu actif, il n'y a aucun effet."
+    },
+    {
+        "word":"Fatalit\u00e9",
+        "definition": "Fatalit\u00e9 est un mot-cl\u00e9 des extensions de saga Le Seigneur des Anneaux. Quand un joueur r\u00e9v\u00e8le une carte Rencontre ayant le mot-cl\u00e9 Fatalit\u00e9, il doit r\u00e9soudre les effets de cette carte sans en discuter avec les autres joueurs. De plus, les autres joueurs n'ont pas le droit d'effectuer des actions, ni de d\u00e9clencher de r\u00e9ponses lors de la r\u00e9solution des effets de cette carte Rencontre."
+    },
+    {
+        "word":"Immunis\u00e9 aux D\u00e9g\u00e2ts \u00e0 Distance",
+        "definition": "Cela signifie qu'un personnage participant \u00e0 une attaque gr\u00e2ce au mot-cl\u00e9 \u00c0 distance ne peut pas infliger de d\u00e9g\u00e2ts \u00e0 cet ennemi. (Si un personnage poss\u00e9dant le mot-cl\u00e9 \u00c0 distance participe \u00e0 une attaque contre le Grand Troll des Cavernes sans utiliser son mot-cl\u00e9 \u00c0 distance, il peut alors infliger des d\u00e9g\u00e2ts et compter son attaque)."
+    },
+    {
+        "word":"Immunis\u00e9 aux Effets de Carte des Joueurs",
+        "definition": "Les cartes comportant la mention \u00AB Immunis\u00e9 aux effets de carte des joueurs \u00BB ignorent les effets de toutes les cartes Joueur. Les joueurs ne peuvent pas non plus choisir ces cartes immunis\u00e9es comme cible d'un effet de carte Joueur."
+    },
+    {
+        "word":"Indestructible",
+        "definition": "Un ennemi avec le mot-cl\u00e9 Indestructible ne peut pas \u00eatre d\u00e9truit en subissant des d\u00e9g\u00e2ts, m\u00eame si ses points de vie tombent \u00e0 0."
+    },
+    {
+        "word":"Maudit X",
+        "definition": "Quand une carte Rencontre avec le mot-cl\u00e9 Maudit entre en jeu, chaque joueur doit augmenter son niveau de menace de la valeur indiqu\u00e9e."
+    },
+    {
+        "word":"Permanent",
+        "definition": "Permanent est un mot-cl\u00e9 qui appara\u00eet sur certaines cartes Avantage et Fardeau. Lorsqu'un avantage ou un fardeau Permanent est gagn\u00e9, il est attach\u00e9 \u00e0 un h\u00e9ros et ce choix est consign\u00e9 dans le journal de campagne. Une carte avec le mot-cl\u00e9 Permanent ne peut \u00eatre attach\u00e9e qu'\u00e0 un seul h\u00e9ros pour toute la dur\u00e9e de la campagne. Les attachements ayant ce mot-cl\u00e9 ne peuvent pas \u00eatre d\u00e9fauss\u00e9s du h\u00e9ros attach\u00e9 tant que ce dernier est en jeu. Si le h\u00e9ros quitte le jeu, les attachements Permanents qui lui sont attach\u00e9s sont retir\u00e9s de la partie."
+    },
+    {
+        "word":"Prot\u00e9g\u00e9",
+        "definition": "Ce mot-cl\u00e9 se trouve sur certaines cartes Objectif. Il sert \u00e0 rappeler aux joueurs qu'ils doivent r\u00e9v\u00e9ler et attacher la prochaine carte du deck de rencontre \u00e0 la carte Objectif quand cette derni\u00e8re est plac\u00e9e dans la zone de cheminement depuis le deck de rencontre. Les joueurs placent les 2 cartes ensemble dans la zone de cheminement. L'objectif ne peut pas \u00eatre r\u00e9cup\u00e9r\u00e9 tant qu'il a une carte Rencontre attach\u00e9e. Une fois que la carte Rencontre est d\u00e9fauss\u00e9e, l'objectif reste dans la zone de cheminement jusqu'\u00e0 ce qu'il soit r\u00e9cup\u00e9r\u00e9. Si les joueurs ont r\u00e9v\u00e9l\u00e9 une autre carte Objectif suite \u00e0 l'utilisation du mot-cl\u00e9 Prot\u00e9g\u00e9, ils placent cet autre objectif dans la zone de cheminement et piochent une nouvelle carte Rencontre pour l'attacher au premier objectif.\nLes cartes Lieu et Ennemi attach\u00e9es aux objectifs Prot\u00e9g\u00e9s comptent toujours leur valeur de menace tant qu'elles se trouvent dans la zone de cheminement. Selon le type de la carte, une carte Rencontre reste attach\u00e9e \u00e0 un objectif Prot\u00e9g\u00e9 jusqu'\u00e0 ce que\n\nEnnemi : l'ennemi quitte le jeu, en \u00e9tant \u00e9limin\u00e9 au combat ou gr\u00e2ce \u00e0 un effet de carte.\nLieu : le lieu quitte le jeu, en \u00e9tant enti\u00e8rement explor\u00e9 ou gr\u00e2ce \u00e0 un effet de carte.\nTra\u00eetrise : les effets de la tra\u00eetrise soient r\u00e9solus ou annul\u00e9s (rappel : les effets des cartes Tra\u00eetrise sont imm\u00e9diatement d\u00e9clench\u00e9s quand elles sont r\u00e9v\u00e9l\u00e9es).\n\nUne fois que toutes les cartes Rencontre attach\u00e9es \u00e0 un objectif Prot\u00e9g\u00e9 ont quitt\u00e9 le jeu, les joueurs peuvent r\u00e9cup\u00e9rer l'objectif de la mani\u00e8re indiqu\u00e9e sur la carte."
+    },
+    {
+        "word":"Ratissage",
+        "definition": "Ratissage est un mot-cl\u00e9 qui d\u00e9crit les efforts de Bellach et de ses sbires pour d\u00e9couvrir la forge cach\u00e9e de Celebrimbor et les h\u00e9ros qui la recherchent. Ce mot-cl\u00e9 n'a aucun effet en lui-m\u00eame mais, quand une carte Qu\u00eate ou une carte Rencontre demande aux joueurs de d\u00e9clencher un \u00AB effet Ratissage \u00BB, ils doivent r\u00e9soudre l'effet qui suit le mot-cl\u00e9 Ratissage sur les cartes ayant ce mot-cl\u00e9."
+    },
+    {
+        "word":"R\u00e9g\u00e9n\u00e9rer X",
+        "definition": "Un ennemi avec ce mot-cl\u00e9 se soigne de X points de d\u00e9g\u00e2ts \u00e0 chaque tour, X \u00e9tant la valeur sp\u00e9cifi\u00e9e \u00e0 droite du mot-cl\u00e9 R\u00e9g\u00e9n\u00e9rer. Cela se produit pendant la phase de restauration, imm\u00e9diatement apr\u00e8s le transfert du marqueur premier joueur et avant la fen\u00eatre d'Actions des joueurs."
+    },
+    {
+        "word":"Renfort",
+        "definition": "Quand une carte Rencontre avec ce mot-cl\u00e9 entre en jeu, on r\u00e9v\u00e8le 1 carte suppl\u00e9mentaire du deck de rencontre. On r\u00e9sout ce mot-cl\u00e9 imm\u00e9diatement apr\u00e8s avoir r\u00e9solu les effets \u00AB Une fois r\u00e9v\u00e9l\u00e9e \u00BB qui peuvent aussi \u00eatre pr\u00e9sents sur la carte."
+    },
+    {
+        "word":"R\u00e9sistance X",
+        "definition": "R\u00e9sistance est un mot-cl\u00e9 de l'extension de saga La Route s'Assombrit. Un ennemi ayant le mot-cl\u00e9 R\u00e9sistance r\u00e9duit de X les d\u00e9g\u00e2ts reçus \u00e0 chaque fois qu'il subit des d\u00e9g\u00e2ts."
+    },
+    {
+        "word":"Restreint",
+        "definition": "Certains attachements ont le mot-cl\u00e9 Restreint. Un personnage ne peut jamais avoir plus de deux attachements Restreint attach\u00e9s \u00e0 sa carte. Si un troisi\u00e8me attachement Restreint est attach\u00e9 \u00e0 un personnage, un des attachements Restreint doit imm\u00e9diatement \u00eatre d\u00e9fauss\u00e9 dans la pile de d\u00e9fausse de son propri\u00e9taire."
+    },
+    {
+        "word":"Sac X",
+        "definition": "Le mot-cl\u00e9 Sac X est propre \u00e0 ce sc\u00e9nario. Il oblige les joueurs \u00e0 piocher des cartes du deck \u00e0 sacs. Quand ce mot-cl\u00e9 est d\u00e9clench\u00e9 par des cartes de rencontre, le premier joueur pioche les X premi\u00e8res cartes du deck \u00e0 sacs et r\u00e9sout leur effet de \u00AB Mise en sac \u00BB. Si les joueurs doivent piocher plusieurs cartes du deck \u00e0 sacs, on r\u00e9sout l'effet de chaque carte Sac avant de piocher la suivante.\n\nSi le mot-cl\u00e9 Sac X est d\u00e9clench\u00e9 et qu'il n'y a plus de cartes dans le deck \u00e0 sacs, ignorez l'effet. Si une carte Sac quitte le jeu, quelle qu'en soit la raison, remettez-la dans le deck \u00e0 sacs et m\u00e9langez ce dernier.\n\nQuand vous r\u00e9solvez l'effet de \u00AB Mise en sac \u00BB d'une carte Sac, c'est au premier joueur de choisir la cible s'il y en a plusieurs possibles. Si une carte Sac oblige les joueurs \u00e0 choisir une cible qui n'est pas valide, le premier joueur doit se tourner vers une autre cible valide. S'il n'y en a pas, remettez la carte Sac dans le deck \u00e0 sacs et m\u00e9langez-le.\n\nGandalf ne peut jamais \u00eatre choisi comme cible d'un effet de \u00AB Mise en sac \u00BB."
+    },
+    {
+        "word":"Secret X",
+        "definition": "Secret est un mot-cl\u00e9 qui appara\u00eet sur certaines cartes Joueur. Secret r\u00e9duit de la valeur sp\u00e9cifi\u00e9e le coût pour jouer la carte, \u00e0 condition que le niveau de menace du joueur jouant cette carte soit de 20 ou moins. Secret ne s'applique qu'au moment o\u00F9 la carte est jou\u00e9e depuis la main, et ne modifie en aucun cas le coût imprim\u00e9 de la carte."
+    },
+    {
+        "word":"Sentinelle",
+        "definition": "Un personnage avec ce mot-cl\u00e9 peut \u00eatre d\u00e9clar\u00e9 par son contr\u00f4leur comme d\u00e9fenseur lors des attaques ennemies sur d'autres joueurs. Un personnage peut \u00eatre d\u00e9clar\u00e9 Sentinelle en d\u00e9fense apr\u00e8s que le joueur engag\u00e9 au combat avec un ennemi d\u00e9clare l'attaque \u00AB sans d\u00e9fense \u00BB. Il faut incliner le personnage Sentinelle et remplir toutes les autres conditions qui pourraient \u00eatre n\u00e9cessaires pour r\u00e9aliser cette d\u00e9fense."
+    },
+    {
+        "word":"Si\u00e8ge",
+        "definition": "Quand une carte Qu\u00eate a le mot-cl\u00e9 Si\u00e8ge, les personnages engag\u00e9s dans cette qu\u00eate additionnent leur valeur de d\u00e9fense (defense) au lieu de leur valeur de volont\u00e9 (volonte) au moment de la r\u00e9solution de la qu\u00eate. Les ennemis et lieux de la zone de cheminement additionnent leur valeur de menace (menace), comme d'habitude."
+    },
+    {
+        "word":"Temps X",
+        "definition": "Temps X est un mot-cl\u00e9 qui illustre l'urgence de la qu\u00eate des h\u00e9ros. Quand une carte ayant ce mot-cl\u00e9 est r\u00e9v\u00e9l\u00e9e, les joueurs placent X marqueurs de ressource dessus. Ces marqueurs sont appel\u00e9s \u00AB compteurs de temps \u00BB. \u00c0 la fin de chaque phase de restauration, retirez 1 compteur de temps de chaque carte ayant le mot-cl\u00e9 Temps X, si possible. Quand le dernier compteur de temps est retir\u00e9 d'une carte, un effet se d\u00e9clenche et doit \u00eatre r\u00e9solu comme indiqu\u00e9 sur la carte. Certaines cartes de rencontre peuvent aussi retirer des compteurs de temps, si bien que les joueurs auront du mal \u00e0 estimer le temps qu'il leur reste pour accomplir la qu\u00eate."
+    },
+    {
+        "word":"Traque X",
+        "definition": "Ce mot-cl\u00e9 repr\u00e9sente la capacit\u00e9 surnaturelle qu'ont les Woses de pister leurs proies dans La For\u00eat de Drúadan. Quand une carte de rencontre ayant le mot-cl\u00e9 Traque est r\u00e9v\u00e9l\u00e9e du deck de rencontre, les joueurs (en tant que groupe) doivent d\u00e9fausser un nombre de ressources de la r\u00e9serve de leurs h\u00e9ros \u00e9gal \u00e0 la valeur indiqu\u00e9e. S'ils n'en ont pas assez, ils doivent tout de m\u00eame en d\u00e9fausser le plus possible."
+    },
+    {
+        "word":"Venin",
+        "definition": "Venin est un mot-cl\u00e9 du sc\u00e9nario Mouches et Araign\u00e9es, qui repr\u00e9sente les tactiques meurtri\u00e8res utilis\u00e9es par les Araign\u00e9es de la For\u00eat Noire pour neutraliser les Nains et les emp\u00eatrer dans leurs toiles.\n\nQuand un ennemi ayant le mot-cl\u00e9 Venin inflige des d\u00e9g\u00e2ts \u00e0 un personnage, le contr\u00f4leur de celui-ci doit lui donner 1 poison. Pour ce faire, il prend la premi\u00e8re carte de son deck et l'attache face cach\u00e9e \u00e0 ce personnage. Les cartes face cach\u00e9e attach\u00e9es aux personnages sont appel\u00e9es \u00AB poison \u00BB. Les cartes Poison sont des attachements Condition, et les personnages auxquels est attach\u00e9e au moins une carte Poison sont consid\u00e9r\u00e9s comme \u00AB empoisonn\u00e9s \u00BB."
+    },
+    {
+        "word":"Victoire X",
+        "definition": "Certaines cartes Ennemi et Lieu accordent des points de victoire quand elles sont \u00e9limin\u00e9es. Quand une carte avec ce mot-cl\u00e9 quitte le jeu, un joueur la place \u00e0 c\u00f4t\u00e9 de son compteur de \u00AB niveau de menace \u00BB pour ne pas oublier de compter ses points de victoire \u00e0 la fi n du jeu. Il est conseill\u00e9 qu'un seul joueur r\u00e9cup\u00e8re ces cartes \u00AB victoire \u00BB, leurs points de victoire \u00e9tant accord\u00e9s \u00e0 l'ensemble des joueurs."
+    },
+    {
+        "word":"Villageois X",
+        "definition": "Villageois est un mot-cl\u00e9 qui appara\u00eet sur des cartes Lieu et Qu\u00eate du sc\u00e9nario Rencontre \u00e0 Amon D\u00een. Il g\u00e9n\u00e8re des marqueurs repr\u00e9sentant les gens qui vivent pr\u00e8s d'Amon D\u00een et que doivent sauver les h\u00e9ros.\nQuand un lieu avec le mot-cl\u00e9 Villageois entre en jeu, ou qu'une carte Qu\u00eate avec le mot-cl\u00e9 Villageois est r\u00e9v\u00e9l\u00e9e, placez sur la carte un nombre de marqueurs de ressource \u00e9gal \u00e0 la valeur indiqu\u00e9e. Les marqueurs de ressource ainsi plac\u00e9s sur un lieu ou une qu\u00eate sont consid\u00e9r\u00e9s comme \u00e9tant des marqueurs de villageois, ils ne comptent pas comme des ressources."
+    }
+]
