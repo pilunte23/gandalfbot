@@ -10,11 +10,14 @@ from discord_slash.utils.manage_components import *
 from dotenv import load_dotenv
 from PIL import Image
 from unidecode import unidecode
+from function import *
+
 
 
 load_dotenv(dotenv_path="config")
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
+bot.load_extension("path.timing")
 slash = SlashCommand(bot , sync_commands=True)
 
 @bot.event
@@ -22,35 +25,6 @@ async def on_ready():
 	""" check if bot is connected """
 	print("Le robot est connecté comme {0.user}".format(bot))
 
-@slash.slash(
-    name="t",
-    description="Affiche le timing des phases du jeu",
-    guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
-    options=[create_option(
-        name="timing",
-        description="Affiche le timing des phases du jeu",
-        option_type=3,
-        required=True,
-        choices=[
-                    create_choice(
-                        name="Phases",
-                        value="phases"
-                    ),
-                    create_choice(
-                        name="Combat",
-                        value="combat"
-                    )
-                ]
-    )                    
-    ]
-)
-
-async def _timing(ctx:SlashContext,timing):  
-    file_url = f"./assets/timing/{timing}.png"
-    file = discord.File(file_url, filename="image.png")
-    embed_no_carte = discord.Embed(name = f"{timing}", color = discord.Color.red())
-    embed_no_carte.set_image(url="attachment://image.png")  
-    await ctx.send(file=file,embed = embed_no_carte)
 
 @slash.slash(
     name="c",
@@ -469,7 +443,7 @@ async def _mot(ctx:SlashContext, motcle:str):
         if len(resultat_word) == 1: 
             datacard = resultat_word[0]
             embed_word = discord.Embed(title=datacard['word'],color=discord.Color.green())
-            embed_word.add_field(name = "Définition", value = change(datacard['definition']))   
+            embed_word.add_field(name = "Définition", value = change(bot,datacard['definition']))   
             await ctx.send(embed = embed_word)
         else:
             if len(resultat_word) > 24:    
@@ -495,7 +469,7 @@ async def _mot(ctx:SlashContext, motcle:str):
                 choice_ctx = await wait_for_component(bot,components=select)
                 datacard = resultat_word[int(choice_ctx.values[0])]
                 embed_word = discord.Embed(title=datacard['word'],color=discord.Color.green())
-                embed_word.add_field(name = "Définition", value = change(datacard['definition']))   
+                embed_word.add_field(name = "Définition", value = change(bot,datacard['definition']))   
                 await ctx.send(embed = embed_word)
                 await fait_ctx.delete()
     else:
@@ -508,17 +482,6 @@ async def _mot(ctx:SlashContext, motcle:str):
         await asyncio.sleep(5)
         await no_card_msg.delete()
 
-def emoji(emoji_name):
-    emoji = discord.utils.get(bot.emojis, name=emoji_name)
-    return str(emoji)
-    
 
-def change(str):
-    str_with_emoji = str.replace("(defense)","("+emoji("defense") +")")
-    str_with_emoji = str_with_emoji.replace("(attaque)","("+ emoji("attack") +")")
-    str_with_emoji = str_with_emoji.replace("(volonte)","("+ emoji("willpower") +")")
-    str_with_emoji = str_with_emoji.replace("(menace)","("+ emoji("threat") +")")
-    str_with_emoji = str_with_emoji.replace("(pointdevie)","("+ emoji("hitpoints") +")")
-    return str_with_emoji
-
+bot.
 bot.run(os.getenv("DISCORD_TOKEN"))
