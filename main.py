@@ -468,8 +468,7 @@ async def _mot(ctx:SlashContext, motcle:str):
     if len(resultat_word) > 0:
         if len(resultat_word) == 1: 
             datacard = resultat_word[0]
-            embed_word = discord.Embed(title=datacard['word'],color=discord.Color.green())
-            embed_word.add_field(name = "Définition", value = change(datacard['definition']))   
+            embed_word = discord.Embed(title=datacard['word'],color=discord.Color.green(),description= change(datacard['definition']))
             await ctx.send(embed = embed_word)
         else:
             if len(resultat_word) > 24:    
@@ -494,8 +493,7 @@ async def _mot(ctx:SlashContext, motcle:str):
                 fait_ctx = await ctx.send("Choisissez votre mot-clé", components=[create_actionrow(select)])
                 choice_ctx = await wait_for_component(bot,components=select)
                 datacard = resultat_word[int(choice_ctx.values[0])]
-                embed_word = discord.Embed(title=datacard['word'],color=discord.Color.green())
-                embed_word.add_field(name = "Définition", value = change(datacard['definition']))   
+                embed_word = discord.Embed(title=datacard['word'],color=discord.Color.green(),description= change(datacard['definition']))
                 await ctx.send(embed = embed_word)
                 await fait_ctx.delete()
     else:

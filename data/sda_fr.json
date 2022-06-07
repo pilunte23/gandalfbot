@@ -6473,7 +6473,7 @@
       "sphere_name":"Tactique",
       "position":84,
       "code":"06084",
-      "name":"Hommes de l'Ouest",
+      "name":"Chevalier de Minas Tirith",
       "traits":"Gondor. Guerrier.",
       "text":"If each of your heroes has a printed [tactics] hero resource icon, Knight of Minas Tirith Tirith gains: \"<b>Response:<\/b> After Knight of Minas Tirith enters play, choose an enemy in the staging area. Engage that enemy and exhaust Knight of Minas Tirith to declare it as attacker (and resolve its attack) against that enemy.\"",
       "is_unique":false,
