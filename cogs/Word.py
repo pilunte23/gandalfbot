@@ -22,7 +22,7 @@ class Word(commands.Cog):
     options=[
         create_option(
             name="motcle",
-            description="mot-clé recherché",
+            description="Mot-Clé Recherché",
             required=True,
             option_type=3
         )

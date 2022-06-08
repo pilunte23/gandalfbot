@@ -2,4 +2,4 @@ config
 gandalf/*
 images/*
 requête.png
-**/*.pyc
+*.pyc
