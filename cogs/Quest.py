@@ -17,7 +17,7 @@ class Quest(commands.Cog):
 
     @cog_ext.cog_slash(
         name="q",
-        description="Pour l'affichage de carte(s) de Quête",
+        description="Pour l'affichage de carte(s) de Quête et des Quêtes annexes rencontre",
         guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
         options=[
             create_option(
