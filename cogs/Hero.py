@@ -6,8 +6,6 @@ from discord_slash.utils.manage_components import *
 from unidecode import unidecode
 from PIL import Image
 import json
-import re
-import asyncio
 import os
 import random
 
