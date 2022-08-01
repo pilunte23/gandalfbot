@@ -167,7 +167,7 @@ class Hero(commands.Cog):
         dataCard = json.load(f)       
         for i in dataCard:
             if i["type_code"] == "hero": 
-                if i["pack_code"] not in ["EoL", "DoG", "RoR", "DoD"]:
+                if i["pack_code"] not in ["EoL", "DoG", "RoR", "DoD", "Starter" ]:
                     if "ALeP" not in i["pack_name"]:
                         if "(MotK)" not in i["name"]:
                             if (i["sphere_code"] == hero_1 or hero_1 =="all" ):
