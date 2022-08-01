@@ -116,7 +116,7 @@ class Encounter(commands.Cog):
                     """check exist octgn file"""
                     if "octgnid" in i:
                         """ remove (MotK) card and starter deck (no octgn file) and """
-                        if not (re.search("(MotK)",i['name'])) and i['pack_code'] not in ["EoL", "DoG", "RoR", "DoD"] and not (re.search("ALeP",i['pack_name'])):
+                        if not (re.search("(MotK)",i['name'])) and i['pack_code'] not in ["EoL", "DoG", "RoR", "DoD", "Starter"] and not (re.search("ALeP",i['pack_name'])):
                             """ check if the id is already on the list """
                             already_find = False  
                             for j in resultat_carte:
