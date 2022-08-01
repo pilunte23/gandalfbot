@@ -8,6 +8,6 @@ RUN pip install discord\
 && pip install pillow \
 && pip install unidecode \
 && pip install discord-components \
-&& pip installbeautifulsoup4
+&& pip install beautifulsoup4
 COPY . ./
 CMD [ "python", "./main.py"]
