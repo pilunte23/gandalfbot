@@ -1,17 +1,14 @@
-from cgitb import text
-from turtle import title
 import discord
 from discord.ext import commands
 from discord_slash import cog_ext
 from discord_slash.utils.manage_commands import create_choice, create_option
 from discord_slash.utils.manage_components import *
-from unidecode import unidecode
 import os
 import requests
 import xml.etree.ElementTree as ET
 import json
 from PIL import Image
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 
 class Deck(commands.Cog):
 
