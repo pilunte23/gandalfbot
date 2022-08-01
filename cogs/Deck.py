@@ -145,7 +145,11 @@ class Deck(commands.Cog):
                         else:     
                             emoji = discord.utils.get(self.bot.emojis, name=resultat_carte[0]['sphere_code'])
                             name=resultat_carte[0]['name']
-                            list_card = list_card + card.get("qty") + "x " + f"{emoji}{name}"+ "\r\n"
+                            code=resultat_carte[0]['code']
+                            if sideboard=="no":
+                                list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ "\r\n"
+                            else:
+                                list_card = list_card + card.get("qty") + "x " + f"{emoji}{name}"+ "\r\n"
                             if len(list_card) > 900:
                                 embed_deck.add_field(name = trad(section.get("name")), value = list_card)
                                 list_card = ""
