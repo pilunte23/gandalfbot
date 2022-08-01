@@ -40,7 +40,22 @@ class Deck(commands.Cog):
                                 value="ringsdb"
                             )
                         ]
-            )            
+            ),
+            create_option(
+                name="sideboard",
+                description="Afficher les cartes mise de coté ?",
+                option_type=3,
+                required=False,
+                choices=[   create_choice(
+                                name="Oui ",
+                                value="yes"
+                            ),
+                            create_choice(
+                                name="Non",
+                                value="no"
+                            )
+                        ]
+            )             
         ]
     )
 
@@ -115,27 +130,28 @@ class Deck(commands.Cog):
             number_card = 0
             if len(countcard) > 0:
                 list_card = ""
-                for card in section:
-                    resultat_carte= []               
-                    for i in dataCard:
-                        if 'octgnid' in i:
-                            if  card.get("id") == i['octgnid']:
-                                resultat_carte.append(i)
-                            if section_name =="Hero" and card.get("id") == i['octgnid']:
-                                resultat_carte_hero.append(i)        
-                    if len(resultat_carte) == 0:
-                        print("non trouvé pour : "+ card.get("id"))
-                        list_card = list_card + card.get("qty") + " " + card.get("id") + "\r\n"
-                    else:     
-                        emoji = discord.utils.get(self.bot.emojis, name=resultat_carte[0]['sphere_code'])
-                        name=resultat_carte[0]['name']
-                        list_card = list_card + card.get("qty") + "x " + f"{emoji}{name}"+ "\r\n"
-                        if len(list_card) > 900:
-                           embed_deck.add_field(name = trad(section.get("name")), value = list_card)
-                           list_card = ""
-                    number_card = number_card + int(card.get("qty")) 
-                if section_name !="Hero":  
-                    embed_deck.add_field(name = trad(section.get("name")) +" ("+ str(number_card)+")", value = list_card)
+                if section_name !="Sideboard" or (section_name =="Sideboard" and sideboard=="yes"):
+                    for card in section:
+                        resultat_carte= []               
+                        for i in dataCard:
+                            if 'octgnid' in i:
+                                if  card.get("id") == i['octgnid']:
+                                    resultat_carte.append(i)
+                                if section_name =="Hero" and card.get("id") == i['octgnid']:
+                                    resultat_carte_hero.append(i)        
+                        if len(resultat_carte) == 0:
+                            print("non trouvé pour : "+ card.get("id"))
+                            list_card = list_card + card.get("qty") + " " + card.get("id") + "\r\n"
+                        else:     
+                            emoji = discord.utils.get(self.bot.emojis, name=resultat_carte[0]['sphere_code'])
+                            name=resultat_carte[0]['name']
+                            list_card = list_card + card.get("qty") + "x " + f"{emoji}{name}"+ "\r\n"
+                            if len(list_card) > 900:
+                                embed_deck.add_field(name = trad(section.get("name")), value = list_card)
+                                list_card = ""
+                        number_card = number_card + int(card.get("qty")) 
+                    if section_name !="Hero":
+                        embed_deck.add_field(name = trad(section.get("name")) +" ("+ str(number_card)+")", value = list_card)
         
         img = []
         place = 0
