@@ -8,7 +8,6 @@ import requests
 import xml.etree.ElementTree as ET
 import json
 from PIL import Image
-#from bs4 import BeautifulSoup
 
 class Deck(commands.Cog):
 
@@ -56,14 +55,36 @@ class Deck(commands.Cog):
                                 value="no"
                             )
                         ]
-            )             
+            ),
+            create_option(
+                name="information",
+                description="Afficher des informations complémentaires ?",
+                option_type=3,
+                required=False,
+                choices=[   create_choice(
+                                name="Non",
+                                value="no"
+                            ),
+                            create_choice(
+                                name="Le nom du paquet",
+                                value="pack"
+                            ),
+                            create_choice(
+                                name="Le nom du Cycle (valeur par défaut)",
+                                value="cycleshort"
+                            ),
+                            create_choice(
+                                name="Le nom du Cycle Complet",
+                                value="cycle"
+                            )
+                        ]
+            )              
         ]
     )
 
-    async def _deck(self,ctx,identifiant,site="cgbuilder",sideboard="no"):
+    async def _deck(self,ctx,identifiant,site="cgbuilder",sideboard="no",information="cycleshort"):
         
-        if site=="cgbuilder":
-            
+        if site=="cgbuilder":      
             data = {
                 'id_ajax': 'exporter_deck_octgn',
                 'id_deck_builder': identifiant,
@@ -73,52 +94,37 @@ class Deck(commands.Cog):
             file=requests.get(urlo8d.content) 
             title="Deck " +identifiant +" sur sda.cgbuilder.fr"
             urlpage = "https://sda.cgbuilder.fr/partage_deck/"+ identifiant +"/" 
-            """
-            while True:
-                try:
-                    urlpage = "https://sda.cgbuilder.fr/partage_deck/"+ identifiant +"/"
-                    filepage=requests.get(urlpage)
-                    open('mypage.html','wb').write(filepage.content) 
-                    url = "mypage.html"
-                    page = open(url)
-                    soup = BeautifulSoup(page.read(),features="html.parser")
-                    mydiv=soup.find("div", {"class": "titre_partage"})
-                    title=mydiv.find("h2",recursive=False).text
-                    title=title.rstrip(title[-1])
-                    author=mydiv.find("h3",recursive=False).text
-                    urlauthor = 'https://sda.cgbuilder.fr/deck_communautaire/'+ author +'/'
-                except:
-                    
-            """
+            #filepage=requests.get(urlpage)
+            #open('mypage.html','wb').write(filepage.content) 
+            #url = "mypage.html"
+            #page = open(url)
+            #soup = BeautifulSoup(page.read(),features="html.parser")
+            #mydiv=soup.find("div", {"class": "titre_partage"})
+            #title=mydiv.find("h2",recursive=False).text
+            #title=title.rstrip(title[-1])
+            #divauthor=mydiv.find("h3",recursive=False)
+            #author=divauthor.find("span",recursive=False).text
 
         if site=="ringsdb":
-            
             urlo8d = 'https://ringsdb.com/decklist/export/octgn/'+ identifiant
             file=requests.get(urlo8d)
             title="Deck " +identifiant +" sur ringsdb.com"
             urlpage = "https://ringsdb.com/decklist/view/"+ identifiant
-            """
-            while True:
-                try:
-                    urlpage = "https://ringsdb.com/decklist/view/"+ identifiant
-                    filepage=requests.get(urlpage)
-                    open('mypage.html','wb').write(filepage.content) 
-                    url = "mypage.html"
-                    page = open(url)
-                    soup = BeautifulSoup(page.read(),features="html.parser")
-                    title=soup.find("h1", {"class": "decklist-name bg-sphere text-center"}).find(text=True, recursive=False)
-                    author=soup.find("a",{"class": "username"}).text
-                    urlauthor = 'https://sda.cgbuilder.fr/deck_communautaire/'+ author +'/'
-                except:
-                    
-            """
-
+            #filepage=requests.get(urlpage)
+            #open('mypage.html','wb').write(filepage.content) 
+            #url = "mypage.html"
+            #page = open(url)
+            #soup = BeautifulSoup(page.read(),features="html.parser")
+            #title=soup.find("h1", {"class": "decklist-name bg-sphere text-center"}).find(text=True, recursive=False)
+            #divauthor=soup.find("h3",{"class": "username"})
+            #author=divauthor.find("a").text
+            #print(author)
+                   
         open('mydeck.xml','wb').write(file.content)
 
         url_file =  "./data/sda_fr.json"
         f = open(url_file)
         dataCard = json.load(f)    
-        embed_deck = discord.Embed(title = title,color = discord.Color.blue())
         embed_deck = discord.Embed(title = title,url=urlpage,color = discord.Color.blue())
         #embed_deck.set_author(name=author)
         resultat_carte_hero= []
@@ -147,7 +153,15 @@ class Deck(commands.Cog):
                             emoji = discord.utils.get(self.bot.emojis, name=resultat_carte[0]['sphere_code'])
                             name=resultat_carte[0]['name']
                             code=resultat_carte[0]['code']
-                            list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ "\r\n,"    
+                            if information == "no":
+                                info = ""
+                            if information == "pack":
+                                info = resultat_carte[0]['pack_name']
+                            if information == "cycle":
+                                info = searchcycle(resultat_carte[0]['pack_code'],"")
+                            if information == "cycleshort":
+                                info = searchcycle(resultat_carte[0]['pack_code'],"short")
+                            list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ f" {info} \r\n,"    
                         number_card = number_card + int(card.get("qty")) 
                     if section_name !="Hero":
                         number_field = (len(list_card)//1024) + 1
@@ -156,10 +170,10 @@ class Deck(commands.Cog):
                         i=0
                         while i < number_field:
                             list_card = ''.join(chunks[i])
-                            if i == number_field -1:
-                                embed_deck.add_field(name = trad(section.get("name")) +" ("+ str(number_card)+")", value = list_card)
+                            if i == 0:
+                                embed_deck.add_field(name = trad(section.get("name")) +" ("+ str(number_card)+")", value = list_card,inline=False)
                             else:
-                                embed_deck.add_field(name = trad(section.get("name")), value = list_card)
+                                embed_deck.add_field(name = trad(section.get("name")) +" (Suite)", value = list_card,inline=False)
                             i = i+1
        
         img = []
@@ -188,6 +202,82 @@ class Deck(commands.Cog):
 
 def chunkify(lst, n):
     return [lst[i::n] for i in range(n)]
+
+def searchcycle(pack_code, type):   
+    cycle=""
+    cycleshort=""
+    if pack_code in ["Starter","Core"]:
+        cycle="Boite de base"
+        cycleshort="Boite de base"
+        "EoL", "DoG", "RoR", "DoD",
+    if pack_code == "Dod":
+        cycle="Starter : Les Nains de Durin"
+        cycleshort="Les Nains de Durin"
+    if pack_code == "EoL":
+        cycle="Starter : Les Elfes de la Lorien"
+        cycleshort="Les Elfes de la Lorien"
+    if pack_code == "DoG":
+        cycle="Starter : Les Défenseurs du Gondor"
+        cycleshort="Les Défenseurs du Gondor"
+    if pack_code == "RoR":
+        cycle="Starter : Les Cavaliers du Rohan"
+        cycleshort="Les Cavaliers du Rohan"        
+    if pack_code in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
+        cycle="Cycle 1 : Ombres de la Forêt Noire"
+        cycleshort="Cycle 1"
+    if pack_code in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
+        cycle="Cycle 2 : Royaume de Cavenain"
+        cycleshort="Cycle 2"
+    if pack_code in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
+        cycle="Cycle 3 : Face à l'Ombre"
+        cycleshort="Cycle 3"
+    if pack_code in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
+        cycle="Cycle 4 : Le Créateur d'Anneaux"
+        cycleshort="Cycle 4"
+    if pack_code in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
+        cycle="Cycle 5 : Le Réveil d'Angmar"
+        cycleshort="Cycle 5"
+    if pack_code in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
+        cycle="Cycle 6 : Chasse-Rêve"
+        cycleshort="Cycle 6"
+    if pack_code in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
+        cycle="Cycle 7 : Les Haradrim"
+        cycleshort="Cycle 7"
+    if pack_code in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
+        cycle="Cycle 8 : Ered Mithrin"
+        cycleshort="Cycle 8"
+    if pack_code in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
+        cycle="Cycle 9 : La Vengeance du Mordor"
+        cycleshort="Cycle 9"
+    if pack_code == "OHaUH":
+        cycle="Extension de saga : Par Monts et par Souterrains"
+        cycleshort="Par Monts et par Souterrains"
+    if pack_code == "OtD":
+        cycle="Extension de saga : Au Seuil de la Porte"
+        cycleshort="Au Seuil de la Porte"
+    if pack_code == "TBR":
+        cycle="Extension de saga : Les Cavaliers Noirs"
+        cycleshort="Les Cavaliers Noirs"
+    if pack_code == "TRD":
+        cycle="Extension de saga : La Route s'Assombrit"
+        cycleshort="La Route s'Assombrit"
+    if pack_code == "ToS":
+        cycle="Extension de saga : La Trahison de Saroumane"
+        cycleshort="La Trahison de Saroumane"
+    if pack_code == "LoS":
+        cycle="Extension de saga : La Terre de l'Ombre"
+        cycleshort="La Terre de l'Ombre"
+    if pack_code == "FotW":
+        cycle="Extension de saga : La Flamme de l'Ouest"
+        cycleshort="La Flamme de l'Ouest"
+    if pack_code == "MoF":
+        cycle="Extension de saga : La Montagne de Feu"
+        cycleshort="La Montagne de Feu"
+    if type=="short":
+        response = cycleshort
+    else:
+        response = cycle
+    return response
 
 def trad(name):
     trad=""
