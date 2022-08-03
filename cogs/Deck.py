@@ -19,6 +19,7 @@ class Deck(commands.Cog):
         name="d",
         description="Partage un deck mis en ligne",
         guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
+        #guild_ids=list(map(int,"962626468591058974")),
         options=[
             create_option(
                 name="identifiant",
@@ -146,17 +147,21 @@ class Deck(commands.Cog):
                             emoji = discord.utils.get(self.bot.emojis, name=resultat_carte[0]['sphere_code'])
                             name=resultat_carte[0]['name']
                             code=resultat_carte[0]['code']
-                            if sideboard=="no":
-                                list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ "\r\n"
-                            else:
-                                list_card = list_card + card.get("qty") + "x " + f"{emoji}{name}"+ "\r\n"
-                            if len(list_card) > 900:
-                                embed_deck.add_field(name = trad(section.get("name")), value = list_card)
-                                list_card = ""
+                            list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ "\r\n,"    
                         number_card = number_card + int(card.get("qty")) 
                     if section_name !="Hero":
-                        embed_deck.add_field(name = trad(section.get("name")) +" ("+ str(number_card)+")", value = list_card)
-        
+                        number_field = (len(list_card)//1024) + 1
+                        split_list_card = list_card.split(',')
+                        chunks =chunkify(split_list_card, number_field)
+                        i=0
+                        while i < number_field:
+                            list_card = ''.join(chunks[i])
+                            if i == number_field -1:
+                                embed_deck.add_field(name = trad(section.get("name")) +" ("+ str(number_card)+")", value = list_card)
+                            else:
+                                embed_deck.add_field(name = trad(section.get("name")), value = list_card)
+                            i = i+1
+       
         img = []
         place = 0
         img_weight = 0
@@ -180,6 +185,9 @@ class Deck(commands.Cog):
         file = discord.File("hero.png", filename = "image.png")
         embed_deck.set_image(url ="attachment://image.png")
         await ctx.send(file=file,embed = embed_deck) 
+
+def chunkify(lst, n):
+    return [lst[i::n] for i in range(n)]
 
 def trad(name):
     trad=""

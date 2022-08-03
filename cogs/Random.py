@@ -29,21 +29,19 @@ class Random(commands.Cog):
         dataPack = json.load(f)
         randomPack = random.randint(0, len(dataPack)-1)
         pack_name= dataPack[randomPack]['code']
-        print(pack_name)
+
         url_file =  "./data/sda_fr.json"
         f = open(url_file)
         dataCard = json.load(f)
         for i in dataCard:
             if i["pack_code"] == pack_name:
                 resultat_carte.append(i)
-        print(len(resultat_carte))
+
         randomCard = random.randint(0, len(resultat_carte)-1) 
         await sendcard(self,ctx,resultat_carte[randomCard])
                     
 async def sendcard(self,ctx,datacard):
-    print(datacard['pack_code'])
-    print(datacard['name'])
-    print(datacard['octgnid'])
+
     #channel = discord.utils.get(ctx.guild.channels, name="carte-du-jour")
     channel = self.bot.get_channel("984083665028014130")
     """ beautiful embed """
