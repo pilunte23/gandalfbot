@@ -19,7 +19,6 @@ class Deck(commands.Cog):
         name="d",
         description="Partage un deck mis en ligne",
         guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
-        #guild_ids=list(map(int,"962626468591058974")),
         options=[
             create_option(
                 name="identifiant",
