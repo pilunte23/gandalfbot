@@ -1,3 +1,4 @@
+from genericpath import exists
 import discord
 from discord.ext import commands
 from discord_slash import cog_ext
@@ -158,23 +159,22 @@ class Deck(commands.Cog):
                             if information == "pack":
                                 info = resultat_carte[0]['pack_name']
                             if information == "cycle":
-                                info = searchcycle(resultat_carte[0]['pack_code'],"")
+                                info = findcycle(resultat_carte[0],"")
                             if information == "cycleshort":
-                                info = searchcycle(resultat_carte[0]['pack_code'],"short")
-                            list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ f" {info} \r\n,"    
+                                info = findcycle(resultat_carte[0],"short")
+                            list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ f" {info} \r\n;"    
                         number_card = number_card + int(card.get("qty")) 
-                    if section_name !="Hero":
-                        number_field = (len(list_card)//1024) + 1
-                        split_list_card = list_card.split(',')
-                        chunks =chunkify(split_list_card, number_field)
-                        i=0
-                        while i < number_field:
-                            list_card = ''.join(chunks[i])
-                            if i == 0:
-                                embed_deck.add_field(name = trad(section.get("name")) +" ("+ str(number_card)+")", value = list_card,inline=False)
-                            else:
-                                embed_deck.add_field(name = trad(section.get("name")) +" (Suite)", value = list_card,inline=False)
-                            i = i+1
+                    number_field = (len(list_card)//1024) + 1
+                    split_list_card = list_card.split(';')
+                    chunks =chunkify(split_list_card, number_field)
+                    i=0
+                    while i < number_field:
+                        list_card = ''.join(chunks[i])
+                        if i == 0:
+                            embed_deck.add_field(name = trad(section.get("name")) +" ("+ str(number_card)+")", value = list_card,inline=False)
+                        else:
+                            embed_deck.add_field(name = trad(section.get("name")) +" (Suite)", value = list_card,inline=False)
+                        i = i+1
        
         img = []
         place = 0
@@ -203,81 +203,103 @@ class Deck(commands.Cog):
 def chunkify(lst, n):
     return [lst[i::n] for i in range(n)]
 
-def searchcycle(pack_code, type):   
-    cycle=""
-    cycleshort=""
-    if pack_code in ["Starter","Core"]:
-        cycle="Boite de base"
-        cycleshort="Boite de base"
-        "EoL", "DoG", "RoR", "DoD",
-    if pack_code == "Dod":
-        cycle="Starter : Les Nains de Durin"
-        cycleshort="Les Nains de Durin"
-    if pack_code == "EoL":
-        cycle="Starter : Les Elfes de la Lorien"
-        cycleshort="Les Elfes de la Lorien"
-    if pack_code == "DoG":
-        cycle="Starter : Les Défenseurs du Gondor"
-        cycleshort="Les Défenseurs du Gondor"
-    if pack_code == "RoR":
-        cycle="Starter : Les Cavaliers du Rohan"
-        cycleshort="Les Cavaliers du Rohan"        
-    if pack_code in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
-        cycle="Cycle 1 : Ombres de la Forêt Noire"
-        cycleshort="Cycle 1"
-    if pack_code in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
-        cycle="Cycle 2 : Royaume de Cavenain"
-        cycleshort="Cycle 2"
-    if pack_code in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
-        cycle="Cycle 3 : Face à l'Ombre"
-        cycleshort="Cycle 3"
-    if pack_code in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
-        cycle="Cycle 4 : Le Créateur d'Anneaux"
-        cycleshort="Cycle 4"
-    if pack_code in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
-        cycle="Cycle 5 : Le Réveil d'Angmar"
-        cycleshort="Cycle 5"
-    if pack_code in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
-        cycle="Cycle 6 : Chasse-Rêve"
-        cycleshort="Cycle 6"
-    if pack_code in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
-        cycle="Cycle 7 : Les Haradrim"
-        cycleshort="Cycle 7"
-    if pack_code in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
-        cycle="Cycle 8 : Ered Mithrin"
-        cycleshort="Cycle 8"
-    if pack_code in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
-        cycle="Cycle 9 : La Vengeance du Mordor"
-        cycleshort="Cycle 9"
-    if pack_code == "OHaUH":
-        cycle="Extension de saga : Par Monts et par Souterrains"
-        cycleshort="Par Monts et par Souterrains"
-    if pack_code == "OtD":
-        cycle="Extension de saga : Au Seuil de la Porte"
-        cycleshort="Au Seuil de la Porte"
-    if pack_code == "TBR":
-        cycle="Extension de saga : Les Cavaliers Noirs"
-        cycleshort="Les Cavaliers Noirs"
-    if pack_code == "TRD":
-        cycle="Extension de saga : La Route s'Assombrit"
-        cycleshort="La Route s'Assombrit"
-    if pack_code == "ToS":
-        cycle="Extension de saga : La Trahison de Saroumane"
-        cycleshort="La Trahison de Saroumane"
-    if pack_code == "LoS":
-        cycle="Extension de saga : La Terre de l'Ombre"
-        cycleshort="La Terre de l'Ombre"
-    if pack_code == "FotW":
-        cycle="Extension de saga : La Flamme de l'Ouest"
-        cycleshort="La Flamme de l'Ouest"
-    if pack_code == "MoF":
-        cycle="Extension de saga : La Montagne de Feu"
-        cycleshort="La Montagne de Feu"
-    if type=="short":
-        response = cycleshort
-    else:
-        response = cycle
-    return response
+def findcycle(data,type):  
+    url_file =  "./data/sda_fr.json"
+    f = open(url_file)
+    dataCard = json.load(f) 
+    resultat_carte=[]
+    for i in dataCard:
+        if"ALeP"not in i['pack_name']:
+            if data['name'] == i['name'] and "(MotK)" not in i['name']:
+                if 'sphere_code' in i:
+                    if data['sphere_code'] == i['sphere_code']: 
+                        if 'type_code' in i:
+                            if data['type_code'] == i['type_code']:
+                                resultat_carte.append(i)  
+    resultat_cycle=[]
+    for i in resultat_carte:
+        if i["pack_code"] == "Starter":
+            cycle="Starter"
+            cycleshort="Starter"
+        if i["pack_code"] == "Core":
+            cycle="Boite de base"
+            cycleshort="Boite de base"
+        if i["pack_code"] == "DoD":
+            cycle="Starter : Les Nains de Durin"
+            cycleshort="Les Nains de Durin"
+        if i["pack_code"] == "EoL":
+            cycle="Starter : Les Elfes de la Lorien"
+            cycleshort="Les Elfes de la Lorien"
+        if i["pack_code"] == "DoG":
+            cycle="Starter : Les Défenseurs du Gondor"
+            cycleshort="Les Défenseurs du Gondor"
+        if i["pack_code"] == "RoR":
+            cycle="Starter : Les Cavaliers du Rohan"
+            cycleshort="Les Cavaliers du Rohan"        
+        if i["pack_code"] in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
+            cycle="Cycle 1 : Ombres de la Forêt Noire"
+            cycleshort="Cycle 1"
+        if i["pack_code"] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
+            cycle="Cycle 2 : Royaume de Cavenain"
+            cycleshort="Cycle 2"
+        if i["pack_code"] in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
+            cycle="Cycle 3 : Face à l'Ombre"
+            cycleshort="Cycle 3"
+        if i["pack_code"] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
+            cycle="Cycle 4 : Le Créateur d'Anneaux"
+            cycleshort="Cycle 4"
+        if i["pack_code"] in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
+            cycle="Cycle 5 : Le Réveil d'Angmar"
+            cycleshort="Cycle 5"
+        if i["pack_code"] in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
+            cycle="Cycle 6 : Chasse-Rêve"
+            cycleshort="Cycle 6"
+        if i["pack_code"] in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
+            cycle="Cycle 7 : Les Haradrim"
+            cycleshort="Cycle 7"
+        if i["pack_code"] in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
+            cycle="Cycle 8 : Ered Mithrin"
+            cycleshort="Cycle 8"
+        if i["pack_code"] in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
+            cycle="Cycle 9 : La Vengeance du Mordor"
+            cycleshort="Cycle 9"
+        if i["pack_code"] == "OHaUH":
+            cycle="Extension de saga : Par Monts et par Souterrains"
+            cycleshort="Par Monts et par Souterrains"
+        if i["pack_code"] == "OtD":
+            cycle="Extension de saga : Au Seuil de la Porte"
+            cycleshort="Au Seuil de la Porte"
+        if i["pack_code"] == "TBR":
+            cycle="Extension de saga : Les Cavaliers Noirs"
+            cycleshort="Les Cavaliers Noirs"
+        if i["pack_code"] == "TRD":
+            cycle="Extension de saga : La Route s'Assombrit"
+            cycleshort="La Route s'Assombrit"
+        if i["pack_code"] == "ToS":
+            cycle="Extension de saga : La Trahison de Saroumane"
+            cycleshort="La Trahison de Saroumane"
+        if i["pack_code"] == "LoS":
+            cycle="Extension de saga : La Terre de l'Ombre"
+            cycleshort="La Terre de l'Ombre"
+        if i["pack_code"] == "FotW":
+            cycle="Extension de saga : La Flamme de l'Ouest"
+            cycleshort="La Flamme de l'Ouest"
+        if i["pack_code"] == "MoF":
+            cycle="Extension de saga : La Montagne de Feu"
+            cycleshort="La Montagne de Feu"
+        if type=="short":
+            resultat_cycle.append(cycleshort)
+        else:
+            resultat_cycle.append(cycle)
+    #supprime toutes les occurences starters        
+    resultat_cycle = list(filter(("Starter").__ne__, resultat_cycle))
+    #supprime d'eventuel doublon
+    resultat_cycle = list(dict.fromkeys(resultat_cycle))
+    resultat_cycle_string=', '.join(resultat_cycle)
+    #hack joke gandalf 
+    if data['name'] == "Gandalf" and data['sphere_code']=="neutral" and data['type_code'] =="ally":
+        resultat_cycle_string=" :man_mage:"
+    return resultat_cycle_string
 
 def trad(name):
     trad=""
