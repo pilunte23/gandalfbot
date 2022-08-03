@@ -27496,7 +27496,7 @@
       "sphere_name":"Tactique",
       "position":16,
       "code":"33016",
-      "name":"Gondorian Shield",
+      "name":"Bouclier Gondorien",
       "traits":"Armure. Objet.",
       "text":"Attach to a hero. Restricted.\nLimit 1 per hero.\nAttached hero gains +1 [defense]. (+2 [defense] instead if attached hero has the Gondor trait.)",
       "flavor":"There flowered a White Tree, and that was for Gondor... -The Return of the King",

@@ -64,7 +64,7 @@ async def sendcard(self,ctx,datacard):
         cycle="Cycle 1 : Ombres de la Forêt Noire"
     if datacard['pack_code'] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
         cycle="Cycle 2 : Royaume de Cavenain"
-    if datacard['pack_code'] in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
+    if datacard['pack_code'] in ["HoN","TSF","TDF","EaAD","AoO","BoG","TMV"]:
         cycle="Cycle 3 : Face à l'Ombre"
     if datacard['pack_code'] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
         cycle="Cycle 4 : Le Créateur d'Anneaux"

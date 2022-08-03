@@ -162,6 +162,7 @@ class Deck(commands.Cog):
                                 info = findcycle(resultat_carte[0],"")
                             if information == "cycleshort":
                                 info = findcycle(resultat_carte[0],"short")
+                            print(name)  
                             list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ f" {info} \r\n;"    
                         number_card = number_card + int(card.get("qty")) 
                     number_field = (len(list_card)//1024) + 1
@@ -217,6 +218,8 @@ def findcycle(data,type):
                             if data['type_code'] == i['type_code']:
                                 resultat_carte.append(i)  
     resultat_cycle=[]
+    cycle=""
+    cycleshort=""
     for i in resultat_carte:
         if i["pack_code"] == "Starter":
             cycle="Starter"
@@ -242,7 +245,7 @@ def findcycle(data,type):
         if i["pack_code"] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
             cycle="Cycle 2 : Royaume de Cavenain"
             cycleshort="Cycle 2"
-        if i["pack_code"] in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
+        if i["pack_code"] in ["HoN","TSF","TDF","EaAD","AoO","BoG","TMV"]:
             cycle="Cycle 3 : Face à l'Ombre"
             cycleshort="Cycle 3"
         if i["pack_code"] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
