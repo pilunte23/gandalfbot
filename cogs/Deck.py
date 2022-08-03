@@ -161,8 +161,7 @@ class Deck(commands.Cog):
                             if information == "cycle":
                                 info = findcycle(resultat_carte[0],"")
                             if information == "cycleshort":
-                                info = findcycle(resultat_carte[0],"short")
-                            print(name)  
+                                info = findcycle(resultat_carte[0],"short")  
                             list_card = list_card + card.get("qty") + "x " + f"{emoji}[{name}](https://ringsdb.com/card/{code})"+ f" {info} \r\n;"    
                         number_card = number_card + int(card.get("qty")) 
                     number_field = (len(list_card)//1024) + 1
