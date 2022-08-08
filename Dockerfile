@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.8
 WORKDIR /usr/app/src
 RUN pip3 install --no-cache --upgrade pip
 RUN pip install discord\
