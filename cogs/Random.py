@@ -96,7 +96,7 @@ async def sendcard(self,ctx,datacard):
         cycle="Extension de saga : La Montagne de Feu"
     file_url = "./images/"+datacard['octgnid']+".jpg"
     emoji = discord.utils.get(self.bot.emojis, name=datacard['sphere_code'])
-    embed = discord.Embed(title=f"{emoji} ahah"+datacard['name'],color=sphere_color)
+    embed = discord.Embed(title=f"{emoji} "+datacard['name'],color=sphere_color)
     file = discord.File(file_url, filename="image.jpg")
     pack_file = discord.File(f"./assets/pack/{datacard['pack_code']}.png", filename="pack.png")
     embed.set_author(name=f"{datacard['pack_name']}", url= f"https://ringsdb.com/set/{datacard['pack_code']}")
