@@ -1,14 +1,16 @@
 FROM python:3.6
-WORKDIR /usr/app/src
-RUN pip3 install --no-cache --upgrade pip
-RUN pip install discord\
-&& pip install discord-py-slash-command \
-&& pip install python-dotenv \
-&& pip install requests \
-&& pip install pillow \
-&& pip install unidecode \
-&& pip install discord-components \
-&& pip install beautifulsoup4
+RUN adduser --disabled-password gandalf
+USER gandalf
+WORKDIR /home/gandalf
+ENV PATH="/home/gandalf/.local/bin:${PATH}"
+RUN pip3 install --upgrade pip
+RUN pip install --user discord\
+&& pip install --user discord-py-slash-command \
+&& pip install --user python-dotenv \
+&& pip install --user requests \
+&& pip install --user pillow \
+&& pip install --user unidecode
 
-COPY . ./
-CMD [ "python", "./main.py"]
+COPY --chown=gandalf:gandalf . .
+
+CMD ["python", "./main.py"]
