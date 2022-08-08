@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.6
 RUN adduser --disabled-password gandalf
 USER gandalf
 WORKDIR /home/gandalf
