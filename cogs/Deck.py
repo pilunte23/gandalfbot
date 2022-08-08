@@ -145,7 +145,7 @@ class Deck(commands.Cog):
                             if 'octgnid' in i:
                                 if  card.get("id") == i['octgnid']:
                                     resultat_carte.append(i)
-                                if section_name =="Hero" and card.get("id") == i['octgnid']:
+                                if (section_name =="Hero" or section_name =="Contract") and card.get("id") == i['octgnid']:
                                     resultat_carte_hero.append(i)        
                         if len(resultat_carte) == 0:
                             print("non trouvé pour : "+ card.get("id"))
@@ -317,6 +317,8 @@ def trad(name):
         trad = "Quête annexe joueur"
     if name == "Sideboard":
         trad = "Mise de coté"
+    if name == "Contract":
+        trad = "Contrat"    
     return trad
 
 def setup(bot):
