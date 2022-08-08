@@ -7,7 +7,6 @@ from unidecode import unidecode
 from PIL import Image
 import json
 import re
-import asyncio
 import os
 
 class Encounter(commands.Cog):
@@ -169,9 +168,8 @@ class Encounter(commands.Cog):
             embed_no_carte = discord.Embed(name = "no result", color = discord.Color.red())
             embed_no_carte.set_image(url="attachment://image.png")
             embed_no_carte.add_field(name = "Aucune carte n'a été trouvée", value = "Vous ne passerez pas !!!")   
-            no_card_msg = await ctx.send(file=file,embed = embed_no_carte)
-            await asyncio.sleep(5)
-            await no_card_msg.delete()
+            await ctx.send(file=file,embed = embed_no_carte, delete_after= 5)
+
 
 async def _listcard(self,ctx,resultat_carte,recherche):
     lib_champs ="Nom"
@@ -195,9 +193,8 @@ async def _listcard(self,ctx,resultat_carte,recherche):
 async def _toomuchcard(self,ctx):
     embed_too_carte = discord.Embed(name = "too much result", color = discord.Color.red())
     embed_too_carte.add_field(name = "Trop de résultat", value = "Veuillez affiner votre recherche")   
-    too_card_msg = await ctx.send(embed = embed_too_carte)
-    await asyncio.sleep(5)
-    await too_card_msg.delete()
+    await ctx.send(embed = embed_too_carte,delete_after=5)
+
 
 async def _selectingbox(self,ctx,resultat_carte):
     list_card = []

@@ -7,7 +7,7 @@ from unidecode import unidecode
 from function import *
 import json
 import re
-import asyncio
+
 import os
 
 class Word(commands.Cog):
@@ -52,9 +52,8 @@ class Word(commands.Cog):
                 if len(resultat_word) > 24:    
                     embed_too_word = discord.Embed(name = "too much result", color = discord.Color.red())
                     embed_too_word.add_field(name = "Trop de résultat", value = "Veuillez affiner votre recherche")   
-                    too_card_msg = await ctx.send(embed = embed_too_word)
-                    await asyncio.sleep(5)
-                    await too_card_msg.delete()
+                    await ctx.send(embed = embed_too_word,delete_after= 5)
+
                 else:
                     """menu for single word search"""
                     list_word = []
@@ -80,9 +79,8 @@ class Word(commands.Cog):
             embed_no_word = discord.Embed(name = "no result", color = discord.Color.red())
             embed_no_word.set_image(url="attachment://image.png")
             embed_no_word.add_field(name = "Ce mot-clé n'a été trouvé", value = "Vous ne passerez pas !!!")   
-            no_card_msg = await ctx.send(file=file,embed = embed_no_word)
-            await asyncio.sleep(5)
-            await no_card_msg.delete()
+            await ctx.send(file=file,embed = embed_no_word, delete_after=5)
+
 
 def change(bot,str):
     str = str.replace("(defense)","("+emoji(bot,"defense") +")")
