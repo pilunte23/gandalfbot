@@ -7598,7 +7598,7 @@
       "sphere_name":"Tactique",
       "position":5,
       "code":"08005",
-      "name":"Piedardent",
+      "name":"De Justesse",
       "text":"Doomed X.\r\n<b>Response:<\/b> Cancel X damage just dealt to a hero.",
       "flavor":"\"That spear-thrust would have skewered a wild boar!\" <cite>Aragorn, The Fellowship of the Ring<\/cite>",
       "is_unique":false,
