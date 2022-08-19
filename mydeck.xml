@@ -1,45 +1,69 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <deck game="a21af4e8-be4b-4cda-a6b6-534f9717391f">
-  <section name="Hero" shared="False">
-    <card qty="1" id="4a76ad60-35d1-4657-ab4a-2f7f15cc7ab7">Denethor</card>
-    <card qty="1" id="8f937f89-b248-4261-9b00-4e3cd9763299">Faramir</card>
-    <card qty="1" id="4823aae3-46ef-4a75-89f9-cbd3aa1b9008">Boromir</card>
-  </section>
-  <section name="Ally" shared="False">
-    <card qty="1" id="1e28318c-e82a-4d50-b6db-d08e6e9a6b53">Ingold</card>
-    <card qty="3" id="0484e428-6a72-4841-b2d5-d8df7cfb51bf">Veteran of Osgiliath</card>
-    <card qty="2" id="c8b5dd1c-82bc-4733-be1a-484a6e87c3c0">Anborn</card>
-    <card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9013">Guard of the Citadel</card>
-    <card qty="3" id="51223bd0-ffd1-11df-a976-0801200c9073">Gandalf</card>
-    <card qty="3" id="4823aae3-46ef-4a75-89f9-cbd3aa1b9010">Citadel Custodian</card>
-    <card qty="2" id="4823aae3-46ef-4a75-89f9-cbd3aa1b9015">Envoy of Pelargir</card>
-    <card qty="3" id="31cd848b-a1bc-4ccd-af0c-eb3cc3ba593b">White Tower Watchman</card>
-    <card qty="2" id="d4f034b0-2444-4b61-a249-8d86e8856f7c">Squire of the Citadel</card>
-    <card qty="2" id="1f28f098-09d4-43fa-8fba-eae551a5d4fe">Pelargir Ship Captain</card>
-  </section>
-  <section name="Attachment" shared="False">
-    <card qty="1" id="8a6566b1-2425-442b-8e44-f8a3aa4590fe">Sword of Númenor</card>
-    <card qty="3" id="3d3ced53-71af-46de-b7e7-1892a9c49747">Rod of the Steward</card>
-    <card qty="2" id="a55bc730-259b-4d52-8c98-648d43840738">Armored Destrier</card>
-    <card qty="3" id="51223bd0-ffd1-11df-a976-0801200c9026">Steward of Gondor</card>
-    <card qty="1" id="51223bd0-ffd1-11df-a976-0801202c9008">Dúnedain Warning</card>
-    <card qty="3" id="2f0a3f18-c84f-4458-b6f7-2e6be9acee6b">Visionary Leadership</card>
-  </section>
-  <section name="Event" shared="False">
-    <card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9022">For Gondor!</card>
-    <card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9023">Sneak Attack</card>
-    <card qty="3" id="4823aae3-46ef-4a75-89f9-cbd3aa1b9087">Wealth of Gondor</card>
-    <card qty="3" id="add42229-f5d1-4c39-a5dd-ec00ad7d0d76">Gaining Strength</card>
-    <card qty="3" id="91f28bdf-4b78-4750-9853-65e783e4cb15">Strength of Arms</card>
-  </section>
-  <section name="Side Quest" shared="False">
-    <card qty="1" id="128f940d-8a71-4a80-83c2-bdbc014d95c9">Gather Information</card>
-  </section>
-  <section name="Sideboard" shared="False">
-  </section>
-  <section name="Quest" shared="True" />
-  <section name="Encounter" shared="True" />
-  <section name="Special" shared="True" />
-  <section name="Setup" shared="True" />
-  <notes><![CDATA[]]></notes>
+<section name="Hero" shared="False">
+<card qty="1" id="94726dff-4b95-4c7c-9542-320b45652d7a">Amarthiúl</card>
+<card qty="1" id="da4c926c-7917-4b6d-a1be-cc90fbdce597">Beregond</card>
+<card qty="1" id="51223bd0-ffd1-11df-a976-0801200c9012">Beravor</card>
+<card qty="1" id="09ebd71c-8286-4838-b661-36a8633c9f0c">Aragorn</card>
+</section>
+<section name="Ally" shared="False">
+<card qty="2" id="d15c0cc8-19c0-49d8-915f-c423e993c03b">Chasseur Dúnedain</card>
+<card qty="2" id="2c6e85b4-18e3-4c21-95eb-5d74b9eebb5b">Sentinelle du Gué de Sarn</card>
+<card qty="1" id="cc73532b-e891-49b6-9544-468b5977149a">Rôdeur du Cardolan</card>
+<card qty="2" id="40efacf7-f3c1-434b-b31f-42b3721c90c0">Archer de Fornost</card>
+<card qty="2" id="66bcd2b8-fcc7-402b-94b2-a45a6c469981">Halbarad</card>
+<card qty="1" id="68168e29-feaf-43da-9ea0-2fc33061710d">Thalion</card>
+<card qty="1" id="0c65af6a-7038-476b-9318-a024cc94c8b6">Angbor l&#039;intrépide</card>
+<card qty="1" id="1fb6e46c-cd32-4435-a750-b1198ef5d9de">Voyageur des Monts Brumeux</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9073">Gandalf</card>
+<card qty="1" id="51223bd0-ffd1-11df-a976-0801210c9002">Arwen Undómiel</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801211c9026">Gardien des Maisons de Guérison</card>
+</section>
+<section name="Attachment" shared="False">
+<card qty="1" id="8b9da56f-6713-457f-8f73-6fdc8168348f">Héritier de Valandil</card>
+<card qty="1" id="c9cdf75b-7535-4d17-804f-0f22569812c7">Faveur du Valar</card>
+<card qty="1" id="2f9c24db-2ee4-4368-99fa-db49a0add8f5">Équipement de Guerre</card>
+<card qty="2" id="a55bc730-259b-4d52-8c98-648d43840738">Destrier Bardé</card>
+<card qty="2" id="44b36766-fbb5-464d-bf9c-6a9cb9f48fad">Filet Entravant</card>
+<card qty="1" id="e7df2c09-6d38-4f92-9279-eba5f41370cd">Étalon du Nord</card>
+<card qty="1" id="b1edce11-55ce-468d-bf6a-b5d7035d41a3">Suivis</card>
+<card qty="1" id="58189608-6de5-4022-a999-e3810044aa18">Épée de Guerrier</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9057">Courage Inattendu</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9069">Danger de la Forêt</card>
+<card qty="1" id="51223bd0-ffd1-11df-a976-0801202c9008">Avertissement des Dúnedain</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801202c9010">Un Tison Enflammé</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801202c9025">Chant de Sagesse</card>
+<card qty="2" id="09134509-191b-4903-b4b5-5e650f8143c1">Bouclier Gondorien</card>
+</section>
+<section name="Event" shared="False">
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9023">Attaque Furtive</card>
+<card qty="1" id="51223bd0-ffd1-11df-a976-0801200c9046">Salutations des Galadhrim</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9048">Coup Précipité</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9050">Tester sa Volonté</card>
+<card qty="2" id="e02f317e-736c-40a0-8d73-45509fce9ef8">Une Bonne Récolte</card>
+</section>
+<section name="Contract" shared="False">
+<card qty="1" id="69897fb3-9152-4886-bb7d-e947fd0aa4f5">Lien d&#039;Amitié</card>
+</section>
+<section name="Side Quest" shared="False">
+<card qty="1" id="128f940d-8a71-4a80-83c2-bdbc014d95c9">Recueillir des Informations</card>
+<card qty="1" id="f4d94f3d-d3af-44d6-9896-764484302bb1">Demi-tour</card>
+</section>
+<section name="Sideboard" shared="False">
+<card qty="1" id="51223bd0-ffd1-11df-a976-0801202c9008">Avertissement des Dúnedain</card>
+<card qty="1" id="51223bd0-ffd1-11df-a976-0801200c9060">Henamarth Chantrivière</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9034">Feinte</card>
+<card qty="2" id="51223bd0-ffd1-11df-a976-0801200c9026">Intendant du Gondor</card>
+<card qty="1" id="ba6d53fd-277c-4796-814b-ada9ff23cafd">Jubayr</card>
+<card qty="2" id="2002b5d3-57b1-429a-a19a-2d10a564bc31">Un Lapereau Pris au Piège</card>
+<card qty="1" id="0238e687-61a4-4e2f-a858-70251cc88552">Défenseur de Cair Andros</card>
+<card qty="1" id="51223bd0-ffd1-11df-a976-0801212c9010">Runes de Daeron</card>
+<card qty="1" id="8b9da56f-6713-457f-8f73-6fdc8168348f">Héritier de Valandil</card>
+<card qty="1" id="51223bd0-ffd1-11df-a976-0801213c9015">Maître de la Forge</card>
+</section>
+<section name="Quest" shared="True" />
+<section name="Encounter" shared="True" />
+<section name="Special" shared="True" />
+<section name="Setup" shared="True" />
+<notes><![CDATA[]]></notes>
 </deck>

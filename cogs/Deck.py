@@ -17,7 +17,7 @@ class Deck(commands.Cog):
     @cog_ext.cog_slash(
         name="d",
         description="Partage un deck mis en ligne",
-        #guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
+        guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
         options=[
             create_option(
                 name="identifiant",

@@ -17,7 +17,7 @@ class Player(commands.Cog):
     @cog_ext.cog_slash(
         name="c",
         description="Pour l'affichage de carte(s) joueur",
-        #guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
+        guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
         options=[
             create_option(
                 name="recherche",
