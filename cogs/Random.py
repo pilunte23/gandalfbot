@@ -14,7 +14,7 @@ class Random(commands.Cog):
     @cog_ext.cog_slash(
         name="a",
         description="Carte Aleatoire",
-        guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" ")))         
+        #guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" ")))         
     )
 #    @commands.Cog.listener()
 #    async def on_ready(self):

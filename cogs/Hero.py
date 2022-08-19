@@ -17,7 +17,7 @@ class Hero(commands.Cog):
     @cog_ext.cog_slash(
         name="h",
         description="Tirage des Héros aléatoires",
-        guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
+        #guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
         options=[  
             create_option(
                 name="hero_1",

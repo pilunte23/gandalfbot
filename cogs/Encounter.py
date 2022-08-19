@@ -17,7 +17,7 @@ class Encounter(commands.Cog):
     @cog_ext.cog_slash(
         name="r",
         description="Pour l'affichage de carte(s) du Deck Rencontre",
-        guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
+        #guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
         options=[
             create_option(
                 name="recherche",

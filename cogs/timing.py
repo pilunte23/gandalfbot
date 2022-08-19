@@ -13,7 +13,7 @@ class Timing(commands.Cog):
     @cog_ext.cog_slash(
         name="t",
         description="Affiche le timing des phases du jeu",
-        guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
+        #guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
         options=[create_option(
             name="timing",
             description="Affiche le timing des phases du jeu",

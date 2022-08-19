@@ -4,11 +4,8 @@ from discord_slash import cog_ext
 from discord_slash.utils.manage_commands import create_choice, create_option
 from discord_slash.utils.manage_components import *
 from unidecode import unidecode
-from function import *
 import json
 import re
-
-import os
 
 class Word(commands.Cog):
 
@@ -18,7 +15,7 @@ class Word(commands.Cog):
     @cog_ext.cog_slash(
     name="m",
     description="Définition de mot clé",
-    guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
+    #guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))),
     options=[
         create_option(
             name="motcle",
