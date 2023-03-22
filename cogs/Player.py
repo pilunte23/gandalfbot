@@ -37,31 +37,31 @@ class Player(commands.Cog):
                     ),
                     create_choice(    
                         name= "Commandement",
-                        value="leadership"
+                        value="300"
                     ),
                     create_choice(
                         name="Connaissance",
-                        value="lore"
+                        value="303"
                     ),
                     create_choice(
                         name="Energie",
-                        value="spirit"
+                        value="302"
                     ),
                     create_choice(
                         name="Tactique",
-                        value="tactics"
+                        value="301"
                     ),
                     create_choice(
                         name="Neutre",
-                        value="neutral"
-                    ),
-                    create_choice(
-                        name="Sacquet",
-                        value="baggins"
+                        value="304"
                     ),
                     create_choice(
                         name="Communauté",
-                        value="fellowship"
+                        value="305"
+                    ),
+                    create_choice(
+                        name="Sacquet",
+                        value="306"
                     )
                 ]
             ),
@@ -77,31 +77,47 @@ class Player(commands.Cog):
                     ),
                     create_choice(
                         name="Héro",
-                        value="Héro"
+                        value="400"
                     ),
                     create_choice(
                         name="Allié",
-                        value="Allié"
-                    ),
-                    create_choice(
-                        name="Attachement",
-                        value="Attachement"
+                        value="401"
                     ),
                     create_choice(
                         name="Evènement",
-                        value="Evènement"
+                        value="402"
                     ),
                     create_choice(
-                        name="Contrat",
-                        value="Contrat"
+                        name="Attachement",
+                        value="403"
                     ),
                     create_choice(
-                        name="Quête annexe",
-                        value="Quête annexe"
+                        name="Objectif Allié",
+                        value="409"
                     ),
+                    create_choice(
+                        name="Trésor",
+                        value="410"
+                    ), 
                     create_choice(
                         name="Campagne",
-                        value="Campagne"
+                        value="411"
+                    ),
+                    create_choice(
+                        name="Quête Annexe Joueur",
+                        value="412"
+                    ),
+                    create_choice(
+                        name="Navire Objectif",
+                        value="411"
+                    ),
+                    create_choice(
+                        name="Objectif Héros",
+                        value="414"
+                    ),                    
+                    create_choice(
+                        name="Contrat",
+                        value="418"
                     )
                 ]
             ),
@@ -112,16 +128,12 @@ class Player(commands.Cog):
                 option_type=3,
                 choices=[
                     create_choice(
-                        name="Nom (par défaut)",
-                        value="name"
+                        name="Titre (par défaut)",
+                        value="titre"
                     ),
                     create_choice(
-                        name="Traits",
-                        value="traits"
-                    ),
-                    create_choice(
-                        name="Illustrateur",
-                        value="illustrator"
+                        name="Trait",
+                        value="trait"
                     )
                 ]
             ),
@@ -164,51 +176,44 @@ class Player(commands.Cog):
         ]     
     )
 
-    async def _carte(self,ctx, recherche:str,sphere="all",type= "all",selection="menu",champs="name",terme="partial"):
-        "pas de multilingue pour l'instant"
-        langue="fr"
+    async def _carte(self,ctx, recherche:str,sphere="all",type= "all",selection="menu",champs="titre",terme="partial"):
         resultat_carte = []
         img = []
         place = 0
         img_weight = 0
-        url_file =  "./data/sda_"+langue+".json"
-        f = open(url_file)
+        url_file =  "./data/SDA_carte_joueur.json"
+        f =  open(url_file , encoding="utf8")
         data = json.load(f)
-
+        
         if terme =="exact":
             word_use = "^"+ unidecode(str(recherche.lower()))+"$"
         else:
-            if champs == "traits":
+            if champs == "trait":
                 word_use = ".*\\b"+ unidecode(str(recherche.lower()))+"\\b.*"
             else:       
                 word_use = ".*"+ unidecode(str(recherche.lower()))+".*"
         for i in data:
             all_search = None
-            """ search in name, traits, illustrator"""
-            if champs == "name" and "name" in i:
-                all_search = re.search(word_use,unidecode(str(i["name"].lower()))) 
-            if champs == "traits" and "traits" in i:
-                all_search = re.search(word_use,unidecode(str(i["traits"].lower())))
-            if champs == "illustrator" and "illustrator" in i:
-                all_search = re.search(word_use,unidecode(str(i["illustrator"].lower()))) 
-            if all_search: 
-                if ( sphere == i['sphere_code'] or sphere == "all" ) and ( type == i['type_name'] or type == "all" ):
-                    """check exist octgn file"""
-                    if "octgnid" in i:
-                        """ remove (MotK) card and starter deck (no octgn file) and """
-                        if not (re.search("(MotK)",i['name'])) and i['pack_code'] not in ["EoL", "DoG", "RoR", "DoD", "Starter"] and not (re.search("ALeP",i['pack_name'])):
-                            """ check if the id is already on the list """
-                            already_find = False  
-                            for j in resultat_carte:
-                                if i['name'] == j['name'] and i['sphere_code'] == j['sphere_code'] \
-                                and i['text'] == j['text']:
-                                    already_find = True
-                            if already_find == False:      
-                                resultat_carte.append(i)                
+            """ search in name, traits"""  
+            if champs == "titre" and "titre" in i:
+                all_search = re.search(word_use,unidecode(str(i["titre"].lower()))) 
+            if champs == "trait" and "trait" in i:
+                all_search = re.search(word_use,unidecode(str(i["trait"].lower())))
+            if all_search:
+                print(i['id_extension'])  
+                if ( sphere == i['id_sphere_influence'] or sphere == "all" ) and ( type == i['id_type_carte'] or type == "all" ) and ( i['id_extension'] not in [67, 87, 82, 83, 84, 88, 91, 92] ):
+                    """already_find = False  
+                    for j in resultat_carte:
+
+                            if i['titre'] == j['titre'] and i['id_sphere_influence'] == j['id_sphere_influence'] and i['texte'] == j['texte']:
+                                already_find = True
+                    if already_find == False:"""      
+                    resultat_carte.append(i) 
+        for i in resultat_carte:   
+            print(i)        
         if len(resultat_carte) > 0:
             if len(resultat_carte) == 1:
-                if langue == "fr": 
-                    await sendcard(self,ctx,resultat_carte[0])
+                await sendcard(self,ctx,resultat_carte[0])
             else:
                 if selection == "multicard":
                     if len(resultat_carte) > 10:
@@ -219,7 +224,7 @@ class Player(commands.Cog):
                         img_height = 700
                         """ add every patch in the list img """
                         for i in resultat_carte:
-                            img.append(i['octgnid']+".jpg")
+                            img.append("sda_cgbuilder/images/simulateur/carte/"+i['id_extension']+"/"+i['numero_identification']+".jpg")
                         """ creating the new img who will be send """
                         new_img = Image.new('RGB', (img_weight, img_height), (250,250,250))
                         """ we paste every image in the new_img """
@@ -253,16 +258,14 @@ class Player(commands.Cog):
 
 
 async def _listcard(self,ctx,resultat_carte,champs,recherche):
-    if champs == "name":
-        lib_champs ="Nom"
-    if champs == "traits":
-        lib_champs ="Traits"   
-    if champs == "illustrator":
-        lib_champs ="Illustrateur"
+    if champs == "titre":
+        lib_champs ="Titre"
+    if champs == "trait":
+        lib_champs ="Trait"   
     list_sphere={"leadership":[],"lore":[],"spirit":[],"tactics":[],"neutral":[],"baggins":[],"fellowship":[]}
     for i in resultat_carte:
         for j in list_sphere:
-            if i['sphere_code'] == j:
+            if i['id_sphere_influence'] == j:
                 list_sphere[j].append(i)
 
     sphere_count = 0  
@@ -274,14 +277,14 @@ async def _listcard(self,ctx,resultat_carte,champs,recherche):
             globals()[f"field{count}"] = ""
             for i in list_card:
                 """if total file size < 1024"""
-                if len(f"[{i['name']}]({i['url']})\n") + len(globals()[f"field{count}"]) < 1024:
-                    globals()[f"field{count}"] = f"[{i['name']}]({i['url']}) {i['type_name']}\n" + globals()[f"field{count}"] 
+                if len(f"[{i['titre']}]({i['url']})\n") + len(globals()[f"field{count}"]) < 1024:
+                    globals()[f"field{count}"] = f"[{i['titre']}]({i['url']}) {i['id_type_carte']}\n" + globals()[f"field{count}"] 
                 else:
                     """create new fields"""
                     globals()[f"embed_list_card{sphere_count}"].add_field(name = f"Carte(s) de la sphère {emoji}", value = globals()[f"field{count}"])  
                     count += 1
                     globals()[f"field{count}"] = ""            
-                    globals()[f"field{count}"] = f"[{i['name']}]({i['url']}) {i['type_name']}\n" + globals()[f"field{count}"]
+                    globals()[f"field{count}"] = f"[{i['titre']}]({i['url']}) {i['type_name']}\n" + globals()[f"field{count}"]
             globals()[f"embed_list_card{sphere_count}"].add_field(name = f"Carte(s) de la sphère {emoji}", value = globals()[f"field{count}"])  
             await ctx.send(embed = globals()[f"embed_list_card{sphere_count}"])
         sphere_count += 1
@@ -296,21 +299,22 @@ async def _selectingbox(self,ctx,resultat_carte):
     list_card = []
     count = 0
     for i in resultat_carte:
-        if i['sphere_code'] == "spirit":
-            altsphere_emoji = "🟦"
-        if i['sphere_code'] == "lore":
-            altsphere_emoji = "🟩"
-        if i['sphere_code'] == "leadership":
+        if i['id_sphere_influence'] == "300":
             altsphere_emoji = "🟪"
-        if i['sphere_code'] == "tactics":
+        if i['id_sphere_influence'] == "301":
+            altsphere_emoji = "🟩"
+        if i['id_sphere_influence'] == "302":
+            altsphere_emoji = "🟦"
+        if i['id_sphere_influence'] == "303":
             altsphere_emoji = "🟥"
-        if i['sphere_code'] == "neutral":
+        if i['id_sphere_influence'] == "304":
             altsphere_emoji = "⬜"
-        if i['sphere_code'] == "baggins":
-            altsphere_emoji = "🟨"
-        if i['sphere_code'] == "fellowship":
+        if i['id_sphere_influence'] == "305":
             altsphere_emoji = "🟧" 
-        list_card.append(create_select_option(i['name']+" "+ i['type_name']+" "+ i['sphere_name'], value=str(count),emoji=altsphere_emoji))
+        if i['id_sphere_influence'] == "306":
+            altsphere_emoji = "🟨"
+
+        list_card.append(create_select_option(i['titre']+" "+ i['libelle'], value=str(count),emoji=altsphere_emoji))
         count += 1
         select = create_select(
         options=list_card,
@@ -332,69 +336,75 @@ async def _selectingbox(self,ctx,resultat_carte):
 
 async def sendcard(self,ctx,datacard):
     """ beautiful embed """
-    if datacard['sphere_code'] == "spirit":
-        sphere_color = 0x33DDFF
-    if datacard['sphere_code'] == "lore":
-        sphere_color = 0x0E7A12
-    if datacard['sphere_code'] == "leadership":
+    sphere=""
+    if datacard['id_sphere_influence'] == "300":
         sphere_color = 0x8B23F9
-    if datacard['sphere_code'] == "tactics":
+        sphere="leadership"
+    if datacard['id_sphere_influence'] == "301":
+        sphere_color = 0x0E7A12
+        sphere="lore"
+    if datacard['id_sphere_influence'] == "302":
+        sphere_color = 0x33DDFF
+        sphere="spirit"
+    if datacard['id_sphere_influence'] == "303":
         sphere_color = 0xDB140B
-    if datacard['sphere_code'] == "neutral":
+        sphere="tactics"
+    if datacard['id_sphere_influence'] == "304":
         sphere_color = 0x797B7A
-    if datacard['sphere_code'] == "baggins":
-        sphere_color = 0xD3D911
-    if datacard['sphere_code'] == "fellowship":
+        sphere="neutral"
+    if datacard['id_sphere_influence'] == "305":
         sphere_color = 0xD99611
+        sphere="fellowship"
+    if datacard['id_sphere_influence'] == "306":
+        sphere_color = 0xD3D911
+        sphere="baggins"
     cycle=""
-    if datacard['pack_code'] in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
+    if datacard['id_extension'] in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
         cycle="Cycle 1 : Ombres de la Forêt Noire"
-    if datacard['pack_code'] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
+    if datacard['id_extension'] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
         cycle="Cycle 2 : Royaume de Cavenain"
-    if datacard['pack_code'] in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
+    if datacard['id_extension'] in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
         cycle="Cycle 3 : Face à l'Ombre"
-    if datacard['pack_code'] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
+    if datacard['id_extension'] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
         cycle="Cycle 4 : Le Créateur d'Anneaux"
-    if datacard['pack_code'] in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
+    if datacard['id_extension'] in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
         cycle="Cycle 5 : Le Réveil d'Angmar"
-    if datacard['pack_code'] in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
+    if datacard['id_extension'] in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
         cycle="Cycle 6 : Chasse-Rêve"
-    if datacard['pack_code'] in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
+    if datacard['id_extension'] in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
         cycle="Cycle 7 : Les Haradrim"
-    if datacard['pack_code'] in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
+    if datacard['id_extension'] in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
         cycle="Cycle 8 : Ered Mithrin"
-    if datacard['pack_code'] in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
+    if datacard['id_extension'] in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
         cycle="Cycle 9 : La Vengeance du Mordor"
-    if datacard['pack_code'] == "OHaUH":
+    if datacard['id_extension'] == "OHaUH":
         cycle="Extension de saga : Par Monts et par Souterrains"
-    if datacard['pack_code'] == "OtD":
+    if datacard['id_extension'] == "OtD":
         cycle="Extension de saga : Au Seuil de la Porte"
-    if datacard['pack_code'] == "TBR":
+    if datacard['id_extension'] == "TBR":
         cycle="Extension de saga : Les Cavaliers Noirs"
-    if datacard['pack_code'] == "TRD":
+    if datacard['id_extension'] == "TRD":
         cycle="Extension de saga : La Route s'Assombrit"
-    if datacard['pack_code'] == "ToS":
+    if datacard['id_extension'] == "ToS":
         cycle="Extension de saga : La Trahison de Saroumane"
-    if datacard['pack_code'] == "LoS":
+    if datacard['id_extension'] == "LoS":
         cycle="Extension de saga : La Terre de l'Ombre"
-    if datacard['pack_code'] == "FotW":
+    if datacard['id_extension'] == "FotW":
         cycle="Extension de saga : La Flamme de l'Ouest"
-    if datacard['pack_code'] == "MoF":
+    if datacard['id_extension'] == "MoF":
         cycle="Extension de saga : La Montagne de Feu"
 
-    file_url = "./images/"+datacard['octgnid']+".jpg"
-    emoji = discord.utils.get(self.bot.emojis, name=datacard['sphere_code'])
-    embed = discord.Embed(title=f"{emoji} "+datacard['name'],color=sphere_color)
+    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
+    emoji = discord.utils.get(self.bot.emojis, name=sphere)
+    embed = discord.Embed(title=f"{emoji} "+datacard['titre'],color=sphere_color)
     file = discord.File(file_url, filename="image.jpg")
-    pack_file = discord.File(f"./assets/pack/{datacard['pack_code']}.png", filename="pack.png")
-    embed.set_author(name=f"{datacard['pack_name']}", url= f"https://ringsdb.com/set/{datacard['pack_code']}")
-    if datacard['has_errata']:
-        errata=f"Cette carte possède une [FAQ](http://lotr-lcg-quest-companion.gamersdungeon.net/#Card{datacard['position']})"
-        embed.add_field(name="\u200b",value=errata) #creates embed
+    #pack_file = discord.File(f"./assets/pack/{datacard['pack_code']}.png", filename="pack.png")
+    #embed.set_author(name=f"{datacard['pack_name']}", url= f"https://ringsdb.com/set/{datacard['pack_code']}")
     embed.set_thumbnail(url=f"attachment://pack.png")
     embed.set_image(url="attachment://image.jpg")
     embed.set_footer(text=f"{cycle}")
-    await ctx.send(files=[file,pack_file], embed=embed)
+    #await ctx.send(files=[file,pack_file], embed=embed)
+    await ctx.send(files=[file], embed=embed)
 
 def setup(bot):
     bot.add_cog(Player(bot))
