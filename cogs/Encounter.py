@@ -50,7 +50,12 @@ class Encounter(commands.Cog):
                     create_choice(
                         name="Objectif",
                         value="Objectif"
+                    ),
+                    create_choice(
+                        name="Campagne",
+                        value="Campagne"
                     )
+
                 ]
             ),
             create_option(
