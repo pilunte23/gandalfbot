@@ -150,10 +150,6 @@ class Player(commands.Cog):
                     create_choice(
                         name="Renvoie une image de plusieurs cartes limité à 10 cartes",
                         value="multicard"
-                    ),
-                    create_choice(
-                        name="Renvoie une liste des cartes pour chaque sphère.",
-                        value="list"
                     )
                 ]
             ),
@@ -183,8 +179,13 @@ class Player(commands.Cog):
         img_weight = 0
         url_file =  "./data/SDA_carte_joueur.json"
         f =  open(url_file , encoding="utf8")
-        data = json.load(f)
-        
+        rawdata = json.load(f)
+        #exclusion les Two-Player Limited Edition et les éditions révisées
+        #exclusion allié-héros
+        data = []
+        for i in rawdata:
+            if i['id_extension'] not in ['67', '87', '82', '83', '84', '88', '91', '92'] and "&bull" not in i['titre']:
+                data.append(i)
         if terme =="exact":
             word_use = "^"+ unidecode(str(recherche.lower()))+"$"
         else:
@@ -200,17 +201,14 @@ class Player(commands.Cog):
             if champs == "trait" and "trait" in i:
                 all_search = re.search(word_use,unidecode(str(i["trait"].lower())))
             if all_search:
-                print(i['id_extension'])  
-                if ( sphere == i['id_sphere_influence'] or sphere == "all" ) and ( type == i['id_type_carte'] or type == "all" ) and ( i['id_extension'] not in [67, 87, 82, 83, 84, 88, 91, 92] ):
+                if ( sphere == i['id_sphere_influence'] or sphere == "all" ) and ( type == i['id_type_carte'] or type == "all" ):
                     """already_find = False  
                     for j in resultat_carte:
-
                             if i['titre'] == j['titre'] and i['id_sphere_influence'] == j['id_sphere_influence'] and i['texte'] == j['texte']:
                                 already_find = True
                     if already_find == False:"""      
                     resultat_carte.append(i) 
-        for i in resultat_carte:   
-            print(i)        
+      
         if len(resultat_carte) > 0:
             if len(resultat_carte) == 1:
                 await sendcard(self,ctx,resultat_carte[0])
@@ -220,8 +218,8 @@ class Player(commands.Cog):
                         await _toomuchcard(self,ctx)
                     else:
                         """ define the size of the result with the number of card found """
-                        img_weight = (img_weight + len(resultat_carte)) * 493
-                        img_height = 700
+                        img_weight = (img_weight + len(resultat_carte)) * 394
+                        img_height = 560
                         """ add every patch in the list img """
                         for i in resultat_carte:
                             img.append("sda_cgbuilder/images/simulateur/carte/"+i['id_extension']+"/"+i['numero_identification']+".jpg")
@@ -229,8 +227,8 @@ class Player(commands.Cog):
                         new_img = Image.new('RGB', (img_weight, img_height), (250,250,250))
                         """ we paste every image in the new_img """
                         for i in img:
-                            image = Image.open("./images/"+i)
-                            largeur = 0+(place*493)
+                            image = Image.open("./"+i)
+                            largeur = 0+(place*394)
                             new_img.paste(image, (largeur, 0))
                             place += 1
                         """ saving the result in a png """
@@ -246,8 +244,7 @@ class Player(commands.Cog):
                     else:
                         """menu for single card search"""
                         await _selectingbox(self,ctx,resultat_carte)       
-                if selection == "list":
-                    await _listcard(self,ctx,resultat_carte,champs,recherche)                  
+               
         else:
             file_url = "./assets/picture/no_card.png"
             file = discord.File(file_url, filename="image.png")
@@ -257,38 +254,6 @@ class Player(commands.Cog):
             await ctx.send(file=file,embed = embed_no_carte,delete_after= 5)
 
 
-async def _listcard(self,ctx,resultat_carte,champs,recherche):
-    if champs == "titre":
-        lib_champs ="Titre"
-    if champs == "trait":
-        lib_champs ="Trait"   
-    list_sphere={"leadership":[],"lore":[],"spirit":[],"tactics":[],"neutral":[],"baggins":[],"fellowship":[]}
-    for i in resultat_carte:
-        for j in list_sphere:
-            if i['id_sphere_influence'] == j:
-                list_sphere[j].append(i)
-
-    sphere_count = 0  
-    for key,list_card in list_sphere.items():     
-        if len(list_card) > 0:
-            emoji = discord.utils.get(self.bot.emojis, name=key)
-            count = 0 
-            globals()[f"embed_list_card{sphere_count}"] = discord.Embed(title=f"Cartes {emoji} pour votre recherche par {lib_champs} : {recherche}", color = discord.Color.from_rgb(127, 64, 7))
-            globals()[f"field{count}"] = ""
-            for i in list_card:
-                """if total file size < 1024"""
-                if len(f"[{i['titre']}]({i['url']})\n") + len(globals()[f"field{count}"]) < 1024:
-                    globals()[f"field{count}"] = f"[{i['titre']}]({i['url']}) {i['id_type_carte']}\n" + globals()[f"field{count}"] 
-                else:
-                    """create new fields"""
-                    globals()[f"embed_list_card{sphere_count}"].add_field(name = f"Carte(s) de la sphère {emoji}", value = globals()[f"field{count}"])  
-                    count += 1
-                    globals()[f"field{count}"] = ""            
-                    globals()[f"field{count}"] = f"[{i['titre']}]({i['url']}) {i['type_name']}\n" + globals()[f"field{count}"]
-            globals()[f"embed_list_card{sphere_count}"].add_field(name = f"Carte(s) de la sphère {emoji}", value = globals()[f"field{count}"])  
-            await ctx.send(embed = globals()[f"embed_list_card{sphere_count}"])
-        sphere_count += 1
-    
 async def _toomuchcard(self,ctx):
     embed_too_carte = discord.Embed(name = "too much result", color = discord.Color.red())
     embed_too_carte.add_field(name = "Trop de résultat", value = "Veuillez affiner votre recherche")   
@@ -299,6 +264,7 @@ async def _selectingbox(self,ctx,resultat_carte):
     list_card = []
     count = 0
     for i in resultat_carte:
+        altsphere_emoji = "⬛"
         if i['id_sphere_influence'] == "300":
             altsphere_emoji = "🟪"
         if i['id_sphere_influence'] == "301":
@@ -313,8 +279,8 @@ async def _selectingbox(self,ctx,resultat_carte):
             altsphere_emoji = "🟧" 
         if i['id_sphere_influence'] == "306":
             altsphere_emoji = "🟨"
-
-        list_card.append(create_select_option(i['titre']+" "+ i['libelle'], value=str(count),emoji=altsphere_emoji))
+            
+        list_card.append(create_select_option(i['titre']+" "+ i['lbl sphere influence'], value=str(count),emoji=altsphere_emoji))
         count += 1
         select = create_select(
         options=list_card,
@@ -337,6 +303,7 @@ async def _selectingbox(self,ctx,resultat_carte):
 async def sendcard(self,ctx,datacard):
     """ beautiful embed """
     sphere=""
+    sphere_color = 0xFFFFFF
     if datacard['id_sphere_influence'] == "300":
         sphere_color = 0x8B23F9
         sphere="leadership"
@@ -359,52 +326,55 @@ async def sendcard(self,ctx,datacard):
         sphere_color = 0xD3D911
         sphere="baggins"
     cycle=""
-    if datacard['id_extension'] in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
+    if datacard['id_extension'] in ['2', '3', '4', '5', '6', '7']:
         cycle="Cycle 1 : Ombres de la Forêt Noire"
-    if datacard['id_extension'] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
+    if datacard['id_extension'] in ['8', '9', '10', '11', '12', '13', '14']:
         cycle="Cycle 2 : Royaume de Cavenain"
-    if datacard['id_extension'] in ["HoN","AtS","TDF","EaAD","AoO","BoG","TMV"]:
+    if datacard['id_extension'] in ['15', '16', '17', '18', '19', '20', '21']:
         cycle="Cycle 3 : Face à l'Ombre"
-    if datacard['id_extension'] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
+    if datacard['id_extension'] in ['22', '23', '24', '25', '26', '27', '28']:
         cycle="Cycle 4 : Le Créateur d'Anneaux"
-    if datacard['id_extension'] in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
+    if datacard['id_extension'] in ['29', '30', '31', '32', '33', '34', '35']:
         cycle="Cycle 5 : Le Réveil d'Angmar"
-    if datacard['id_extension'] in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
+    if datacard['id_extension'] in ['36', '37', '38', '39', '40', '41', '42']:
         cycle="Cycle 6 : Chasse-Rêve"
-    if datacard['id_extension'] in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
+    if datacard['id_extension'] in ['50', '51', '52', '53', '54', '55', '56']:
         cycle="Cycle 7 : Les Haradrim"
-    if datacard['id_extension'] in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
+    if datacard['id_extension'] in ['65', '66', '68', '69', '70', '71', '72']:
         cycle="Cycle 8 : Ered Mithrin"
-    if datacard['id_extension'] in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
+    if datacard['id_extension'] in ['73', '74', '75', '76', '77', '78', '79']:
         cycle="Cycle 9 : La Vengeance du Mordor"
-    if datacard['id_extension'] == "OHaUH":
+    if datacard['id_extension'] == "43":
         cycle="Extension de saga : Par Monts et par Souterrains"
-    if datacard['id_extension'] == "OtD":
+    if datacard['id_extension'] == "44":
         cycle="Extension de saga : Au Seuil de la Porte"
-    if datacard['id_extension'] == "TBR":
+    if datacard['id_extension'] == "45":
         cycle="Extension de saga : Les Cavaliers Noirs"
-    if datacard['id_extension'] == "TRD":
+    if datacard['id_extension'] == "46":
         cycle="Extension de saga : La Route s'Assombrit"
-    if datacard['id_extension'] == "ToS":
+    if datacard['id_extension'] == "47":
         cycle="Extension de saga : La Trahison de Saroumane"
-    if datacard['id_extension'] == "LoS":
+    if datacard['id_extension'] == "48":
         cycle="Extension de saga : La Terre de l'Ombre"
-    if datacard['id_extension'] == "FotW":
+    if datacard['id_extension'] == "49":
         cycle="Extension de saga : La Flamme de l'Ouest"
-    if datacard['id_extension'] == "MoF":
+    if datacard['id_extension'] == "57":
         cycle="Extension de saga : La Montagne de Feu"
 
     file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
-    emoji = discord.utils.get(self.bot.emojis, name=sphere)
-    embed = discord.Embed(title=f"{emoji} "+datacard['titre'],color=sphere_color)
+    if sphere == "":
+        embed = discord.Embed(title=datacard['titre'],color=sphere_color)
+    else:
+        emoji = discord.utils.get(self.bot.emojis, name=sphere)
+        embed = discord.Embed(title=f"{emoji} "+datacard['titre'],color=sphere_color)
     file = discord.File(file_url, filename="image.jpg")
-    #pack_file = discord.File(f"./assets/pack/{datacard['pack_code']}.png", filename="pack.png")
-    #embed.set_author(name=f"{datacard['pack_name']}", url= f"https://ringsdb.com/set/{datacard['pack_code']}")
+    pack_file = discord.File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
+    embed.set_author(name=f"{datacard['lbl extension']}", url= f"https://sda.cgbuilder.fr/liste_carte/{datacard['id_extension']}/")
     embed.set_thumbnail(url=f"attachment://pack.png")
     embed.set_image(url="attachment://image.jpg")
     embed.set_footer(text=f"{cycle}")
-    #await ctx.send(files=[file,pack_file], embed=embed)
-    await ctx.send(files=[file], embed=embed)
+    await ctx.send(files=[file,pack_file], embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Player(bot))

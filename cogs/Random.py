@@ -24,17 +24,14 @@ class Random(commands.Cog):
 
     async def _cardoftheday(self,ctx):
         resultat_carte=[]   
-        url_file =  "./data/pack.json"
-        f = open(url_file)
-        dataPack = json.load(f)
-        randomPack = random.randint(0, len(dataPack)-1)
-        pack_name= dataPack[randomPack]['code']
-
-        url_file =  "./data/sda_fr.json"
-        f = open(url_file)
+        url_file =  "./data/SDA_carte_joueur.json"
+        f =  open(url_file , encoding="utf8")
         dataCard = json.load(f)
         for i in dataCard:
-            if i["pack_code"] == pack_name:
+            #exclusion les Two-Player Limited Edition et les éditions révisées
+            #exclusion allié-héros
+            #garde uniquement les cartes joueurs
+            if i['id_extension'] not in ['67', '87', '82', '83', '84', '88', '91', '92'] and "&bull" not in i['titre'] and i['id_type_carte'] in ['400','401','402','403']:
                 resultat_carte.append(i)
 
         randomCard = random.randint(0, len(resultat_carte)-1) 
@@ -43,70 +40,80 @@ class Random(commands.Cog):
 async def sendcard(self,ctx,datacard):
 
     #channel = discord.utils.get(ctx.guild.channels, name="carte-du-jour")
-    channel = self.bot.get_channel("984083665028014130")
     """ beautiful embed """
-    if datacard['sphere_code'] == "spirit":
-        sphere_color = 0x33DDFF
-    if datacard['sphere_code'] == "lore":
-        sphere_color = 0x0E7A12
-    if datacard['sphere_code'] == "leadership":
+    sphere=""
+    sphere_color = 0xFFFFFF
+    if datacard['id_sphere_influence'] == "300":
         sphere_color = 0x8B23F9
-    if datacard['sphere_code'] == "tactics":
+        sphere="leadership"
+    if datacard['id_sphere_influence'] == "301":
+        sphere_color = 0x0E7A12
+        sphere="lore"
+    if datacard['id_sphere_influence'] == "302":
+        sphere_color = 0x33DDFF
+        sphere="spirit"
+    if datacard['id_sphere_influence'] == "303":
         sphere_color = 0xDB140B
-    if datacard['sphere_code'] == "neutral":
+        sphere="tactics"
+    if datacard['id_sphere_influence'] == "304":
         sphere_color = 0x797B7A
-    if datacard['sphere_code'] == "baggins":
-        sphere_color = 0xD3D911
-    if datacard['sphere_code'] == "fellowship":
+        sphere="neutral"
+    if datacard['id_sphere_influence'] == "305":
         sphere_color = 0xD99611
+        sphere="fellowship"
+    if datacard['id_sphere_influence'] == "306":
+        sphere_color = 0xD3D911
+        sphere="baggins"
     cycle=""
-    if datacard['pack_code'] in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
+    if datacard['id_extension'] in ['2', '3', '4', '5', '6', '7']:
         cycle="Cycle 1 : Ombres de la Forêt Noire"
-    if datacard['pack_code'] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
+    if datacard['id_extension'] in ['8', '9', '10', '11', '12', '13', '14']:
         cycle="Cycle 2 : Royaume de Cavenain"
-    if datacard['pack_code'] in ["HoN","TSF","TDF","EaAD","AoO","BoG","TMV"]:
+    if datacard['id_extension'] in ['15', '16', '17', '18', '19', '20', '21']:
         cycle="Cycle 3 : Face à l'Ombre"
-    if datacard['pack_code'] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
+    if datacard['id_extension'] in ['22', '23', '24', '25', '26', '27', '28']:
         cycle="Cycle 4 : Le Créateur d'Anneaux"
-    if datacard['pack_code'] in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
+    if datacard['id_extension'] in ['29', '30', '31', '32', '33', '34', '35']:
         cycle="Cycle 5 : Le Réveil d'Angmar"
-    if datacard['pack_code'] in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
+    if datacard['id_extension'] in ['36', '37', '38', '39', '40', '41', '42']:
         cycle="Cycle 6 : Chasse-Rêve"
-    if datacard['pack_code'] in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
+    if datacard['id_extension'] in ['50', '51', '52', '53', '54', '55', '56']:
         cycle="Cycle 7 : Les Haradrim"
-    if datacard['pack_code'] in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
+    if datacard['id_extension'] in ['65', '66', '68', '69', '70', '71', '72']:
         cycle="Cycle 8 : Ered Mithrin"
-    if datacard['pack_code'] in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
+    if datacard['id_extension'] in ['73', '74', '75', '76', '77', '78', '79']:
         cycle="Cycle 9 : La Vengeance du Mordor"
-    if datacard['pack_code'] == "OHaUH":
+    if datacard['id_extension'] == "43":
         cycle="Extension de saga : Par Monts et par Souterrains"
-    if datacard['pack_code'] == "OtD":
+    if datacard['id_extension'] == "44":
         cycle="Extension de saga : Au Seuil de la Porte"
-    if datacard['pack_code'] == "TBR":
+    if datacard['id_extension'] == "45":
         cycle="Extension de saga : Les Cavaliers Noirs"
-    if datacard['pack_code'] == "TRD":
+    if datacard['id_extension'] == "46":
         cycle="Extension de saga : La Route s'Assombrit"
-    if datacard['pack_code'] == "ToS":
+    if datacard['id_extension'] == "47":
         cycle="Extension de saga : La Trahison de Saroumane"
-    if datacard['pack_code'] == "LoS":
+    if datacard['id_extension'] == "48":
         cycle="Extension de saga : La Terre de l'Ombre"
-    if datacard['pack_code'] == "FotW":
+    if datacard['id_extension'] == "49":
         cycle="Extension de saga : La Flamme de l'Ouest"
-    if datacard['pack_code'] == "MoF":
+    if datacard['id_extension'] == "57":
         cycle="Extension de saga : La Montagne de Feu"
-    file_url = "./images/"+datacard['octgnid']+".jpg"
-    emoji = discord.utils.get(self.bot.emojis, name=datacard['sphere_code'])
-    embed = discord.Embed(title=f"{emoji} "+datacard['name'],color=sphere_color)
+
+    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
+    if sphere == "":
+        embed = discord.Embed(title=datacard['titre'],color=sphere_color)
+    else:
+        emoji = discord.utils.get(self.bot.emojis, name=sphere)
+        embed = discord.Embed(title=f"{emoji} "+datacard['titre'],color=sphere_color)
     file = discord.File(file_url, filename="image.jpg")
-    pack_file = discord.File(f"./assets/pack/{datacard['pack_code']}.png", filename="pack.png")
-    embed.set_author(name=f"{datacard['pack_name']}", url= f"https://ringsdb.com/set/{datacard['pack_code']}")
-    if datacard['has_errata']:
-        errata=f"Cette carte possède une [FAQ](http://lotr-lcg-quest-companion.gamersdungeon.net/#Card{datacard['position']})"
-        embed.add_field(name="\u200b",value=errata) #creates embed
+    pack_file = discord.File(f"./sda_cgbuilder/images/extension/{datacard['id_extension']}.png", filename="pack.png")
+    embed.set_author(name=f"Nom du pack", url= f"https://sda.cgbuilder.fr/liste_carte/{datacard['id_extension']}/")
     embed.set_thumbnail(url=f"attachment://pack.png")
     embed.set_image(url="attachment://image.jpg")
     embed.set_footer(text=f"{cycle}")
     await ctx.send(files=[file,pack_file], embed=embed)
+
 
 def setup(bot):
     bot.add_cog(Random(bot))

@@ -31,31 +31,31 @@ class Hero(commands.Cog):
                     ),
                     create_choice(    
                         name= "Commandement",
-                        value="leadership"
+                        value="300"
                     ),
                     create_choice(
                         name="Connaissance",
-                        value="lore"
+                        value="303"
                     ),
                     create_choice(
                         name="Energie",
-                        value="spirit"
+                        value="302"
                     ),
                     create_choice(
                         name="Tactique",
-                        value="tactics"
+                        value="301"
                     ),
                     create_choice(
                         name="Neutre",
-                        value="neutral"
-                    ),
-                    create_choice(
-                        name="Sacquet",
-                        value="baggins"
+                        value="304"
                     ),
                     create_choice(
                         name="Communauté",
-                        value="fellowship"
+                        value="305"
+                    ),
+                    create_choice(
+                        name="Sacquet",
+                        value="306"
                     )
                 ]
             ),
@@ -71,31 +71,31 @@ class Hero(commands.Cog):
                     ),
                     create_choice(    
                         name= "Commandement",
-                        value="leadership"
+                        value="300"
                     ),
                     create_choice(
                         name="Connaissance",
-                        value="lore"
+                        value="303"
                     ),
                     create_choice(
                         name="Energie",
-                        value="spirit"
+                        value="302"
                     ),
                     create_choice(
                         name="Tactique",
-                        value="tactics"
+                        value="301"
                     ),
                     create_choice(
                         name="Neutre",
-                        value="neutral"
-                    ),
-                    create_choice(
-                        name="Sacquet",
-                        value="baggins"
+                        value="304"
                     ),
                     create_choice(
                         name="Communauté",
-                        value="fellowship"
+                        value="305"
+                    ),
+                    create_choice(
+                        name="Sacquet",
+                        value="306"
                     ),
                     create_choice(
                         name="Pas de second héro",
@@ -115,31 +115,31 @@ class Hero(commands.Cog):
                     ),
                     create_choice(    
                         name= "Commandement",
-                        value="leadership"
+                        value="300"
                     ),
                     create_choice(
                         name="Connaissance",
-                        value="lore"
+                        value="303"
                     ),
                     create_choice(
                         name="Energie",
-                        value="spirit"
+                        value="302"
                     ),
                     create_choice(
                         name="Tactique",
-                        value="tactics"
+                        value="301"
                     ),
                     create_choice(
                         name="Neutre",
-                        value="neutral"
-                    ),
-                    create_choice(
-                        name="Sacquet",
-                        value="baggins"
+                        value="304"
                     ),
                     create_choice(
                         name="Communauté",
-                        value="fellowship"
+                        value="305"
+                    ),
+                    create_choice(
+                        name="Sacquet",
+                        value="306"
                     ),
                     create_choice(
                         name="Pas de troisième héro",
@@ -160,51 +160,48 @@ class Hero(commands.Cog):
         img = []
         place = 0
         img_weight = 0
-        url_file =  "./data/sda_"+langue+".json"
-        f = open(url_file)
+        url_file =  "./data/SDA_carte_joueur.json"
+        f = open(url_file , encoding="utf8")
         dataCard = json.load(f)       
         for i in dataCard:
-            if i["type_code"] == "hero": 
-                if i["pack_code"] not in ["EoL", "DoG", "RoR", "DoD", "Starter" ]:
-                    if "ALeP" not in i["pack_name"]:
-                        if "(MotK)" not in i["name"]:
-                            if (i["sphere_code"] == hero_1 or hero_1 =="all" ):
-                                list_hero1.append(i)
-                            if (i["sphere_code"] == hero_2 or hero_2 =="all" ) and hero_2 !="no": 
-                                list_hero2.append(i)
-                            if (i["sphere_code"] == hero_3 or hero_3 =="all" ) and hero_3 !="no":
-                                list_hero3.append(i)
+            if i['id_extension'] not in ['67', '87', '82', '83', '84', '88', '91', '92'] and "&bull" not in i['titre'] and i["id_type_carte"] == "400": 
+                if (i["id_sphere_influence"] == hero_1 or hero_1 =="all" ):
+                    list_hero1.append(i)
+                if (i["id_sphere_influence"] == hero_2 or hero_2 =="all" ) and hero_2 !="no": 
+                    list_hero2.append(i)
+                if (i["id_sphere_influence"] == hero_3 or hero_3 =="all" ) and hero_3 !="no":
+                    list_hero3.append(i)
         randomHero1 = random.randint(0, len(list_hero1)-1)
         resultat_carte.append(list_hero1[randomHero1])  
         
         if hero_2 !="no":
             randomHero2 = random.randint(0, len(list_hero2)-1) 
-            while list_hero1[randomHero1]["name"] == list_hero2[randomHero2]["name"]:
+            while list_hero1[randomHero1]["titre"] == list_hero2[randomHero2]["titre"]:
                 randomHero2 = random.randint(0, len(list_hero2)-1)
             resultat_carte.append(list_hero2[randomHero2])
 
         if hero_3 !="no":
             randomHero3 = random.randint(0, len(list_hero3)-1)
             if hero_2 =="no":  
-                while list_hero1[randomHero1]["name"] == list_hero3[randomHero3]["name"]:
+                while list_hero1[randomHero1]["titre"] == list_hero3[randomHero3]["titre"]:
                     randomHero3 = random.randint(0, len(list_hero3)-1)
             else:
-                while list_hero1[randomHero1]["name"] == list_hero3[randomHero3]["name"] or list_hero2[randomHero2]["name"] == list_hero3[randomHero3]["name"]:
+                while list_hero1[randomHero1]["titre"] == list_hero3[randomHero3]["titre"] or list_hero2[randomHero2]["titre"] == list_hero3[randomHero3]["titre"]:
                     randomHero3 = random.randint(0, len(list_hero3)-1) 
             resultat_carte.append(list_hero3[randomHero3]) 
 
         """ define the size of the result with the number of card found """
-        img_weight = (img_weight + len(resultat_carte)) * 493
-        img_height = 700
+        img_weight = (img_weight + len(resultat_carte)) * 394
+        img_height = 560
         """ add every patch in the list img """
         for i in resultat_carte:
-            img.append(i['octgnid']+".jpg")
+            img.append("sda_cgbuilder/images/simulateur/carte/"+i['id_extension']+"/"+i['numero_identification']+".jpg")
         """ creating the new img who will be send """
         new_img = Image.new('RGB', (img_weight, img_height), (250,250,250))
         """ we paste every image in the new_img """
         for i in img:
-            image = Image.open("./images/"+i)
-            largeur = 0+(place*493)
+            image = Image.open("./"+i)
+            largeur = 0+(place*394)
             new_img.paste(image, (largeur, 0))
             place += 1
         """ saving the result in a png """

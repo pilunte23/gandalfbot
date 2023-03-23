@@ -81,11 +81,18 @@ class Word(commands.Cog):
 
 
 def change(bot,str):
-    str = str.replace("(defense)","("+emoji(bot,"defense") +")")
-    str = str.replace("(attaque)","("+ emoji(bot,"attack") +")")
-    str = str.replace("(volonte)","("+ emoji(bot,"willpower") +")")
-    str = str.replace("(menace)","("+ emoji(bot,"threat") +")")
-    str = str.replace("(pointdevie)","("+ emoji(bot,"hitpoints") +")")
+    for i in bot.guilds:
+        defense = discord.utils.get(i.emojis, name="defense")
+        attack = discord.utils.get(i.emojis, name="attack")
+        willpower = discord.utils.get(i.emojis, name="willpower")
+        threat = discord.utils.get(i.emojis, name="threat")
+        hitpoints = discord.utils.get(i.emojis, name="hitpoints")
+
+    str = str.replace("(defense)",f"({defense})")
+    str = str.replace("(attaque)",f"({attack})")
+    str = str.replace("(volonte)",f"({willpower})")
+    str = str.replace("(menace)",f"({threat})")
+    str = str.replace("(pointdevie)",f"({hitpoints})")
     return str
 
 def setup(bot):
