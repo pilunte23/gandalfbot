@@ -1,15 +1,14 @@
 from http import client
 import os
+import nextcord
 from discord.ext import commands
-from discord_slash import SlashCommand
-from discord_slash.utils.manage_components import *
 from dotenv import load_dotenv
 from function import *
 
 load_dotenv(dotenv_path="config")
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
-slash = SlashCommand(bot , sync_commands=True)
+#slash = SlashCommand(bot , sync_commands=True)
 
 initial_extensions = []
 

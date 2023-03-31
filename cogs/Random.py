@@ -1,8 +1,7 @@
-import discord
 import os
-from discord.ext import commands
-from discord_slash import cog_ext
-from discord_slash.utils.manage_components import *
+import nextcord 
+from nextcord.ext import commands
+from nextcord import Interaction
 import json
 import random
 
@@ -10,19 +9,10 @@ class Random(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-    @cog_ext.cog_slash(
-        name="a",
-        description="Carte Aleatoire",
-        guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" ")))         
-    )
-#    @commands.Cog.listener()
-#    async def on_ready(self):
-#        """ check if bot is connected """
-#        print("Le robot est connecté comme {0.user}".format(self.bot))
-#        await cardoftheday(self)
-
-    async def _cardoftheday(self,ctx):
+    
+    @nextcord.slash_command(name="a",description="Carte Aleatoire",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
+ 
+    async def _cardoftheday(self,interaction: Interaction):
         resultat_carte=[]   
         url_file =  "./data/SDA_carte_joueur.json"
         f =  open(url_file , encoding="utf8")
@@ -31,13 +21,13 @@ class Random(commands.Cog):
             #exclusion les Two-Player Limited Edition et les éditions révisées
             #exclusion allié-héros
             #garde uniquement les cartes joueurs
-            if i['id_extension'] not in ['67', '87', '82', '83', '84', '88', '91', '92'] and "&bull" not in i['titre'] and i['id_type_carte'] in ['400','401','402','403']:
+            if i['id_extension'] not in ['67','82', '83', '84', '85','87', '88', '91', '94'] and "&bull" not in i['titre'] and i['id_type_carte'] in ['400','401','402','403']:
                 resultat_carte.append(i)
 
         randomCard = random.randint(0, len(resultat_carte)-1) 
-        await sendcard(self,ctx,resultat_carte[randomCard])
+        await sendcard(self,interaction,resultat_carte[randomCard])
                     
-async def sendcard(self,ctx,datacard):
+async def sendcard(self,interaction,datacard):
 
     #channel = discord.utils.get(ctx.guild.channels, name="carte-du-jour")
     """ beautiful embed """
@@ -102,17 +92,17 @@ async def sendcard(self,ctx,datacard):
 
     file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
     if sphere == "":
-        embed = discord.Embed(title=datacard['titre'],color=sphere_color)
+        embed = nextcord.Embed(title=datacard['titre'],color=sphere_color)
     else:
-        emoji = discord.utils.get(self.bot.emojis, name=sphere)
-        embed = discord.Embed(title=f"{emoji} "+datacard['titre'],color=sphere_color)
-    file = discord.File(file_url, filename="image.jpg")
-    pack_file = discord.File(f"./sda_cgbuilder/images/extension/{datacard['id_extension']}.png", filename="pack.png")
-    embed.set_author(name=f"Nom du pack", url= f"https://sda.cgbuilder.fr/liste_carte/{datacard['id_extension']}/")
+        emoji = nextcord.utils.get(self.bot.emojis, name=sphere)
+        embed = nextcord.Embed(title=f"{emoji} "+datacard['titre'],color=sphere_color)
+    file = nextcord.File(file_url, filename="image.jpg")
+    pack_file = nextcord.File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
+    embed.set_author(name=f"{datacard['lbl extension']}", url= f"https://sda.cgbuilder.fr/liste_carte/{datacard['id_extension']}/")
     embed.set_thumbnail(url=f"attachment://pack.png")
     embed.set_image(url="attachment://image.jpg")
     embed.set_footer(text=f"{cycle}")
-    await ctx.send(files=[file,pack_file], embed=embed)
+    await interaction.send(files=[file,pack_file], embed=embed)
 
 
 def setup(bot):

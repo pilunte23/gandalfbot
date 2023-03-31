@@ -119,7 +119,7 @@ class Hero(commands.Cog):
                     ),
                     create_choice(
                         name="Connaissance",
-                        value="303"
+                        value="301"
                     ),
                     create_choice(
                         name="Energie",
@@ -127,7 +127,7 @@ class Hero(commands.Cog):
                     ),
                     create_choice(
                         name="Tactique",
-                        value="301"
+                        value="303"
                     ),
                     create_choice(
                         name="Neutre",
