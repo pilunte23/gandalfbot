@@ -85,7 +85,7 @@ class Quest(commands.Cog):
                 all_search = re.search(word_use,unidecode(str(i["lbl set rencontre"].lower())))     
             if all_search:                 
                 resultat_carte.append(i)
-        #print("nombre de carte" + str(len(resultat_carte))) 
+        #print("nombre de carte : " + str(len(resultat_carte))) 
         if len(resultat_carte) > 0:
             if len(resultat_carte) == 1:
                 await share.sendcard(self,interaction,resultat_carte[0])

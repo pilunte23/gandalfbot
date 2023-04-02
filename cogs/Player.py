@@ -100,7 +100,7 @@ class Player(commands.Cog):
             if row_search: 
                 if (( id_type == i["id_type_carte"] or id_type == "all" ) and( id_sphere == i["id_sphere_influence"] or id_sphere == "all" )):   
                     resultat_carte.append(i) 
-        #print("nombre de carte" + str(len(resultat_carte)))
+        #print("nombre de carte : " + str(len(resultat_carte)))
         if len(resultat_carte) > 0:
             if len(resultat_carte) == 1:
                 await share.sendcard(self,interaction,resultat_carte[0])
