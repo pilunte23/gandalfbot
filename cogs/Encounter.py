@@ -25,7 +25,6 @@ class myselect(nextcord.ui.Select):
         for i in rawdata:
             if i['numero_identification'] == numero_identification and i['id_extension'] == id_extension:
                 data.append(i)
-        #print(f"id_sphere_influence : {data[0]['id_sphere_influence']}")
         return await share.sendcard(self,interaction,data[0])
     
     
@@ -98,7 +97,7 @@ class Encounter(commands.Cog):
             if row_search: 
                 if ( id_type == i["id_type_carte"] or id_type == "all" ):   
                     resultat_carte.append(i) 
-        print("nombre de carte : " + str(len(resultat_carte)))
+        #print("nombre de carte : " + str(len(resultat_carte)))
         if len(resultat_carte) > 0:
             if len(resultat_carte) == 1:
                 await share.sendcard(resultat_carte[0])
@@ -113,7 +112,6 @@ class Encounter(commands.Cog):
                         """ add every patch in the list img """
                         for i in resultat_carte:
                             src_file="sda_cgbuilder/images/simulateur/carte/"+i['id_extension']+"/"+i['numero_identification']+".jpg"
-                            #print(src_file)
                             img.append(src_file)
                         """ creating the new img who will be send """
                         new_img = Image.new('RGB', (img_weight, img_height), (250,250,250))
