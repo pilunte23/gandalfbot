@@ -26,7 +26,7 @@ class myselect(nextcord.ui.Select):
             if i['numero_identification'] == numero_identification and i['id_extension'] == id_extension:
                 data.append(i)
         #print(f"id_sphere_influence : {data[0]['id_sphere_influence']}")
-        return await share.sendcard(data[0])
+        return await share.sendcard(self,interaction,data[0])
     
     
 class SelectView(nextcord.ui.View):
