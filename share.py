@@ -69,29 +69,30 @@ def info_cycle(datacard):
     if datacard['id_extension'] == "57":
         cycle="Extension de saga : La Montagne de Feu"
     if datacard['id_extension'] in ['80', '81', '90', '92', '93', '95', '96']:
-        cycle=["Serment des Rohirrim (ALEP)"]
+        cycle="Serment des Rohirrim (ALEP)"
     if datacard['id_extension'] in ['86', '97']:
-        cycle=["Scénario Indépendant (ALEP)"]
+        cycle="Cycle : Scénario Indépendant (ALEP)"
     if datacard['id_extension'] == "89":
         cycle="Les Ténèbres de la Forêt Noire"
     return cycle
 
 def info_sphere(datacard):
     sphere, sphere_color ="", 0xFFFFFF
-    if datacard['id_sphere_influence'] == "300":
-        sphere="leadership", 0x8B23F9
-    if datacard['id_sphere_influence'] == "301":
-        sphere, sphere_color ="lore",  0x0E7A12
-    if datacard['id_sphere_influence'] == "302":
-        sphere, sphere_color ="spirit",0x33DDFF
-    if datacard['id_sphere_influence'] == "303":
-        sphere, sphere_color ="tactics",0xDB140B
-    if datacard['id_sphere_influence'] == "304":
-        sphere, sphere_color ="neutral",0x797B7A
-    if datacard['id_sphere_influence'] == "305":
-        sphere, sphere_color ="fellowship",0xD99611
-    if datacard['id_sphere_influence'] == "306":
-        sphere, sphere_color ="baggins",0xD3D911
+    if "id_sphere_influence" in datacard:
+        if datacard['id_sphere_influence'] == "300":
+            sphere="leadership", 0x8B23F9
+        if datacard['id_sphere_influence'] == "301":
+            sphere, sphere_color ="lore",  0x0E7A12
+        if datacard['id_sphere_influence'] == "302":
+            sphere, sphere_color ="spirit",0x33DDFF
+        if datacard['id_sphere_influence'] == "303":
+            sphere, sphere_color ="tactics",0xDB140B
+        if datacard['id_sphere_influence'] == "304":
+            sphere, sphere_color ="neutral",0x797B7A
+        if datacard['id_sphere_influence'] == "305":
+            sphere, sphere_color ="fellowship",0xD99611
+        if datacard['id_sphere_influence'] == "306":
+            sphere, sphere_color ="baggins",0xD3D911
     return sphere, sphere_color
 
 
@@ -118,9 +119,22 @@ def get_id_type_carte(word):
         case "Objectif Héros":
             return "414"
         case "Contrat":
-            return "418"      
+            return "418" 
+        case "Ennemi":
+            return "404"
+        case "Lieu":
+            return "405"
+        case "Traitrise":
+            return "406"
+        case "Objectif":
+            return "407"
+        case "Quête annexe rencontre":
+            return "413"
+        case "Préparation":
+            return "415"              
         case _:
             return "all"
+  
         
 def get_id_sphere(word):
     match word:
