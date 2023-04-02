@@ -100,7 +100,7 @@ class Encounter(commands.Cog):
         #print("nombre de carte : " + str(len(resultat_carte)))
         if len(resultat_carte) > 0:
             if len(resultat_carte) == 1:
-                await share.sendcard(resultat_carte[0])
+                await share.sendcard(self,interaction,resultat_carte[0])
             else:
                 if selection == "multicard":
                     if len(resultat_carte) > 10:
