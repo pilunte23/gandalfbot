@@ -17,14 +17,13 @@ class myselect(nextcord.ui.Select):
         id= self.values[0].split("/")
         id_extension = id[0]
         numero_identification = id[1]
-        url_file =  "./data/SDA_carte_joueur.json"
+        url_file =  "./data/SDA_carte_quete.json"
         f =  open(url_file , encoding="utf8")
         rawdata = json.load(f)
         data = []
         for i in rawdata:
             if i['numero_identification'] == numero_identification and i['id_extension'] == id_extension:
                 data.append(i)
-        #print(f"id_sphere_influence : {data[0]['id_sphere_influence']}")
         return await share.sendcard(self,interaction,data[0])
     
     
@@ -43,7 +42,6 @@ class Quest(commands.Cog):
     interaction: Interaction, 
     recherche: str = nextcord.SlashOption(name="recherche",description="Terme Recherché", required=True),
     type: str = nextcord.SlashOption(name="type",description="Recherche par Nom de Carte ou Nom de Scénario",required=False,choices=["Nom de la Carte (par défaut)","Nom du Scénario"]),
-    sequence: str = nextcord.SlashOption(name="sequence",description="Quel Face de Carte ?",required=False,choices=["Les 2 Cotés (par défaut)","Face A","Face B"]),
     selection: str = nextcord.SlashOption(name="selection",description="Type d'affichage (Liste Déroulante ou Multicarte)",required=False, choices=["Renvoie une liste de carte via Menu sélectionnable limité à 25 cartes (par défaut)", "Renvoie une image de plusieurs cartes limité à 10 cartes"]),
     terme: str = nextcord.SlashOption(name="terme",description="Terme Exacte ou Partiel",required=False, choices=["Terme partiel (par défaut)", "Terme exact"])):
         #Retravaille des champs saisie par la commande
@@ -51,12 +49,6 @@ class Quest(commands.Cog):
             id_type = "card"
         else:
             id_type = "scenario"
-        if sequence == None or sequence == "Les 2 Cotés (par défaut)":
-            id_sequence = "all"
-        elif sequence == "Face A":
-            id_sequence = "A"
-        elif sequence == "Face B":
-            id_sequence = "B"
         if terme == None or terme =="Terme partiel (par défaut)": 
             terme ="Partiel"
         else:
@@ -71,7 +63,7 @@ class Quest(commands.Cog):
         img = []
         place = 0
         img_weight = 0
-        url_file =  "./data/SDA_carte_joueur.json"
+        url_file =  "./data/SDA_carte_quete.json"
         f =  open(url_file , encoding="utf8")
         rawdata = json.load(f)
         #exclusion les Two-Player Limited Edition et les éditions révisées
@@ -92,8 +84,8 @@ class Quest(commands.Cog):
             if id_type =="scenario":
                 all_search = re.search(word_use,unidecode(str(i["lbl set rencontre"].lower())))     
             if all_search:                 
-                resultat_carte.append(i) 
-        print("nombre de carte" + str(len(resultat_carte)))
+                resultat_carte.append(i)
+        #print("nombre de carte" + str(len(resultat_carte))) 
         if len(resultat_carte) > 0:
             if len(resultat_carte) == 1:
                 await share.sendcard(self,interaction,resultat_carte[0])
@@ -144,12 +136,12 @@ async def _toomuchcard(self,interaction):
     await interaction.send(embed = embed_too_carte,delete_after= 5)
 
 
-async def _selectingbox(self,interaction,resultat_carte):
+async def _selectingbox(self,interaction : nextcord.Interaction,resultat_carte):
     list_card = []
     count = 0
     for i in resultat_carte:
         altsphere_emoji = "⬛"
-        list_card.append(nextcord.SelectOption(label=i['titre'],description=f"{(i['lbl set rencontre']).capitalize()}",value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
+        list_card.append(nextcord.SelectOption(label=i['titre'],description=str(f"{i['lbl set rencontre'].capitalize()}"),value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
         count += 1
     view = SelectView(list_card)
     await interaction.response.send_message(view=view,ephemeral=True)

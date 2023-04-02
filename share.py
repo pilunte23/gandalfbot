@@ -23,7 +23,6 @@ def create_image(datacard):
     for i in list_img:
         im = Image.open(i)
         w, h = im.size
-        print("h:"+ str(h))
         total_width += w
         total_height += h
         if max_width < w:
@@ -32,14 +31,12 @@ def create_image(datacard):
             max_height = h
     
     """ creating the new img who will be send """
-    print("total_width"+ str(total_width) + " , max_height"+ str(max_height))
     new_img = Image.new('RGB', (total_width, max_height), (250,250,250))
     """ we paste every image in the new_img """
     largeur=0
     for i in list_img:
         image = Image.open(i)
         w, h = image.size
-        print(str(largeur))
         new_img.paste(image, (largeur, 0))
         largeur += w
     """ saving the result in a png """
