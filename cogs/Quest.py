@@ -141,7 +141,7 @@ async def _selectingbox(self,interaction : Interaction,resultat_carte):
     count = 0
     for i in resultat_carte:
         altsphere_emoji = "⬛"
-        list_card.append(SelectOption(label=i['titre'],description=str(f"{i['lbl set rencontre'].capitalize()}"),value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
+        list_card.append(SelectOption(label=i['titre'],description=str(f"{i['lbl set rencontre'].capitalize()} Partie {i['sequence']}"),value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
         count += 1
     view = SelectView(list_card)
     await interaction.response.send_message(view=view,ephemeral=True)
