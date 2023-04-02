@@ -25,28 +25,8 @@ class Random(commands.Cog):
             if i['id_extension'] not in ['67','82', '83', '84', '85','87', '88', '91', '94'] and "&bull" not in i['titre'] and i['id_type_carte'] in ['400','401','402','403']:
                 resultat_carte.append(i)
 
-        randomCard = random.randint(0, len(resultat_carte)-1) 
-        await sendcard(self,interaction,resultat_carte[randomCard])
+        randomCard = random.randint(0, len(resultat_carte)-1)
+        await share.sendcard(self,interaction,resultat_carte[randomCard]) 
                     
-async def sendcard(self,interaction,datacard):
-
-    """ beautiful embed """
-    sphere, sphere_color=share.info_sphere(datacard)
-    cycle=share.info_cycle(datacard)
-    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
-    if sphere == "":
-        embed = nextcord.Embed(title=datacard['titre'],color=sphere_color)
-    else:
-        emoji = nextcord.utils.get(self.bot.emojis, name=sphere)
-        embed = nextcord.Embed(title=f"{emoji} "+datacard['titre'],color=sphere_color)
-    file = nextcord.File(file_url, filename="image.jpg")
-    pack_file = nextcord.File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
-    embed.set_author(name=f"{datacard['lbl extension']}", url= f"https://sda.cgbuilder.fr/liste_carte/{datacard['id_extension']}/")
-    embed.set_thumbnail(url=f"attachment://pack.png")
-    embed.set_image(url="attachment://image.jpg")
-    embed.set_footer(text=f"{cycle}")
-    await interaction.send(files=[file,pack_file], embed=embed)
-
-
 def setup(bot):
     bot.add_cog(Random(bot))

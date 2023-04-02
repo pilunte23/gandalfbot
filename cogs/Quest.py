@@ -1,6 +1,6 @@
 import nextcord 
 from nextcord.ext import commands
-from nextcord import Interaction
+from nextcord import Interaction, SelectOption, ui, SlashOption, Embed, File
 from unidecode import unidecode
 from PIL import Image
 import json
@@ -8,12 +8,12 @@ import re
 import os
 import share
 
-class myselect(nextcord.ui.Select):
+class myselect(ui.Select):
     def __init__(self,list_card):
         selectoptions = list_card
         super().__init__(placeholder="Quelle carte voulez vous afficher? ",min_values=1,max_values=1 ,options=selectoptions)
         
-    async def callback(self, interaction: nextcord.Interaction):
+    async def callback(self, interaction: Interaction):
         id= self.values[0].split("/")
         id_extension = id[0]
         numero_identification = id[1]
@@ -27,7 +27,7 @@ class myselect(nextcord.ui.Select):
         return await share.sendcard(self,interaction,data[0])
     
     
-class SelectView(nextcord.ui.View):
+class SelectView(ui.View):
     def __init__(self,list_card):
         super().__init__()
         self.add_item(myselect(list_card))
@@ -40,10 +40,10 @@ class Quest(commands.Cog):
     @nextcord.slash_command(name="q",description="Pour l'affichage de carte(s) quêtes",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
     async def _timing(self, 
     interaction: Interaction, 
-    recherche: str = nextcord.SlashOption(name="recherche",description="Terme Recherché", required=True),
-    type: str = nextcord.SlashOption(name="type",description="Recherche par Nom de Carte ou Nom de Scénario",required=False,choices=["Nom de la Carte (par défaut)","Nom du Scénario"]),
-    selection: str = nextcord.SlashOption(name="selection",description="Type d'affichage (Liste Déroulante ou Multicarte)",required=False, choices=["Renvoie une liste de carte via Menu sélectionnable limité à 25 cartes (par défaut)", "Renvoie une image de plusieurs cartes limité à 10 cartes"]),
-    terme: str = nextcord.SlashOption(name="terme",description="Terme Exacte ou Partiel",required=False, choices=["Terme partiel (par défaut)", "Terme exact"])):
+    recherche: str = SlashOption(name="recherche",description="Terme Recherché", required=True),
+    type: str = SlashOption(name="type",description="Recherche par Nom de Carte ou Nom de Scénario",required=False,choices=["Nom de la Carte (par défaut)","Nom du Scénario"]),
+    selection: str = SlashOption(name="selection",description="Type d'affichage (Liste Déroulante ou Multicarte)",required=False, choices=["Renvoie une liste de carte via Menu sélectionnable limité à 25 cartes (par défaut)", "Renvoie une image de plusieurs cartes limité à 10 cartes"]),
+    terme: str = SlashOption(name="terme",description="Terme Exacte ou Partiel",required=False, choices=["Terme partiel (par défaut)", "Terme exact"])):
         #Retravaille des champs saisie par la commande
         if type == None or type =="Nom de la Carte (par défaut)": 
             id_type = "card"
@@ -111,8 +111,8 @@ class Quest(commands.Cog):
                         """ saving the result in a png """
                         new_img.save("requête.png", "PNG")
                         """ beautiful embed """
-                        embed_carte = nextcord.Embed(title = "Test", color = nextcord.Color.blue())
-                        file = nextcord.File("requête.png", filename = "image.png")
+                        embed_carte = Embed(title = "Test", color = nextcord.Color.blue())
+                        file = File("requête.png", filename = "image.png")
                         embed_carte.set_image(url ="attachment://image.png")
                         await interaction.send(files=[file], embed=embed_carte)
                 if selection == "menu":  
@@ -123,25 +123,25 @@ class Quest(commands.Cog):
                         await _selectingbox(self,interaction,resultat_carte)                  
         else:
             file_url = "./assets/picture/no_card.png"
-            file = nextcord.File(file_url, filename="image.png")
-            embed_no_carte = nextcord.Embed(title = "no result", color = nextcord.Color.red())
+            file = File(file_url, filename="image.png")
+            embed_no_carte = Embed(title = "no result", color = nextcord.Color.red())
             embed_no_carte.set_image(url="attachment://image.png")
             embed_no_carte.add_field(name = "Aucune carte n'a été trouvée", value = "Vous ne passerez pas !!!")   
             await interaction.send(file=file,embed = embed_no_carte,delete_after= 5)
 
 
-async def _toomuchcard(self,interaction):
-    embed_too_carte = nextcord.Embed(title = "too much result", color = nextcord.Color.red())
+async def _toomuchcard(self,interaction : Interaction):
+    embed_too_carte = Embed(title = "too much result", color = nextcord.Color.red())
     embed_too_carte.add_field(name = "Trop de résultat", value = "Veuillez affiner votre recherche")   
-    await interaction.send(embed = embed_too_carte,delete_after= 5)
+    await self.send(embed = embed_too_carte,delete_after= 5)
 
 
-async def _selectingbox(self,interaction : nextcord.Interaction,resultat_carte):
+async def _selectingbox(self,interaction : Interaction,resultat_carte):
     list_card = []
     count = 0
     for i in resultat_carte:
         altsphere_emoji = "⬛"
-        list_card.append(nextcord.SelectOption(label=i['titre'],description=str(f"{i['lbl set rencontre'].capitalize()}"),value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
+        list_card.append(SelectOption(label=i['titre'],description=str(f"{i['lbl set rencontre'].capitalize()}"),value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
         count += 1
     view = SelectView(list_card)
     await interaction.response.send_message(view=view,ephemeral=True)

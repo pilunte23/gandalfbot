@@ -1,5 +1,6 @@
 import os
 import nextcord
+from nextcord import File, Embed
 from PIL import Image
 
 def create_image(datacard):
@@ -48,9 +49,9 @@ async def sendcard(self,interaction,datacard):
     cycle=info_cycle(datacard)
     create_image(datacard)
     file_url="./createimage.png"
-    embed = nextcord.Embed(title=datacard['titre'],color=sphere_color)
-    file = nextcord.File(file_url, filename="image.jpg")
-    pack_file = nextcord.File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
+    embed = Embed(title=datacard['titre'],color=sphere_color)
+    file = File(file_url, filename="image.jpg")
+    pack_file = File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
     embed.set_author(name=f"{datacard['lbl extension']}", url= f"https://sda.cgbuilder.fr/liste_carte/{datacard['id_extension']}/")
     embed.set_thumbnail(url=f"attachment://pack.png")
     embed.set_image(url="attachment://image.jpg")
