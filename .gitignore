@@ -2,6 +2,7 @@ config
 gandalf/*
 images/*
 requête.png
+createimage.png
 hero.png
 mydeck.xml
 mypage.html

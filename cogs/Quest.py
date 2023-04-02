@@ -8,7 +8,6 @@ import re
 import os
 import share
 
-
 class myselect(nextcord.ui.Select):
     def __init__(self,list_card):
         selectoptions = list_card
@@ -18,7 +17,7 @@ class myselect(nextcord.ui.Select):
         id= self.values[0].split("/")
         id_extension = id[0]
         numero_identification = id[1]
-        url_file =  "./data/SDA_carte_rencontre.json"
+        url_file =  "./data/SDA_carte_joueur.json"
         f =  open(url_file , encoding="utf8")
         rawdata = json.load(f)
         data = []
@@ -26,7 +25,7 @@ class myselect(nextcord.ui.Select):
             if i['numero_identification'] == numero_identification and i['id_extension'] == id_extension:
                 data.append(i)
         #print(f"id_sphere_influence : {data[0]['id_sphere_influence']}")
-        return await share.sendcard(data[0])
+        return await share.sendcard(self,interaction,data[0])
     
     
 class SelectView(nextcord.ui.View):
@@ -34,28 +33,30 @@ class SelectView(nextcord.ui.View):
         super().__init__()
         self.add_item(myselect(list_card))
 
-class Encounter(commands.Cog):
+class Quest(commands.Cog):
 
     def __init__(self, bot):
         self.bot:  commands.bot = bot
 
-    @nextcord.slash_command(name="r",description="Pour l'affichage de carte(s) rencontre",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
+    @nextcord.slash_command(name="q",description="Pour l'affichage de carte(s) quêtes",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
     async def _timing(self, 
     interaction: Interaction, 
     recherche: str = nextcord.SlashOption(name="recherche",description="Terme Recherché", required=True),
-    type: str = nextcord.SlashOption(name="type",description="Filtre sur le Type de Carte (Héro, Allié, Attachement, Evènement...)",required=False,choices=["Pas de filtre (par défaut)","Ennemi","Lieu","Traitrise","Objectif","Quête annexe rencontre","Préparation"]),
-    champs: str = nextcord.SlashOption(name="champs",description="Sur Quel Champs de Rechercher le Terme saisi (Nom, Traits)",required=False, choices=["Titre (par défaut)", "Trait"]),  
+    type: str = nextcord.SlashOption(name="type",description="Recherche par Nom de Carte ou Nom de Scénario",required=False,choices=["Nom de la Carte (par défaut)","Nom du Scénario"]),
+    sequence: str = nextcord.SlashOption(name="sequence",description="Quel Face de Carte ?",required=False,choices=["Les 2 Cotés (par défaut)","Face A","Face B"]),
     selection: str = nextcord.SlashOption(name="selection",description="Type d'affichage (Liste Déroulante ou Multicarte)",required=False, choices=["Renvoie une liste de carte via Menu sélectionnable limité à 25 cartes (par défaut)", "Renvoie une image de plusieurs cartes limité à 10 cartes"]),
     terme: str = nextcord.SlashOption(name="terme",description="Terme Exacte ou Partiel",required=False, choices=["Terme partiel (par défaut)", "Terme exact"])):
         #Retravaille des champs saisie par la commande
-        if type == None or type =="Pas de filtre (par défaut)": 
-            id_type = "all"
+        if type == None or type =="Nom de la Carte (par défaut)": 
+            id_type = "card"
         else:
-            id_type = share.get_id_type_carte(type) 
-        if champs == None or champs =="Titre (par défaut)":
-            champs = "Titre"
-        else:
-            champs = "Trait"
+            id_type = "scenario"
+        if sequence == None or sequence == "Les 2 Cotés (par défaut)":
+            id_sequence = "all"
+        elif sequence == "Face A":
+            id_sequence = "A"
+        elif sequence == "Face B":
+            id_sequence = "B"
         if terme == None or terme =="Terme partiel (par défaut)": 
             terme ="Partiel"
         else:
@@ -70,7 +71,7 @@ class Encounter(commands.Cog):
         img = []
         place = 0
         img_weight = 0
-        url_file =  "./data/SDA_carte_rencontre.json"
+        url_file =  "./data/SDA_carte_joueur.json"
         f =  open(url_file , encoding="utf8")
         rawdata = json.load(f)
         #exclusion les Two-Player Limited Edition et les éditions révisées
@@ -80,47 +81,39 @@ class Encounter(commands.Cog):
             if i['id_extension'] not in ['67', '87', '82', '83', '84', '88', '91', '92'] and "&bull" not in i['titre']:
                 data.append(i)
         #regex differentes selon qu'on cherme un bout de mot ou le mot complet
-        if terme =="Exact":
+        if terme =="exact":
             word_use = "^"+ unidecode(str(recherche.lower()))+"$"
         else:
-            #pour un Trait , la recherche sera forcement partiel parce qu'il ya toujours . à trainer et potentiellement d'autres traits
-            if champs == "Trait":
-                word_use = ".*\\b"+ unidecode(str(recherche.lower()))+"\\b.*"
-            else:       
-                word_use = ".*"+ unidecode(str(recherche.lower()))+".*"
+            word_use = ".*"+ unidecode(str(recherche.lower()))+".*"
         for i in data:
-            row_search = None
-            """ search in name, traits"""  
-            if champs == "Titre" and "titre" in i:
-                row_search = re.search(word_use,unidecode(str(i["titre"].lower()))) 
-            if champs == "Trait" and "trait" in i and i["trait"] != None:
-                row_search = re.search(word_use,unidecode(str(i["trait"].lower())))
-            if row_search: 
-                if ( id_type == i["id_type_carte"] or id_type == "all" ):   
-                    resultat_carte.append(i) 
-        print("nombre de carte : " + str(len(resultat_carte)))
+            all_search = None
+            if id_type =="card":
+                all_search = re.search(word_use,unidecode(str(i["titre"].lower()))) 
+            if id_type =="scenario":
+                all_search = re.search(word_use,unidecode(str(i["lbl set rencontre"].lower())))     
+            if all_search:                 
+                resultat_carte.append(i) 
+        print("nombre de carte" + str(len(resultat_carte)))
         if len(resultat_carte) > 0:
             if len(resultat_carte) == 1:
-                await share.sendcard(resultat_carte[0])
+                await share.sendcard(self,interaction,resultat_carte[0])
             else:
                 if selection == "multicard":
                     if len(resultat_carte) > 10:
                         await _toomuchcard(self,interaction)
                     else:
                         """ define the size of the result with the number of card found """
-                        img_weight = (img_weight + len(resultat_carte)) * 394
-                        img_height = 560
+                        img_weight = (img_weight + len(resultat_carte)) * 700
+                        img_height = 493
                         """ add every patch in the list img """
                         for i in resultat_carte:
-                            src_file="sda_cgbuilder/images/simulateur/carte/"+i['id_extension']+"/"+i['numero_identification']+".jpg"
-                            #print(src_file)
-                            img.append(src_file)
+                            img.append(i['octgnid']+".jpg")
                         """ creating the new img who will be send """
                         new_img = Image.new('RGB', (img_weight, img_height), (250,250,250))
                         """ we paste every image in the new_img """
                         for i in img:
-                            image = Image.open("./"+i)
-                            largeur = 0+(place*394)
+                            image = Image.open("./images/"+i)
+                            largeur = 0+(place*700)
                             new_img.paste(image, (largeur, 0))
                             place += 1
                         """ saving the result in a png """
@@ -156,23 +149,10 @@ async def _selectingbox(self,interaction,resultat_carte):
     count = 0
     for i in resultat_carte:
         altsphere_emoji = "⬛"
-        if i['id_type_carte'] == "413":
-            altsphere_emoji = "🟩"
-        if i['id_type_carte'] == "405":
-            altsphere_emoji = "🟦"
-        if i['id_type_carte'] == "404":
-            altsphere_emoji = "🟥"
-        if i['id_type_carte'] == "407":
-            altsphere_emoji = "⬜"
-        if i['id_type_carte'] == "406":
-            altsphere_emoji = "🟧" 
-        if i['id_type_carte'] == "415":
-            altsphere_emoji = "🟨"
-        list_card.append(nextcord.SelectOption(label=i['titre'],description=f"{(i['lbl type carte']).capitalize()} dans {i['lbl extension']}",value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
+        list_card.append(nextcord.SelectOption(label=i['titre'],description=f"{(i['lbl set rencontre']).capitalize()}",value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
         count += 1
     view = SelectView(list_card)
     await interaction.response.send_message(view=view,ephemeral=True)
 
-
 def setup(bot):
-    bot.add_cog(Encounter(bot))
+    bot.add_cog(Quest(bot))    

@@ -1,28 +1,56 @@
 import os
 import nextcord
+from PIL import Image
 
-async def create_image(datacard):
-    list_file = []
+def create_image(datacard):
+    """ add every patch in the list img """
+    list_img = []
     file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
     if os.path.isfile(file_url):
-        list_file.append(file_url)
-    else:
-        file_url = "./sda_cgbuilder/images/simulateur/carte_horizontale/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
-        if os.path.isfile(file_url):
-           list_file.append(file_url)
-        else:
-            file_url = "./sda_cgbuilder/images/simulateur/carte_horizontale/"+datacard['id_extension']+"/"+ datacard['numero_identification']+"A.jpg"
-            if os.path.isfile(file_url):
-               list_file.append(file_url)
-               file_urlB = "./sda_cgbuilder/images/simulateur/carte_horizontale/"+datacard['id_extension']+"/"+ datacard['numero_identification']+"B.jpg"
-               list_file.append(file_urlB)
-    return await list_file
+        list_img.append(file_url)
+    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+"A.jpg"
+    if os.path.isfile(file_url):
+        list_img.append(file_url)
+    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+"B.jpg"
+    if os.path.isfile(file_url):
+        list_img.append(file_url)
+
+    #max width, height
+    max_width = 0
+    max_height = 0
+    total_width = 0
+    total_height = 0
+    for i in list_img:
+        im = Image.open(i)
+        w, h = im.size
+        print("h:"+ str(h))
+        total_width += w
+        total_height += h
+        if max_width < w:
+            max_width = w
+        if max_height < h:
+            max_height = h
+    
+    """ creating the new img who will be send """
+    print("total_width"+ str(total_width) + " , max_height"+ str(max_height))
+    new_img = Image.new('RGB', (total_width, max_height), (250,250,250))
+    """ we paste every image in the new_img """
+    largeur=0
+    for i in list_img:
+        image = Image.open(i)
+        w, h = image.size
+        print(str(largeur))
+        new_img.paste(image, (largeur, 0))
+        largeur += w
+    """ saving the result in a png """
+    new_img.save("./createimage.png", "PNG" )
 
 async def sendcard(self,interaction,datacard):
     """ beautiful embed """
     sphere, sphere_color = info_sphere(datacard)
     cycle=info_cycle(datacard)
-    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
+    create_image(datacard)
+    file_url="./createimage.png"
     embed = nextcord.Embed(title=datacard['titre'],color=sphere_color)
     file = nextcord.File(file_url, filename="image.jpg")
     pack_file = nextcord.File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
