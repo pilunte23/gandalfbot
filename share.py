@@ -4,6 +4,7 @@ from nextcord import File, Embed
 from PIL import Image
 
 def create_image(datacard):
+    find=False
     """ add every patch in the list img """
     list_img = []
     file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
@@ -17,6 +18,7 @@ def create_image(datacard):
         list_img.append(file_url)
 
     #max width, height
+
     max_width = 0
     max_height = 0
     total_width = 0
@@ -30,33 +32,48 @@ def create_image(datacard):
             max_width = w
         if max_height < h:
             max_height = h
-    
-    """ creating the new img who will be send """
-    new_img = Image.new('RGB', (total_width, max_height), (250,250,250))
-    """ we paste every image in the new_img """
-    largeur=0
-    for i in list_img:
-        image = Image.open(i)
-        w, h = image.size
-        new_img.paste(image, (largeur, 0))
-        largeur += w
-    """ saving the result in a png """
-    new_img.save("./createimage.png", "PNG" )
+    print(list_img)
+    if len(list_img) > 0:
+        find= True
+        """ creating the new img who will be send """
+        new_img = Image.new('RGB', (total_width, max_height), (250,250,250))
+        """ we paste every image in the new_img """
+        largeur=0
+        for i in list_img:
+            image = Image.open(i)
+            w, h = image.size
+            new_img.paste(image, (largeur, 0))
+            largeur += w
+        """ saving the result in a png """
+        new_img.save("./createimage.png", "PNG" )
+    return find
 
 async def sendcard(self,interaction,datacard):
     """ beautiful embed """
     sphere, sphere_color = info_sphere(datacard)
     cycle=info_cycle(datacard)
-    create_image(datacard)
-    file_url="./createimage.png"
+
     embed = Embed(title=datacard['titre'],color=sphere_color)
-    file = File(file_url, filename="image.jpg")
+    find_image= create_image(datacard)
+ 
     pack_file = File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
     embed.set_author(name=f"{datacard['lbl extension']}", url= f"https://sda.cgbuilder.fr/liste_carte/{datacard['id_extension']}/")
     embed.set_thumbnail(url=f"attachment://pack.png")
-    embed.set_image(url="attachment://image.jpg")
     embed.set_footer(text=f"{cycle}")
-    await interaction.send(files=[file,pack_file], embed=embed)
+    if find_image:
+        file_url="./createimage.png"
+        file = File(file_url, filename="image.jpg")
+        embed.set_image(url="attachment://image.jpg")
+        await interaction.send(files=[file,pack_file], embed=embed)
+    else:
+        if datacard['texte']:
+            embed.add_field(name = "", value =f"{datacard['texte']}")   
+        await interaction.send(files=[pack_file], embed=embed)
+
+
+def convert(text):
+
+    return
 
 def info_cycle(datacard):
     cycle=""
