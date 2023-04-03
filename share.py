@@ -2,6 +2,7 @@ import os
 import nextcord
 from nextcord import File, Embed
 from PIL import Image
+import re
 
 def create_image(datacard):
     find=False
@@ -67,13 +68,31 @@ async def sendcard(self,interaction,datacard):
         await interaction.send(files=[file,pack_file], embed=embed)
     else:
         if datacard['texte']:
-            embed.add_field(name = "", value =f"{datacard['texte']}")   
+            embed.add_field(name = "", value =f"{convert(self,datacard['texte'])}")   
         await interaction.send(files=[pack_file], embed=embed)
 
 
-def convert(text):
-
-    return
+def convert(self,text):
+    rep = {"<b>": "**","</b>": "**","<i>": "*","</i>": "*","<br>": "\n"} 
+    pattern = re.compile("|".join(rep.keys()))
+    text = pattern.sub(lambda m: rep[re.escape(m.group(0))], text)
+    text= text.replace("$gouvernail$", str(nextcord.utils.get(self.bot.emojis, name='gouvernail')))
+    text= text.replace("$attaque$", str(nextcord.utils.get(self.bot.emojis, name='attack')))
+    text= text.replace("$defense$", str(nextcord.utils.get(self.bot.emojis, name='defense')))
+    text= text.replace("$menace$", str(nextcord.utils.get(self.bot.emojis, name='threat')))
+    text= text.replace("$volonte$", str(nextcord.utils.get(self.bot.emojis, name='willpower')))
+    text= text.replace("$orage$", str(nextcord.utils.get(self.bot.emojis, name='orage')))
+    text= text.replace("$pluie$", str(nextcord.utils.get(self.bot.emojis, name='pluie')))
+    text= text.replace("$nuage$", str(nextcord.utils.get(self.bot.emojis, name='nuage')))
+    text= text.replace("$sacquet$", str(nextcord.utils.get(self.bot.emojis, name='baggins')))
+    text= text.replace("$communaute$", str(nextcord.utils.get(self.bot.emojis, name='fellowship')))
+    text= text.replace("$oeil$", str(nextcord.utils.get(self.bot.emojis, name='oeil')))
+    text= text.replace("$tactique$", str(nextcord.utils.get(self.bot.emojis, name='tactics')))
+    text= text.replace("$connaissance$", str(nextcord.utils.get(self.bot.emojis, name='lore')))
+    text= text.replace("$commandement$", str(nextcord.utils.get(self.bot.emojis, name='leadership')))
+    text= text.replace("$energie$", str(nextcord.utils.get(self.bot.emojis, name='spirit'))) 
+    text= text.replace("$neutre$", str(nextcord.utils.get(self.bot.emojis, name='neutral')))
+    return text
 
 def info_cycle(datacard):
     cycle=""

@@ -9,8 +9,9 @@ import os
 import share
 
 class myselect(ui.Select):
-    def __init__(self,list_card):
+    def __init__(self,list_card,bot):
         selectoptions = list_card
+        self.bot = bot
         super().__init__(placeholder="Quelle carte voulez vous afficher? ",min_values=1,max_values=1 ,options=selectoptions)
         
     async def callback(self, interaction: Interaction):
@@ -25,12 +26,12 @@ class myselect(ui.Select):
             if i['numero_identification'] == numero_identification and i['id_extension'] == id_extension:
                 data.append(i)
         return await share.sendcard(self,interaction,data[0])
-    
-    
+     
 class SelectView(ui.View):
-    def __init__(self,list_card):
+    def __init__(self,list_card,bot):
         super().__init__()
-        self.add_item(myselect(list_card))
+        self.bot = bot
+        self.add_item(myselect(list_card,bot))
 
 class Quest(commands.Cog):
 
@@ -143,7 +144,7 @@ async def _selectingbox(self,interaction : Interaction,resultat_carte):
         altsphere_emoji = "⬛"
         list_card.append(SelectOption(label=i['titre'],description=str(f"{i['lbl set rencontre'].capitalize()} Partie {i['sequence']}"),value=str(f"{i['id_extension']}/{i['numero_identification']}"),emoji=altsphere_emoji))
         count += 1
-    view = SelectView(list_card)
+    view = SelectView(list_card,self.bot)
     await interaction.response.send_message(view=view,ephemeral=True)
 
 def setup(bot):
