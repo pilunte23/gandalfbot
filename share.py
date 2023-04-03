@@ -51,10 +51,10 @@ def create_image(datacard):
 
 async def sendcard(self,interaction,datacard):
     """ beautiful embed """
-    sphere, sphere_color = info_sphere(datacard)
+    sphere, sphere_color, sphere_emoji = info_sphere(self,datacard)
     cycle=info_cycle(datacard)
 
-    embed = Embed(title=datacard['titre'],color=sphere_color)
+    embed = Embed(title=f"{sphere_emoji}{datacard['titre']}",color=sphere_color)
     find_image= create_image(datacard)
  
     pack_file = File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
@@ -85,8 +85,8 @@ def convert(self,text):
     text= text.replace("$pluie$", str(nextcord.utils.get(self.bot.emojis, name='pluie')))
     text= text.replace("$nuage$", str(nextcord.utils.get(self.bot.emojis, name='nuage')))
     text= text.replace("$sacquet$", str(nextcord.utils.get(self.bot.emojis, name='baggins')))
-    text= text.replace("$communaute$", str(nextcord.utils.get(self.bot.emojis, name='fellowship')))
     text= text.replace("$oeil$", str(nextcord.utils.get(self.bot.emojis, name='oeil')))
+    text= text.replace("$communaute$", str(nextcord.utils.get(self.bot.emojis, name='fellowship')))
     text= text.replace("$tactique$", str(nextcord.utils.get(self.bot.emojis, name='tactics')))
     text= text.replace("$connaissance$", str(nextcord.utils.get(self.bot.emojis, name='lore')))
     text= text.replace("$commandement$", str(nextcord.utils.get(self.bot.emojis, name='leadership')))
@@ -138,24 +138,25 @@ def info_cycle(datacard):
         cycle="Les Ténèbres de la Forêt Noire"
     return cycle
 
-def info_sphere(datacard):
-    sphere, sphere_color ="", 0xFFFFFF
+def info_sphere(self,datacard):
+    sphere, sphere_color, sphere_emoji ="", 0xFFFFFF,""
+
     if "id_sphere_influence" in datacard:
         if datacard['id_sphere_influence'] == "300":
-            sphere="leadership", 0x8B23F9
+            sphere, sphere_color, sphere_emoji="leadership", 0x8B23F9, str(nextcord.utils.get(self.bot.emojis, name='leadership'))
         if datacard['id_sphere_influence'] == "301":
-            sphere, sphere_color ="lore",  0x0E7A12
+            sphere, sphere_color, sphere_emoji ="lore",  0x0E7A12,str(nextcord.utils.get(self.bot.emojis, name='lore')) 
         if datacard['id_sphere_influence'] == "302":
-            sphere, sphere_color ="spirit",0x33DDFF
+            sphere, sphere_color, sphere_emoji ="spirit",0x33DDFF, str(nextcord.utils.get(self.bot.emojis, name='spirit'))
         if datacard['id_sphere_influence'] == "303":
-            sphere, sphere_color ="tactics",0xDB140B
+            sphere, sphere_color, sphere_emoji ="tactics",0xDB140B, str(nextcord.utils.get(self.bot.emojis, name='tactics'))
         if datacard['id_sphere_influence'] == "304":
-            sphere, sphere_color ="neutral",0x797B7A
+            sphere, sphere_color, sphere_emoji ="neutral",0x797B7A, str(nextcord.utils.get(self.bot.emojis, name='neutral'))
         if datacard['id_sphere_influence'] == "305":
-            sphere, sphere_color ="fellowship",0xD99611
+            sphere, sphere_color, sphere_emoji ="fellowship",0xD99611, str(nextcord.utils.get(self.bot.emojis, name='fellowship'))
         if datacard['id_sphere_influence'] == "306":
-            sphere, sphere_color ="baggins",0xD3D911
-    return sphere, sphere_color
+            sphere, sphere_color, sphere_emoji  ="baggins",0xD3D911,str(nextcord.utils.get(self.bot.emojis, name='baggins'))
+    return sphere, sphere_color, sphere_emoji
 
 
 def get_id_type_carte(word):

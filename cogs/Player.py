@@ -111,6 +111,7 @@ class Player(commands.Cog):
                     if len(resultat_carte) > 10:
                         await _toomuchcard(self,interaction)
                     else:
+                        card_sphere, sphere_color, sphere_emoji = share.info_sphere(self,resultat_carte[0])
                         """ define the size of the result with the number of card found """
                         img_weight = (img_weight + len(resultat_carte)) * 394
                         img_height = 560
@@ -129,7 +130,7 @@ class Player(commands.Cog):
                         """ saving the result in a png """
                         new_img.save("requête.png", "PNG")
                         """ beautiful embed """
-                        embed_carte = Embed(title = "Test", color = nextcord.Color.blue())
+                        embed_carte = Embed(title = "Résulat pour les cartes "+(type+" " if id_type != "all" else "") + (sphere_emoji+" " if id_sphere != "all" else "") + "ayant pour"+ (" Titre " if champs == "Titre" else " Trait ") + recherche.capitalize(), color=sphere_color)
                         file = File("requête.png", filename = "image.png")
                         embed_carte.set_image(url ="attachment://image.png")
                         await interaction.send(files=[file], embed=embed_carte)
