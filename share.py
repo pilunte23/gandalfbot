@@ -54,7 +54,7 @@ async def sendcard(self,interaction,datacard):
     sphere, sphere_color, sphere_emoji = info_sphere(self,datacard)
     cycle=info_cycle(datacard)
 
-    embed = Embed(title=f"{sphere_emoji}{datacard['titre']}",color=sphere_color)
+    embed = Embed(title=f"{sphere_emoji} {datacard['titre']}",color=sphere_color)
     find_image= create_image(datacard)
  
     pack_file = File(f"./assets/pack/{datacard['id_extension']}.png", filename="pack.png")
