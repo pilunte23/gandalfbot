@@ -96,6 +96,7 @@ def convert(self,text):
 
 def info_cycle(datacard):
     cycle=""
+    
     if datacard['id_extension'] in ['2', '3', '4', '5', '6', '7']:
         cycle="Cycle 1 : Ombres de la Forêt Noire"
     if datacard['id_extension'] in ['8', '9', '10', '11', '12', '13', '14']:
@@ -158,6 +159,30 @@ def info_sphere(self,datacard):
             sphere, sphere_color, sphere_emoji  ="baggins",0xD3D911,str(nextcord.utils.get(self.bot.emojis, name='baggins'))
     return sphere, sphere_color, sphere_emoji
 
+def hero_value(hero_string):
+    match hero_string:
+        case None:
+            return "all"
+        case "Aléatoire (par défaut)":
+            return "all"
+        case "Commandement":
+            return"leadership"
+        case "Connaissance":
+            return "lore"
+        case "Energie": 
+            return "spirit"
+        case "Tactique":
+            return "tactics"
+        case "Neutre":
+            return "neutral"
+        case "Sacquet":
+            return "baggins"
+        case "Communauté":
+            return"fellowship"
+        case "Pas de second héro":
+            return "no"
+        case "Pas de troisième héro":
+            return "no"
 
 def get_id_type_carte(word):
     match word:
