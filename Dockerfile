@@ -1,4 +1,8 @@
 FROM python:3.10
+COPY ./assets/fonts/times-ro.ttf ./
+RUN mkdir -p /usr/share/fonts/truetype/
+RUN install -m644 times-ro.ttf /usr/share/fonts/truetype/
+RUN rm ./times-ro.ttf
 RUN adduser --disabled-password gandalf
 USER gandalf
 WORKDIR /home/gandalf
