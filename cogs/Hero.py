@@ -10,37 +10,58 @@ import share
 import random
 
 class myselect(ui.Select):
-    def __init__(self,list_cycle,bot):
+    def __init__(self,list_cycle,bot,hero_1,hero_2,hero_3):
         self.bot = bot
+        mycustom_id = f"{hero_1}/{hero_2}/{hero_3}"
         selectoptions = []
-        
-      
+            
         for i in list_cycle:
             selectoptions.append(SelectOption(label=i,description="",value=i))
 
-        super().__init__(placeholder="Quelle cycle possedez vous? ",min_values=1,max_values=len(selectoptions) ,options=selectoptions)
+        super().__init__(custom_id=mycustom_id,placeholder="Quelle cycle possedez vous? ",min_values=1,max_values=len(selectoptions) ,options=selectoptions)
     
-    async def callback(self,interaction: Interaction):
+    async def callback(self,interaction: Interaction ):
+
         resultat_carte=[]
         selected_list_id = share.id_extension_by_cycle_name(self.values)
+        print(self.custom_id)
         print(selected_list_id)
         url_file =  "./data/SDA_carte_joueur.json"
         f =  open(url_file , encoding="utf8")
         rawdata = json.load(f)
+        choice_sphere_hero = self.custom_id.split("/")
+        sphere_hero_1 = choice_sphere_hero[0]
+        sphere_hero_2 = choice_sphere_hero[1]
+        sphere_hero_3 = choice_sphere_hero[2]
         heros1 = []
         heros2 = []
         heros3 = []
+
         for i in rawdata:
-            if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:
-                heros1.append(i)
-                heros2.append(i)
-                heros3.append(i)
+            if sphere_hero_1 == "all":
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:
+                    heros1.append(i)
+            if sphere_hero_1 not in  ["all","no"]:
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre'] and i['id_sphere_influence'] == share.get_id_sphere(sphere_hero_1):
+                    heros1.append(i)            
+            if sphere_hero_2 == "all":
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:               
+                    heros2.append(i)
+            if sphere_hero_2 not in  ["all","no"]:
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre'] and i['id_sphere_influence'] == share.get_id_sphere(sphere_hero_2):
+                    heros2.append(i)   
+            if sphere_hero_3 == "all":
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:               
+                    heros3.append(i)
+            if sphere_hero_3 not in  ["all","no"]:
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre'] and i['id_sphere_influence'] == share.get_id_sphere(sphere_hero_3):
+                    heros3.append(i)   
         if heros1 != []:       
             randomHero1 = random.randint(0, len(heros1)-1)
             resultat_carte.append(heros1[randomHero1])
         if heros2 != []:       
             randomHero2 = random.randint(0, len(heros2)-1)
-            while heros2[randomHero1]["titre"] == heros2[randomHero2]["titre"]:
+            while heros1[randomHero1]["titre"] == heros2[randomHero2]["titre"]:
                 randomHero2 = random.randint(0, len(heros2)-1)
             resultat_carte.append(heros2[randomHero2])
         if heros3 != []:       
@@ -75,28 +96,28 @@ class myselect(ui.Select):
         return await interaction.send(files=[file], embed=embed_carte)
     
 class SelectView(ui.View):
-    def __init__(self,list_cycle,bot):
+    def __init__(self,list_cycle,bot,hero_1,hero_2,hero_3):
         super().__init__()
         self.bot = bot
-        self.add_item(myselect(list_cycle,bot))
+        self.add_item(myselect(list_cycle,bot,hero_1,hero_2,hero_3))
 
 class Hero(commands.Cog):
 
     def __init__(self, bot):
         self.bot:  commands.bot = bot
 
-    @nextcord.slash_command(name="h",description="Tirage des Héros aléatoires",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
+    @nextcord.slash_command(name="h",description="Tirage de Héros aléatoires aléatoire de votre collection ",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
     async def _hero(self, interaction: Interaction, 
     hero_1: str = SlashOption(name="hero_1",description="Sphère du premier héro (Commandement,Connaissance,Energie,Tactique,Neutre...)", required=False,choices=["Aléatoire (par défaut)","Commandement","Tactique","Energie","Connaissance","Neutre","Sacquet","Communauté"]),
     hero_2: str = SlashOption(name="hero_2",description="Sphère du second héro (Commandement,Connaissance,Energie,Tactique,Neutre...)", required=False,choices=["Aléatoire (par défaut)","Commandement","Tactique","Energie","Connaissance","Neutre","Sacquet","Communauté","Pas de second héro"]),
     hero_3: str = SlashOption(name="hero_3",description="Sphère du troisème héro (Commandement,Connaissance,Energie,Tactique,Neutre...)", required=False,choices=["Aléatoire (par défaut)","Commandement","Tactique","Energie","Connaissance","Neutre","Sacquet","Communauté","Pas de troisième héro"])):
         print(f"{interaction.user} use Hero slash command" )
         #Retravaille des champs saisie par la commande
-        hero_1 == share.hero_value(hero_1)
-        hero_2 == share.hero_value(hero_2)
-        hero_3 == share.hero_value(hero_3)
+        hero_1 = share.hero_value(hero_1)
+        hero_2 = share.hero_value(hero_2)
+        hero_3 = share.hero_value(hero_3)
         list_cycle = ["Tout","Boîte de Base","Cycle 1 : Ombres de la Forêt Noire","Cycle 2 : Royaume de Cavenain","Cycle 3 : Face à l'Ombre","Cycle 4 : Le Créateur d'Anneaux","Cycle 5 : Le Réveil d'Angmar","Cycle 6 : Chasse-Rêve","Cycle 7 : Les Haradrim","Cycle 8 : Ered Mithrin","Cycle 9 : La Vengeance du Mordor","Extension de saga : Par Monts et par Souterrains","Extension de saga : Au Seuil de la Porte","Extension de saga : Les Cavaliers Noirs","Extension de saga : La Route s'Assombrit","Extension de saga : La Trahison de Saroumane","Extension de saga : La Terre de l'Ombre","Extension de saga : La Flamme de l'Ouest","Extension de saga : La Montagne de Feu","Starter pack : Les Nains de Durin","Starter pack : Les Elfes de la Lórien","Starter pack : Les Défenseurs du Gondor","Starter pack : Les Cavaliers du Rohan","A long Extented Party : Serment des Rohirrim"]
-        view = SelectView(list_cycle,self.bot)
+        view = SelectView(list_cycle,self.bot,hero_1,hero_2,hero_3)
         await interaction.response.send_message(view=view,ephemeral=True)
 
 def setup(bot):

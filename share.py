@@ -231,25 +231,13 @@ def hero_value(hero_string):
             return "all"
         case "Aléatoire (par défaut)":
             return "all"
-        case "Commandement":
-            return"leadership"
-        case "Connaissance":
-            return "lore"
-        case "Energie": 
-            return "spirit"
-        case "Tactique":
-            return "tactics"
-        case "Neutre":
-            return "neutral"
-        case "Sacquet":
-            return "baggins"
-        case "Communauté":
-            return"fellowship"
         case "Pas de second héro":
             return "no"
         case "Pas de troisième héro":
             return "no"
-
+        case _:
+            return hero_string
+        
 def get_id_type_carte(word):
     match word:
         case "Héro":

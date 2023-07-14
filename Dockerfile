@@ -8,7 +8,8 @@ RUN pip install --user pillow\
 && pip install --user nextcord \
 && pip install --user python-dotenv \
 && pip install --user requests \
-&& pip install --user unidecode
+&& pip install --user unidecode \
+&& pip install --user matplotlib
 
 COPY --chown=gandalf:gandalf . .
 
