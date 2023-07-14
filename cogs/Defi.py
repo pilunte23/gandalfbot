@@ -2,7 +2,6 @@ import nextcord
 from nextcord.ext import commands
 from nextcord import Interaction, SelectOption, ui, SlashOption, Embed, File
 from unidecode import unidecode
-from matplotlib import font_manager
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
