@@ -10,6 +10,7 @@ class Timing(commands.Cog):
 
     @nextcord.slash_command(name="t",description="Affiche le timing des phases du jeu",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
     async def _timing(self, interaction: Interaction, timing: str = nextcord.SlashOption(name="timing", choices=["phases", "combat"])):
+        print(f"{interaction.user} use Timing slash command" )
         file_url = f"./assets/timing/{timing}.png"
         file = nextcord.File(file_url, filename="image.png")
         embed_no_carte = nextcord.Embed(title = f"{timing}", color = nextcord.Color.red())

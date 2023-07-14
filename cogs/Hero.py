@@ -90,7 +90,7 @@ class Hero(commands.Cog):
     hero_1: str = SlashOption(name="hero_1",description="Sphère du premier héro (Commandement,Connaissance,Energie,Tactique,Neutre...)", required=False,choices=["Aléatoire (par défaut)","Commandement","Tactique","Energie","Connaissance","Neutre","Sacquet","Communauté"]),
     hero_2: str = SlashOption(name="hero_2",description="Sphère du second héro (Commandement,Connaissance,Energie,Tactique,Neutre...)", required=False,choices=["Aléatoire (par défaut)","Commandement","Tactique","Energie","Connaissance","Neutre","Sacquet","Communauté","Pas de second héro"]),
     hero_3: str = SlashOption(name="hero_3",description="Sphère du troisème héro (Commandement,Connaissance,Energie,Tactique,Neutre...)", required=False,choices=["Aléatoire (par défaut)","Commandement","Tactique","Energie","Connaissance","Neutre","Sacquet","Communauté","Pas de troisième héro"])):
-
+        print(f"{interaction.user} use Hero slash command" )
         #Retravaille des champs saisie par la commande
         hero_1 == share.hero_value(hero_1)
         hero_2 == share.hero_value(hero_2)

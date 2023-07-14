@@ -47,6 +47,7 @@ class Player(commands.Cog):
     champs: str = SlashOption(name="champs",description="Sur Quel Champs de Rechercher le Terme saisi (Nom, Traits)",required=False, choices=["Titre (par défaut)", "Trait"]),  
     selection: str = SlashOption(name="selection",description="Type d'affichage (Liste Déroulante ou Multicarte)",required=False, choices=["Renvoie une liste de carte via Menu sélectionnable limité à 25 cartes (par défaut)", "Renvoie une image de plusieurs cartes limité à 10 cartes"]),
     terme: str = SlashOption(name="terme",description="Terme Exacte ou Partiel",required=False, choices=["Terme partiel (par défaut)", "Terme exact"])):
+        print(f"{interaction.user} use Player slash command" )
         #Retravaille des champs saisie par la commande
         if type == None or type =="Pas de filtre (par défaut)": 
             id_type = "all"

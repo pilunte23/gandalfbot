@@ -45,6 +45,7 @@ class Quest(commands.Cog):
     type: str = SlashOption(name="type",description="Recherche par Nom de Carte ou Nom de Scénario",required=False,choices=["Nom de la Carte (par défaut)","Nom du Scénario"]),
     selection: str = SlashOption(name="selection",description="Type d'affichage (Liste Déroulante ou Multicarte)",required=False, choices=["Renvoie une liste de carte via Menu sélectionnable limité à 25 cartes (par défaut)", "Renvoie une image de plusieurs cartes limité à 10 cartes"]),
     terme: str = SlashOption(name="terme",description="Terme Exacte ou Partiel",required=False, choices=["Terme partiel (par défaut)", "Terme exact"])):
+        print(f"{interaction.user} use Quest slash command" )
         #Retravaille des champs saisie par la commande
         if type == None or type =="Nom de la Carte (par défaut)": 
             id_type = "card"

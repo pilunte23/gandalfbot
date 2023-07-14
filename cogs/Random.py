@@ -14,6 +14,7 @@ class Random(commands.Cog):
     @nextcord.slash_command(name="a",description="Carte Aleatoire",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
  
     async def _cardoftheday(self,interaction: Interaction):
+        print(f"{interaction.user} use Random slash command" )
         resultat_carte=[]   
         url_file =  "./data/SDA_carte_joueur.json"
         f =  open(url_file , encoding="utf8")
