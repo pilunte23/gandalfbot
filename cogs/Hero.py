@@ -10,29 +10,75 @@ import share
 import random
 
 class myselect(ui.Select):
-    def __init__(self):
+    def __init__(self,list_cycle,bot):
+        self.bot = bot
         selectoptions = []
-        list_cycle =[]
+        
+      
+        for i in list_cycle:
+            selectoptions.append(SelectOption(label=i,description="",value=i))
+
+        super().__init__(placeholder="Quelle cycle possedez vous? ",min_values=1,max_values=len(selectoptions) ,options=selectoptions)
+    
+    async def callback(self,interaction: Interaction):
+        resultat_carte=[]
+        selected_list_id = share.id_extension_by_cycle_name(self.values)
+        print(selected_list_id)
         url_file =  "./data/SDA_carte_joueur.json"
         f =  open(url_file , encoding="utf8")
         rawdata = json.load(f)
+        heros1 = []
+        heros2 = []
+        heros3 = []
         for i in rawdata:
-            card_cycle = share.info_cycle(i)
-            if card_cycle not in list_cycle:
-                list_cycle.append(card_cycle)
-                selectoptions.append(SelectOption(label=card_cycle,description="",value=card_cycle))
-        print(str(len(selectoptions)))
-        print(str(list_cycle))
-        super().__init__(placeholder="Quelle cycle possedez vous? ",min_values=1,max_values=len(selectoptions) ,options=selectoptions)
+            if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:
+                heros1.append(i)
+                heros2.append(i)
+                heros3.append(i)
+        if heros1 != []:       
+            randomHero1 = random.randint(0, len(heros1)-1)
+            resultat_carte.append(heros1[randomHero1])
+        if heros2 != []:       
+            randomHero2 = random.randint(0, len(heros2)-1)
+            while heros2[randomHero1]["titre"] == heros2[randomHero2]["titre"]:
+                randomHero2 = random.randint(0, len(heros2)-1)
+            resultat_carte.append(heros2[randomHero2])
+        if heros3 != []:       
+            randomHero3 = random.randint(0, len(heros3)-1)
+            while heros1[randomHero1]["titre"] == heros3[randomHero3]["titre"] or heros2[randomHero2]["titre"] == heros3[randomHero3]["titre"]:
+                randomHero3 = random.randint(0, len(heros3)-1) 
+            resultat_carte.append(heros3[randomHero3])
         
-    async def callback(self,interaction: Interaction):
-        selected_list= self.values
-        return await interaction.message(str(selected_list))
+        img = []
+        place = 0
+        img_weight = 0
+        img_weight = (img_weight + len(resultat_carte)) * 394
+        img_height = 560
+        """ add every patch in the list img """
+        for i in resultat_carte:
+            src_file="sda_cgbuilder/images/simulateur/carte/"+i['id_extension']+"/"+i['numero_identification']+".jpg"
+            img.append(src_file)
+        """ creating the new img who will be send """
+        new_img = Image.new('RGB', (img_weight, img_height), (250,250,250))
+        """ we paste every image in the new_img """
+        for i in img:
+            image = Image.open("./"+i)
+            largeur = 0+(place*394)
+            new_img.paste(image, (largeur, 0))
+            place += 1
+        """ saving the result in a png """
+        new_img.save("requête.png", "PNG")
+        """ beautiful embed """
+        embed_carte = Embed(title = "Héros aléatoires")
+        file = File("requête.png", filename = "image.png")
+        embed_carte.set_image(url ="attachment://image.png")
+        return await interaction.send(files=[file], embed=embed_carte)
     
 class SelectView(ui.View):
-    def __init__(self):
+    def __init__(self,list_cycle,bot):
         super().__init__()
-        self.add_item(myselect())
+        self.bot = bot
+        self.add_item(myselect(list_cycle,bot))
 
 class Hero(commands.Cog):
 
@@ -49,78 +95,9 @@ class Hero(commands.Cog):
         hero_1 == share.hero_value(hero_1)
         hero_2 == share.hero_value(hero_2)
         hero_3 == share.hero_value(hero_3)
-
-        view = SelectView()
+        list_cycle = ["Tout","Boîte de Base","Cycle 1 : Ombres de la Forêt Noire","Cycle 2 : Royaume de Cavenain","Cycle 3 : Face à l'Ombre","Cycle 4 : Le Créateur d'Anneaux","Cycle 5 : Le Réveil d'Angmar","Cycle 6 : Chasse-Rêve","Cycle 7 : Les Haradrim","Cycle 8 : Ered Mithrin","Cycle 9 : La Vengeance du Mordor","Extension de saga : Par Monts et par Souterrains","Extension de saga : Au Seuil de la Porte","Extension de saga : Les Cavaliers Noirs","Extension de saga : La Route s'Assombrit","Extension de saga : La Trahison de Saroumane","Extension de saga : La Terre de l'Ombre","Extension de saga : La Flamme de l'Ouest","Extension de saga : La Montagne de Feu","Starter pack : Les Nains de Durin","Starter pack : Les Elfes de la Lórien","Starter pack : Les Défenseurs du Gondor","Starter pack : Les Cavaliers du Rohan","A long Extented Party : Serment des Rohirrim"]
+        view = SelectView(list_cycle,self.bot)
         await interaction.response.send_message(view=view,ephemeral=True)
 
 def setup(bot):
     bot.add_cog(Hero(bot))
-
-"""
-
-    async def _carte(self,ctx,hero_1="all",hero_2= "all",hero_3="all"):
-        "pas de multilingue pour l'instant"
-        langue="fr"
-        resultat_carte = []
-        list_hero1 = []
-        list_hero2 = []
-        list_hero3 = []
-        img = []
-        place = 0
-        img_weight = 0
-        url_file =  "./data/sda_"+langue+".json"
-        f = open(url_file)
-        dataCard = json.load(f)       
-        for i in dataCard:
-            if i["type_code"] == "hero": 
-                if i["pack_code"] not in ["EoL", "DoG", "RoR", "DoD", "Starter" ]:
-                    if "ALeP" not in i["pack_name"]:
-                        if "(MotK)" not in i["name"]:
-                            if (i["sphere_code"] == hero_1 or hero_1 =="all" ):
-                                list_hero1.append(i)
-                            if (i["sphere_code"] == hero_2 or hero_2 =="all" ) and hero_2 !="no": 
-                                list_hero2.append(i)
-                            if (i["sphere_code"] == hero_3 or hero_3 =="all" ) and hero_3 !="no":
-                                list_hero3.append(i)
-        randomHero1 = random.randint(0, len(list_hero1)-1)
-        resultat_carte.append(list_hero1[randomHero1])  
-        
-        if hero_2 !="no":
-            randomHero2 = random.randint(0, len(list_hero2)-1) 
-            while list_hero1[randomHero1]["name"] == list_hero2[randomHero2]["name"]:
-                randomHero2 = random.randint(0, len(list_hero2)-1)
-            resultat_carte.append(list_hero2[randomHero2])
-
-        if hero_3 !="no":
-            randomHero3 = random.randint(0, len(list_hero3)-1)
-            if hero_2 =="no":  
-                while list_hero1[randomHero1]["name"] == list_hero3[randomHero3]["name"]:
-                    randomHero3 = random.randint(0, len(list_hero3)-1)
-            else:
-                while list_hero1[randomHero1]["name"] == list_hero3[randomHero3]["name"] or list_hero2[randomHero2]["name"] == list_hero3[randomHero3]["name"]:
-                    randomHero3 = random.randint(0, len(list_hero3)-1) 
-            resultat_carte.append(list_hero3[randomHero3]) 
-
- 
-        img_weight = (img_weight + len(resultat_carte)) * 493
-        img_height = 700
-
-        for i in resultat_carte:
-            img.append(i['octgnid']+".jpg")
-
-        new_img = Image.new('RGB', (img_weight, img_height), (250,250,250))
-
-        for i in img:
-            image = Image.open("./images/"+i)
-            largeur = 0+(place*493)
-            new_img.paste(image, (largeur, 0))
-            place += 1
-
-        new_img.save("requête.png", "PNG")
-
-        embed_carte = Embed(name = "Test", color = nextcord.Color.blue())
-        file = File("requête.png", filename = "image.png")
-        embed_carte.set_image(url ="attachment://image.png")
-        await ctx.send(file=file,embed = embed_carte)
-                  
-"""

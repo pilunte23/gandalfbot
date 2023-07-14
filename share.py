@@ -132,12 +132,78 @@ def info_cycle(datacard):
     if datacard['id_extension'] == "57":
         cycle="Extension de saga : La Montagne de Feu"
     if datacard['id_extension'] in ['80', '81', '90', '92', '93', '95', '96']:
-        cycle="Serment des Rohirrim (ALEP)"
+        cycle="A long Extented Party : Serment des Rohirrim "
     if datacard['id_extension'] in ['86', '97']:
-        cycle="Cycle : Scénario Indépendant (ALEP)"
+        cycle="A long Extented Party : Scénario Indépendant"
+    if datacard['id_extension'] == "82":
+        cycle="Starter pack : Les Nains de Durin"
+    if datacard['id_extension'] == "83":
+        cycle="Starter pack : Les Elfes de la Lórien"
+    if datacard['id_extension'] == "84":
+        cycle="Starter pack : Les Défenseurs du Gondor"
+    if datacard['id_extension'] == "85":
+        cycle="Starter pack : Les Cavaliers du Rohan"
     if datacard['id_extension'] == "89":
         cycle="Les Ténèbres de la Forêt Noire"
     return cycle
+
+def id_extension_by_cycle_name(list_name):
+    list_id =[]
+    for name in list_name:
+        if name == "Tout":
+            list_id.extend(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '50', '51', '52', '53', '54', '55', '56', '65', '66', '68', '69', '70', '71', '72', '73', '74', '75', '76', '77', '78', '79', '43', '44', '45', '46', '47', '48', '49', '57', '80', '81', '90', '92', '93', '95', '96', '86', '97', '82', '83', '84', '85', '89'])
+        if name == "Boîte de Base":
+            list_id.append("1") 
+        if name == "Cycle 1 : Ombres de la Forêt Noire":
+            list_id.extend(['2', '3', '4', '5', '6', '7'])
+        if name == "Cycle 2 : Royaume de Cavenain":
+            list_id.extend(['8', '9', '10', '11', '12', '13', '14'])          
+        if name == "Cycle 3 : Face à l'Ombre":
+            list_id.extend(['15', '16', '17', '18', '19', '20', '21'])
+        if name == "Cycle 4 : Le Créateur d'Anneaux":
+            list_id.extend(['22', '23', '24', '25', '26', '27', '28'])    
+        if name == "Cycle 5 : Le Réveil d'Angmar":
+            list_id.extend(['29', '30', '31', '32', '33', '34', '35'])
+        if name == "Cycle 6 : Chasse-Rêve":
+            list_id.extend(['36', '37', '38', '39', '40', '41', '42'])          
+        if name == "Cycle 7 : Les Haradrim":
+            list_id.extend(['50', '51', '52', '53', '54', '55', '56'])
+        if name == "Cycle 8 : Ered Mithrin":
+            list_id.extend(['65', '66', '68', '69', '70', '71', '72'])   
+        if name == "Cycle 9 : La Vengeance du Mordor":
+            list_id.extend(['73', '74', '75', '76', '77', '78', '79'])   
+        if name == "Extension de saga : Par Monts et par Souterrains":
+            list_id.append("43")  
+        if name == "Extension de saga : Au Seuil de la Porte":
+            list_id.append("44")  
+        if name == "Extension de saga : Les Cavaliers Noirs":
+            list_id.append("45")  
+        if name == "Extension de saga : La Route s'Assombrit":
+            list_id.append("46")  
+        if name == "Extension de saga : La Trahison de Saroumane":
+            list_id.append("47")  
+        if name == "Extension de saga : La Terre de l'Ombre":
+            list_id.append("48")  
+        if name == "Extension de saga : La Flamme de l'Ouest":
+            list_id.append("49")  
+        if name == "Extension de saga : La Montagne de Feu":
+            list_id.append("57")  
+        if name == "A long Extented Party : Serment des Rohirrim":
+            list_id.extend(['80', '81', '90', '92', '93', '95', '96'])
+        if name == "A long Extented Party : Scénario Indépendant":
+            list_id.extend(['86', '97'])   
+        if name == "Starter pack : Les Nains de Durin":
+            list_id.append("82")  
+        if name == "Starter pack : Les Elfes de la Lórien":
+            list_id.append("83")  
+        if name == "Starter pack : Les Défenseurs du Gondor":
+            list_id.append("84")  
+        if name == "Starter pack : Les Cavaliers du Rohan":
+            list_id.append("85")  
+        if name == "Les Ténèbres de la Forêt Noire":
+            list_id.append("89") 
+    return list_id
+
 
 def info_sphere(self,datacard):
     sphere, sphere_color, sphere_emoji ="", 0xFFFFFF,""
