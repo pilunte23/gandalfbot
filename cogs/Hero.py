@@ -39,19 +39,19 @@ class myselect(ui.Select):
 
         for i in rawdata:
             if sphere_hero_1 == "all":
-                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and i["id_sphere_influence"] not in ["305","306"] and "&bull" not in i['titre']:
                     heros1.append(i)
             if sphere_hero_1 not in  ["all","no"]:
-                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre'] and i['id_sphere_influence'] == share.get_id_sphere(sphere_hero_1):
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400"  and "&bull" not in i['titre'] and i['id_sphere_influence'] == share.get_id_sphere(sphere_hero_1):
                     heros1.append(i)            
             if sphere_hero_2 == "all":
-                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:               
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and i["id_sphere_influence"] not in ["305","306"] and "&bull" not in i['titre']:               
                     heros2.append(i)
             if sphere_hero_2 not in  ["all","no"]:
                 if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre'] and i['id_sphere_influence'] == share.get_id_sphere(sphere_hero_2):
                     heros2.append(i)   
             if sphere_hero_3 == "all":
-                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:               
+                if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and i["id_sphere_influence"] not in ["305","306"] and "&bull" not in i['titre']:               
                     heros3.append(i)
             if sphere_hero_3 not in  ["all","no"]:
                 if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre'] and i['id_sphere_influence'] == share.get_id_sphere(sphere_hero_3):
@@ -88,10 +88,10 @@ class myselect(ui.Select):
             new_img.paste(image, (largeur, 0))
             place += 1
         """ saving the result in a png """
-        new_img.save("requête.png", "PNG")
+        new_img.save("hero.png", "PNG")
         """ beautiful embed """
         embed_carte = Embed(title = "Héros aléatoires")
-        file = File("requête.png", filename = "image.png")
+        file = File("hero.png", filename = "image.png")
         embed_carte.set_image(url ="attachment://image.png")
         return await interaction.send(files=[file], embed=embed_carte)
     
@@ -106,7 +106,7 @@ class Hero(commands.Cog):
     def __init__(self, bot):
         self.bot:  commands.bot = bot
 
-    @nextcord.slash_command(name="h",description="Tirage de Héros aléatoires aléatoire de votre collection ",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
+    @nextcord.slash_command(name="hero",description="Tirage de Héros aléatoires aléatoire de votre collection duSeigneur des anneaux JCE",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
     async def _hero(self, interaction: Interaction, 
     hero_1: str = SlashOption(name="hero_1",description="Sphère du premier héro (Commandement,Connaissance,Energie,Tactique,Neutre...)", required=False,choices=["Aléatoire (par défaut)","Commandement","Tactique","Energie","Connaissance","Neutre","Sacquet","Communauté"]),
     hero_2: str = SlashOption(name="hero_2",description="Sphère du second héro (Commandement,Connaissance,Energie,Tactique,Neutre...)", required=False,choices=["Aléatoire (par défaut)","Commandement","Tactique","Energie","Connaissance","Neutre","Sacquet","Communauté","Pas de second héro"]),

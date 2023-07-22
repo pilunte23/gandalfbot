@@ -8,13 +8,13 @@ def create_image(datacard):
     find=False
     """ add every patch in the list img """
     list_img = []
-    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
+    file_url = f"./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+".jpg"
     if os.path.isfile(file_url):
         list_img.append(file_url)
-    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+"A.jpg"
+    file_url = f"./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+"A.jpg"
     if os.path.isfile(file_url):
         list_img.append(file_url)
-    file_url = "./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+"B.jpg"
+    file_url = f"./sda_cgbuilder/images/simulateur/carte/"+datacard['id_extension']+"/"+ datacard['numero_identification']+"B.jpg"
     if os.path.isfile(file_url):
         list_img.append(file_url)
 
@@ -52,7 +52,7 @@ def create_image(datacard):
 async def sendcard(self,interaction,datacard):
     """ beautiful embed """
     sphere, sphere_color, sphere_emoji = info_sphere(self,datacard)
-    cycle=info_cycle(datacard)
+    cycle=info_cycle(datacard,"long")
 
     embed = Embed(title=f"{sphere_emoji} {datacard['titre']}",color=sphere_color)
     find_image= create_image(datacard)
@@ -94,58 +94,170 @@ def convert(self,text):
     text= text.replace("$neutre$", str(nextcord.utils.get(self.bot.emojis, name='neutral')))
     return text
 
-def info_cycle(datacard):
+def info_cycle(datacard,option):
     cycle=""
-    
+    cycleshort=""
+    if datacard['id_extension'] in ['1']:
+        cycle="Boite de base"
+        cycleshort="Boite de base"
     if datacard['id_extension'] in ['2', '3', '4', '5', '6', '7']:
         cycle="Cycle 1 : Ombres de la Forêt Noire"
+        cycleshort="Cycle 1"
     if datacard['id_extension'] in ['8', '9', '10', '11', '12', '13', '14']:
         cycle="Cycle 2 : Royaume de Cavenain"
+        cycleshort="Cycle 2"
     if datacard['id_extension'] in ['15', '16', '17', '18', '19', '20', '21']:
         cycle="Cycle 3 : Face à l'Ombre"
+        cycleshort="Cycle 3"
     if datacard['id_extension'] in ['22', '23', '24', '25', '26', '27', '28']:
         cycle="Cycle 4 : Le Créateur d'Anneaux"
+        cycleshort="Cycle 4"
     if datacard['id_extension'] in ['29', '30', '31', '32', '33', '34', '35']:
         cycle="Cycle 5 : Le Réveil d'Angmar"
+        cycleshort="Cycle 5"
     if datacard['id_extension'] in ['36', '37', '38', '39', '40', '41', '42']:
         cycle="Cycle 6 : Chasse-Rêve"
+        cycleshort="Cycle 6"
     if datacard['id_extension'] in ['50', '51', '52', '53', '54', '55', '56']:
         cycle="Cycle 7 : Les Haradrim"
+        cycleshort="Cycle 7"
     if datacard['id_extension'] in ['65', '66', '68', '69', '70', '71', '72']:
         cycle="Cycle 8 : Ered Mithrin"
+        cycleshort="Cycle 8"
     if datacard['id_extension'] in ['73', '74', '75', '76', '77', '78', '79']:
         cycle="Cycle 9 : La Vengeance du Mordor"
+        cycleshort="Cycle 9"
     if datacard['id_extension'] == "43":
         cycle="Extension de saga : Par Monts et par Souterrains"
+        cycleshort="Par Monts et par Souterrains"
     if datacard['id_extension'] == "44":
         cycle="Extension de saga : Au Seuil de la Porte"
+        cycleshort="Au Seuil de la Porte"
     if datacard['id_extension'] == "45":
         cycle="Extension de saga : Les Cavaliers Noirs"
+        cycleshort="Les Cavaliers Noirs"
     if datacard['id_extension'] == "46":
         cycle="Extension de saga : La Route s'Assombrit"
+        cycleshort="La Route s'Assombrit"
     if datacard['id_extension'] == "47":
         cycle="Extension de saga : La Trahison de Saroumane"
+        cycleshort="La Trahison de Saroumane"
     if datacard['id_extension'] == "48":
         cycle="Extension de saga : La Terre de l'Ombre"
+        cycleshort="La Terre de l'Ombre"
     if datacard['id_extension'] == "49":
         cycle="Extension de saga : La Flamme de l'Ouest"
+        cycleshort="La Flamme de l'Ouest"
     if datacard['id_extension'] == "57":
         cycle="Extension de saga : La Montagne de Feu"
+        cycleshort="La Montagne de Feu"
     if datacard['id_extension'] in ['80', '81', '90', '92', '93', '95', '96']:
-        cycle="A long Extented Party : Serment des Rohirrim "
+        cycle="A long Extented Party : Serment des Rohirrim"
+        cycleshort="Alep Serment des Rohirrim"
     if datacard['id_extension'] in ['86', '97']:
         cycle="A long Extented Party : Scénario Indépendant"
     if datacard['id_extension'] == "82":
         cycle="Starter pack : Les Nains de Durin"
+        cycleshort="Les Nains de Durin"
     if datacard['id_extension'] == "83":
         cycle="Starter pack : Les Elfes de la Lórien"
+        cycleshort="Les Elfes de la Lórien"
     if datacard['id_extension'] == "84":
         cycle="Starter pack : Les Défenseurs du Gondor"
+        cycleshort="Les Défenseurs du Gondor"
     if datacard['id_extension'] == "85":
         cycle="Starter pack : Les Cavaliers du Rohan"
+        cycleshort="Les Cavaliers du Rohan"   
     if datacard['id_extension'] == "89":
         cycle="Les Ténèbres de la Forêt Noire"
-    return cycle
+    reponse=""
+    if option == "short":
+        reponse=cycleshort
+    else:
+        reponse=cycle
+    return reponse
+
+def info_cycle_ringsdb(datacard,option):
+    cycle=""
+    cycleshort=""
+    if datacard["pack_code"] == "Starter":
+        cycle="Starter"
+        cycleshort="Starter"
+    if datacard["pack_code"] == "Core":
+        cycle="Boite de base"
+        cycleshort="Boite de base"
+    if datacard["pack_code"] == "DoD":
+        cycle="Starter : Les Nains de Durin"
+        cycleshort="Les Nains de Durin"
+    if datacard["pack_code"] == "EoL":
+        cycle="Starter : Les Elfes de la Lorien"
+        cycleshort="Les Elfes de la Lorien"
+    if datacard["pack_code"] == "DoG":
+        cycle="Starter : Les Défenseurs du Gondor"
+        cycleshort="Les Défenseurs du Gondor"
+    if datacard["pack_code"] == "RoR":
+        cycle="Starter : Les Cavaliers du Rohan"
+        cycleshort="Les Cavaliers du Rohan"        
+    if datacard["pack_code"] in ["HfG","CatC","JtR","HoEM","TDM","RtM"]:
+        cycle="Cycle 1 : Ombres de la Forêt Noire"
+        cycleshort="Cycle 1"
+    if datacard["pack_code"] in ["KD","TRG","RtR","WitW","TLD","FoS","SaF"]:
+        cycle="Cycle 2 : Royaume de Cavenain"
+        cycleshort="Cycle 2"
+    if datacard["pack_code"] in ["HoN","TSF","TDF","EaAD","AoO","BoG","TMV"]:
+        cycle="Cycle 3 : Face à l'Ombre"
+        cycleshort="Cycle 3"
+    if datacard["pack_code"] in ["VoI","TDT","TTT","TiT","NiE","CS","TAC"]:
+        cycle="Cycle 4 : Le Créateur d'Anneaux"
+        cycleshort="Cycle 4"
+    if datacard["pack_code"] in ["TLR","WoE","EfMG","AtE","ToR","BoCD","TDR"]:
+        cycle="Cycle 5 : Le Réveil d'Angmar"
+        cycleshort="Cycle 5"
+    if datacard["pack_code"] in ["TGH","FotS","TitD","TotD","DR","SoCH","CoC"]:
+        cycle="Cycle 6 : Chasse-Rêve"
+        cycleshort="Cycle 6"
+    if datacard["pack_code"] in ["TSoH","M","RAH","BtS","TBS","DoCG","CoP"]:
+        cycle="Cycle 7 : Les Haradrim"
+        cycleshort="Cycle 7"
+    if datacard["pack_code"] in ["TWoR","TWH","RAR","FitN","TGoF","MG","TFoW"]:
+        cycle="Cycle 8 : Ered Mithrin"
+        cycleshort="Cycle 8"
+    if datacard["pack_code"] in ["ASitE","WaR","TCoU","CotW","UtAM","TLoS","TFoN"]:
+        cycle="Cycle 9 : La Vengeance du Mordor"
+        cycleshort="Cycle 9"
+    if datacard["pack_code"] == "OHaUH":
+        cycle="Extension de saga : Par Monts et par Souterrains"
+        cycleshort="Par Monts et par Souterrains"
+    if datacard["pack_code"] == "OtD":
+        cycle="Extension de saga : Au Seuil de la Porte"
+        cycleshort="Au Seuil de la Porte"
+    if datacard["pack_code"] == "TBR":
+        cycle="Extension de saga : Les Cavaliers Noirs"
+        cycleshort="Les Cavaliers Noirs"
+    if datacard["pack_code"] == "TRD":
+        cycle="Extension de saga : La Route s'Assombrit"
+        cycleshort="La Route s'Assombrit"
+    if datacard["pack_code"] == "ToS":
+        cycle="Extension de saga : La Trahison de Saroumane"
+        cycleshort="La Trahison de Saroumane"
+    if datacard["pack_code"] == "LoS":
+        cycle="Extension de saga : La Terre de l'Ombre"
+        cycleshort="La Terre de l'Ombre"
+    if datacard["pack_code"] == "FotW":
+        cycle="Extension de saga : La Flamme de l'Ouest"
+        cycleshort="La Flamme de l'Ouest"
+    if datacard["pack_code"] == "MoF":
+        cycle="Extension de saga : La Montagne de Feu"
+        cycleshort="La Montagne de Feu"
+    if "ALeP" in datacard['pack_name']:
+        cycle="A long Extented Party : Serment des Rohirrim"
+        cycleshort="Alep Serment des Rohirrim"
+    reponse=""
+    if option == "short":
+        reponse=cycleshort
+    else:
+        reponse=cycle
+    return reponse
 
 def id_extension_by_cycle_name(list_name):
     list_id =[]
@@ -222,6 +334,26 @@ def info_sphere(self,datacard):
         if datacard['id_sphere_influence'] == "305":
             sphere, sphere_color, sphere_emoji ="fellowship",0xD99611, str(nextcord.utils.get(self.bot.emojis, name='fellowship'))
         if datacard['id_sphere_influence'] == "306":
+            sphere, sphere_color, sphere_emoji  ="baggins",0xD3D911,str(nextcord.utils.get(self.bot.emojis, name='baggins'))
+    return sphere, sphere_color, sphere_emoji
+
+def info_sphere_ringsdb(self,datacard):
+    sphere, sphere_color, sphere_emoji ="", 0xFFFFFF,""
+
+    if "sphere_code" in datacard:
+        if datacard['sphere_code'] == "leadership":
+            sphere, sphere_color, sphere_emoji="leadership", 0x8B23F9, str(nextcord.utils.get(self.bot.emojis, name='leadership'))
+        if datacard['sphere_code'] == "lore":
+            sphere, sphere_color, sphere_emoji ="lore",  0x0E7A12,str(nextcord.utils.get(self.bot.emojis, name='lore')) 
+        if datacard['sphere_code'] == "spirit":
+            sphere, sphere_color, sphere_emoji ="spirit",0x33DDFF, str(nextcord.utils.get(self.bot.emojis, name='spirit'))
+        if datacard['sphere_code'] == "tactics":
+            sphere, sphere_color, sphere_emoji ="tactics",0xDB140B, str(nextcord.utils.get(self.bot.emojis, name='tactics'))
+        if datacard['sphere_code'] == "neutral":
+            sphere, sphere_color, sphere_emoji ="neutral",0x797B7A, str(nextcord.utils.get(self.bot.emojis, name='neutral'))
+        if datacard['sphere_code'] == "fellowship":
+            sphere, sphere_color, sphere_emoji ="fellowship",0xD99611, str(nextcord.utils.get(self.bot.emojis, name='fellowship'))
+        if datacard['sphere_code'] == "baggins":
             sphere, sphere_color, sphere_emoji  ="baggins",0xD3D911,str(nextcord.utils.get(self.bot.emojis, name='baggins'))
     return sphere, sphere_color, sphere_emoji
 

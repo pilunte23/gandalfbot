@@ -39,7 +39,7 @@ class Encounter(commands.Cog):
         self.bot:  commands.bot = bot
 
 
-    @nextcord.slash_command(name="r",description="Pour l'affichage de carte(s) rencontre",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
+    @nextcord.slash_command(name="rencontre",description="Pour l'affichage de carte(s) rencontre dans Seigneur des anneaux JCE",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
     async def _timing(self, 
     interaction: Interaction, 
     recherche: str = SlashOption(name="recherche",description="Terme Recherché", required=True),

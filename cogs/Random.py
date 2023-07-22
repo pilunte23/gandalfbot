@@ -11,7 +11,7 @@ class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @nextcord.slash_command(name="a",description="Carte Aleatoire",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
+    @nextcord.slash_command(name="aleatoire",description="Affiche une carte joueur aleatoire dans Seigneur des anneaux JCE",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
  
     async def _cardoftheday(self,interaction: Interaction):
         print(f"{interaction.user} use Random slash command" )

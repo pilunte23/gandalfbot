@@ -38,7 +38,7 @@ class Quest(commands.Cog):
     def __init__(self, bot):
         self.bot:  commands.bot = bot
 
-    @nextcord.slash_command(name="q",description="Pour l'affichage de carte(s) quêtes",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
+    @nextcord.slash_command(name="quete",description="Pour l'affichage de carte(s) quête dans Seigneur des anneaux JCE",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
     async def _timing(self, 
     interaction: Interaction, 
     recherche: str = SlashOption(name="recherche",description="Terme Recherché", required=True),

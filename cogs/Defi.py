@@ -34,7 +34,7 @@ class myselect(ui.Select):
         heros3 = []
         
         for i in rawdata:
-            if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and "&bull" not in i['titre']:
+            if i['id_extension'] in selected_list_id and i['id_type_carte']=="400" and i["id_sphere_influence"] not in ["305","306"] and "&bull" not in i['titre']:
                 heros1.append(i)                        
                 heros2.append(i)              
                 heros3.append(i)
@@ -63,7 +63,7 @@ class myselect(ui.Select):
         randomValue = random.randint(0, len(scenarios)-1)
         randomScenario= scenarios[randomValue]
         scenario = randomScenario['lbl set rencontre']
-        cycle = share.info_cycle(randomScenario)
+        cycle = share.info_cycle(randomScenario,"long")
         print(scenario)
         print(cycle)
         """font = ImageFont.load_default()
@@ -74,6 +74,7 @@ class myselect(ui.Select):
         # Open an Image
         img_scenario = Image.open("assets/picture/scenario.png")
         #font = ImageFont.load_default()
+        #font2 = ImageFont.load_default()
         font = ImageFont.truetype("times-ro.ttf", 28, encoding="unic")
         font2 = ImageFont.truetype("times-ro.ttf", 14, encoding="unic")
         # Call draw Method to add 2D graphics in an image
@@ -127,7 +128,7 @@ class Defi(commands.Cog):
     def __init__(self, bot):
         self.bot:  commands.bot = bot
 
-    @nextcord.slash_command(name="d",description="Tirage des Héros aléatoires associés à un scénario aléatoire de votre collection ",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
+    @nextcord.slash_command(name="defi",description="Tirage de Héros et d'un scénario aléatoire avec votre collection du Seigneur des anneaux JCE",guild_ids=list(map(int,str(os.getenv("GUILDID")).split(" "))))
     async def _hero(self, interaction: Interaction):
         print(f"{interaction.user} use Defi slash command" )
         #Retravaille des champs saisie par la commande
