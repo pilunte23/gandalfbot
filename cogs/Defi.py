@@ -74,14 +74,11 @@ class myselect(ui.Select):
         # Open an Image
         img_scenario = Image.open("assets/picture/scenario.png")
         #Pour linux
-        #font = ImageFont.load_default()
-        #font2 = ImageFont.load_default()
-<<<<<<< HEAD
-=======
-        #Pour windows 
->>>>>>> 172d6a79f1c9227da57ff2acccbb9fdc713e8d71
-        font = ImageFont.truetype("times-ro.ttf", 28, encoding="unic")
-        font2 = ImageFont.truetype("times-ro.ttf", 14, encoding="unic")
+        font = ImageFont.load_default()
+        font2 = ImageFont.load_default()
+        #Pour windows
+        #font = ImageFont.truetype("times-ro.ttf", 28, encoding="unic")
+        #font2 = ImageFont.truetype("times-ro.ttf", 14, encoding="unic")
         # Call draw Method to add 2D graphics in an image
         I1 = ImageDraw.Draw(img_scenario)
         W, H =  (394 , 560)
