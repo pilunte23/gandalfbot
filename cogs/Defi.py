@@ -73,9 +73,12 @@ class myselect(ui.Select):
         img_scenario.save("scenario.png")"""
         # Open an Image
         img_scenario = Image.open("assets/picture/scenario.png")
+        #Pour linux
         #font = ImageFont.load_default()
-        font = ImageFont.truetype("arial.ttf", 28, encoding="unic")
-        font2 = ImageFont.truetype("arial.ttf", 14, encoding="unic")
+        #font2 = ImageFont.load_default()
+        #Pour windows 
+        font = ImageFont.truetype("times-ro.ttf", 28, encoding="unic")
+        font2 = ImageFont.truetype("times-ro.ttf", 14, encoding="unic")
         # Call draw Method to add 2D graphics in an image
         I1 = ImageDraw.Draw(img_scenario)
         W, H =  (394 , 560)
